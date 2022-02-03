@@ -1,0 +1,5 @@
+name: Backpacks
+version: '${project.version}'
+main: com.gmail.ibmesp1.Backpacks
+api-version: 1.18
+authors: [ Ib ]
