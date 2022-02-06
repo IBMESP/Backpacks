@@ -3,3 +3,7 @@ version: '${project.version}'
 main: com.gmail.ibmesp1.Backpacks
 api-version: 1.18
 authors: [ Ib ]
+
+commands:
+  bp:
+    description: Use /bp help to see the commands
