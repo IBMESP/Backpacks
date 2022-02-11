@@ -1,11 +1,14 @@
 package com.gmail.ibmesp1;
 
-import com.gmail.ibmesp1.commands.BpCommand;
+import com.gmail.ibmesp1.commands.bpcommand.BpCommand;
 import com.gmail.ibmesp1.events.PlayerEvent;
+import com.gmail.ibmesp1.utils.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Logger;
 
 public final class Backpacks extends JavaPlugin {
 
@@ -17,11 +20,20 @@ public final class Backpacks extends JavaPlugin {
         PluginDescriptionFile pdffile = getDescription();
         version = pdffile.getVersion();
         name = ChatColor.DARK_RED + "[" + pdffile.getName() + "]";
+        Logger log = Bukkit.getLogger();
 
         Bukkit.getConsoleSender().sendMessage("[Backpacks] - Version: " + version + " Enabled - By Ib");
         registrerCommands();
         registerEvents();
         BpCommand.loadBackPacks();
+
+        new UpdateChecker(this,99840).getLatestVersion(version -> {
+            if(this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                log.info("[Backpacks] Backpacks is up to date");
+            } else {
+                log.warning("[Backpacks] Backpacks has a new update");
+            }
+        });
     }
 
     @Override
@@ -36,4 +48,6 @@ public final class Backpacks extends JavaPlugin {
     public void registerEvents(){
         Bukkit.getPluginManager().registerEvents(new PlayerEvent(),this);
     }
+
+
 }

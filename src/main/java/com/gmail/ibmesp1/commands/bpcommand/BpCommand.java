@@ -1,12 +1,14 @@
-package com.gmail.ibmesp1.commands;
+package com.gmail.ibmesp1.commands.bpcommand;
 
 import com.gmail.ibmesp1.Backpacks;
+import com.gmail.ibmesp1.commands.SubCommand;
+import com.gmail.ibmesp1.commands.bpcommand.subcommands.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -20,22 +22,27 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
-public class BpCommand  implements CommandExecutor {
+public class BpCommand  implements TabExecutor {
 
     private final Backpacks plugin;
     private static HashMap<UUID, Inventory> playerBackpack;
     private static File file;
     private static FileConfiguration cfg;
+    private ArrayList<SubCommand> subCommands = new ArrayList<>();
 
     public BpCommand(Backpacks plugin){
         this.plugin = plugin;
         playerBackpack = new HashMap<>();
         file = new File(plugin.getDataFolder(), "backpacks.yml");
         cfg = YamlConfiguration.loadConfiguration(file);
+
+        subCommands.add(new VersionSubCommand(plugin));
+        subCommands.add(new HelpSubCommand());
+        subCommands.add(new CreateSubCommand(plugin,playerBackpack));
+        subCommands.add(new OpenSubCommand(playerBackpack));
+        subCommands.add(new DeleteSubCommand(plugin,playerBackpack));
     }
 
     public static void loadBackPacks() {
@@ -123,65 +130,35 @@ public class BpCommand  implements CommandExecutor {
             return true;
         }
 
-        if(args[0].equalsIgnoreCase("version")) {
-            player.sendMessage(plugin.name+ChatColor.WHITE+" Version "+plugin.version);
-            return true;
-        }else if(args[0].equalsIgnoreCase("help")){
-            player.sendMessage(ChatColor.YELLOW+"--------------------"+ChatColor.WHITE+"Backpacks Help"+ChatColor.YELLOW+"--------------------");
-            player.sendMessage(ChatColor.YELLOW+"/bp version:"+ChatColor.WHITE+" Backpacks version");
-            player.sendMessage(ChatColor.YELLOW+"/bp create <s/m>:"+ChatColor.WHITE+" To create a backpack");
-            player.sendMessage(ChatColor.YELLOW+"/bp open:"+ChatColor.WHITE+" To open a backpack");
-            player.sendMessage(ChatColor.YELLOW+"/bp delete:"+ChatColor.WHITE+" To delete a backpack");
-            return true;
-        }else if(args[0].equalsIgnoreCase("delete")){
-            if(args.length == 1){
-                player.sendMessage(ChatColor.RED + "This will remove your backpack and what is inside");
-                player.sendMessage(ChatColor.RED + "/bp delete confirm to delete the backpack");
-            }else if(args[1].equalsIgnoreCase("confirm")){
-                playerBackpack.remove(player.getUniqueId());
-                savePlayerBackPacks(player);
-                player.sendMessage(ChatColor.RED + "Your backpack has been deleted");
-            }else{
-                player.sendMessage(plugin.name + ChatColor.RED + " This command doesn't exists");
-            }
-            return true;
-        }else if(args[0].equalsIgnoreCase("create")) {
-            if(args.length == 1) {
-                player.sendMessage(ChatColor.RED + "/bp create <s/m>");
-            }else if (args[1].equalsIgnoreCase("s") && player.hasPermission("bp.small")) { // add backpack mechanics
-                if (playerBackpack.containsKey(player.getUniqueId())) {
-                    player.sendMessage(ChatColor.RED + "You already have a backpack");
-                    return true;
+        if(args.length > 0){
+            for (int i = 0; i< getSubCommands().size(); i++){
+                if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())){
+                    getSubCommands().get(i).perform(player,args);
                 }
-
-                Inventory inventory = Bukkit.createInventory(null, 3 * 9);
-                playerBackpack.put(player.getUniqueId(), inventory);
-                player.openInventory(inventory);
-                return true;
-            }else if (args[1].equalsIgnoreCase("m") && player.hasPermission("bp.medium")) {
-                if (playerBackpack.containsKey(player.getUniqueId())) {
-                    player.sendMessage(ChatColor.RED + "You already have a backpack");
-                    return true;
-                }
-
-                Inventory inventory = Bukkit.createInventory(null, 6 * 9);
-                playerBackpack.put(player.getUniqueId(), inventory);
-                player.openInventory(inventory);
-                return true;
-            }else{
-                player.sendMessage(plugin.name + ChatColor.RED + " This command doesn't exists");
             }
-            return true;
-        } else if (args[0].equalsIgnoreCase("open")) {
-            if (playerBackpack.containsKey(player.getUniqueId())) {
-                player.openInventory(playerBackpack.get(player.getUniqueId()));
-            }else{
-                player.sendMessage(ChatColor.RED + "You don't have a backpack");
-            }
-            return true;
-        } else {
-            player.sendMessage(plugin.name + ChatColor.RED + " This command doesn't exists");
-            return true;
         }
+        return true;
+    }
+
+    public ArrayList<SubCommand> getSubCommands(){return subCommands;}
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if(args.length == 1){
+            ArrayList<String> subCommandsArgs = new ArrayList<>();
+
+            for (int i = 0; i< getSubCommands().size(); i++){
+                subCommandsArgs.add(getSubCommands().get(i).getName());
+            }
+            return subCommandsArgs;
+        }else if(args.length == 2){
+            for (int i = 0; i< getSubCommands().size(); i++){
+                if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())){
+                    return getSubCommands().get(i).getSubCommandsArgs(args);
+                }
+            }
+        }
+
+        return null;
     }
 }

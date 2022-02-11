@@ -1,6 +1,6 @@
 package com.gmail.ibmesp1.events;
 
-import com.gmail.ibmesp1.commands.BpCommand;
+import com.gmail.ibmesp1.commands.bpcommand.BpCommand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
