@@ -1,19 +1,26 @@
 package com.gmail.ibmesp1;
 
 import com.gmail.ibmesp1.commands.bpcommand.BpCommand;
+import com.gmail.ibmesp1.commands.bpsee.BpSee;
+import com.gmail.ibmesp1.commands.keepBackpack.keepBackpack;
+import com.gmail.ibmesp1.commands.keepBackpack.keepBackpackTab;
 import com.gmail.ibmesp1.events.PlayerEvent;
 import com.gmail.ibmesp1.utils.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public final class Backpacks extends JavaPlugin {
 
     public String version;
     public String name;
+    public static HashMap<UUID, Inventory> playerBackpack;
 
     @Override
     public void onEnable() {
@@ -21,11 +28,15 @@ public final class Backpacks extends JavaPlugin {
         version = pdffile.getVersion();
         name = ChatColor.DARK_RED + "[" + pdffile.getName() + "]";
         Logger log = Bukkit.getLogger();
+        playerBackpack = new HashMap<>();
 
         Bukkit.getConsoleSender().sendMessage("[Backpacks] - Version: " + version + " Enabled - By Ib");
         registrerCommands();
         registerEvents();
         BpCommand.loadBackPacks();
+
+        getConfig().options().copyDefaults(true);
+        saveConfig();
 
         new UpdateChecker(this,99840).getLatestVersion(version -> {
             if(this.getDescription().getVersion().equalsIgnoreCase(version)) {
@@ -42,11 +53,14 @@ public final class Backpacks extends JavaPlugin {
     }
 
     public void registrerCommands() {
-        getCommand("bp").setExecutor(new BpCommand(this));
+        getCommand("bp").setExecutor(new BpCommand(this,playerBackpack));
+        getCommand("bpsee").setExecutor(new BpSee(this,playerBackpack));
+        getCommand("bgamerule").setExecutor(new keepBackpack(this));
+        getCommand("bgamerule").setTabCompleter(new keepBackpackTab());
     }
 
     public void registerEvents(){
-        Bukkit.getPluginManager().registerEvents(new PlayerEvent(),this);
+        Bukkit.getPluginManager().registerEvents(new PlayerEvent(this,playerBackpack),this);
     }
 
 

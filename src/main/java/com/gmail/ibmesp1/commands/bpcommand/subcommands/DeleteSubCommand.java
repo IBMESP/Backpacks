@@ -1,8 +1,8 @@
 package com.gmail.ibmesp1.commands.bpcommand.subcommands;
 
 import com.gmail.ibmesp1.Backpacks;
-import com.gmail.ibmesp1.commands.bpcommand.BpCommand;
 import com.gmail.ibmesp1.commands.SubCommand;
+import com.gmail.ibmesp1.commands.bpcommand.BpCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -36,10 +36,24 @@ public class DeleteSubCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
+        Inventory inventory = playerBackpack.get(player.getUniqueId());
         if(args.length == 1){
-            player.sendMessage(ChatColor.RED + "This will remove your backpack and what is inside");
+            player.sendMessage(ChatColor.RED + "This will remove your backpack");
             player.sendMessage(ChatColor.RED + "/bp delete confirm to delete the backpack");
         }else if(args[1].equalsIgnoreCase("confirm")){
+            if(inventory == null){
+                player.sendMessage(ChatColor.RED + "You do not have a backpack");
+                return;
+            }
+            Inventory prevInventory = playerBackpack.get(player.getUniqueId());
+            int size = prevInventory.getSize();
+
+            for (int i = 0;i<size;i++){
+                try {
+                    player.getLocation().getWorld().dropItem(player.getLocation(), prevInventory.getItem(i));
+                }catch (IllegalArgumentException e){}
+            }
+
             playerBackpack.remove(player.getUniqueId());
             BpCommand.savePlayerBackPacks(player);
             player.sendMessage(ChatColor.RED + "Your backpack has been deleted");

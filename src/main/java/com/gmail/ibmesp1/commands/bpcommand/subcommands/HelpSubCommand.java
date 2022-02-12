@@ -25,5 +25,7 @@ public class HelpSubCommand extends SubCommand {
         player.sendMessage(ChatColor.YELLOW+"/bp create <s/m>:"+ChatColor.WHITE+" To create a backpack");
         player.sendMessage(ChatColor.YELLOW+"/bp open:"+ChatColor.WHITE+" To open a backpack");
         player.sendMessage(ChatColor.YELLOW+"/bp delete:"+ChatColor.WHITE+" To delete a backpack");
+        player.sendMessage(ChatColor.YELLOW+"/bgamerule keepBackpack <true/false>:"+ChatColor.WHITE+" To keep or drop your backpack when a player dies");
+        player.sendMessage(ChatColor.YELLOW+"/bpsee:"+ChatColor.WHITE+" To open other player inventory");
     }
 }

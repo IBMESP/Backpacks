@@ -7,3 +7,10 @@ authors: [ Ib ]
 commands:
   bp:
     description: Use /bp help to see the commands
+  bpsee:
+    description: Use /bp help to see the commands
+    permission: bp.bpsee
+  bgamerule:
+    description: Use /bp help to see the commands
+    permission: bp.gamerule
+    aliases: bgr

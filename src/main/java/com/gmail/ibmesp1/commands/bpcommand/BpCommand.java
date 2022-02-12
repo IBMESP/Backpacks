@@ -32,9 +32,9 @@ public class BpCommand  implements TabExecutor {
     private static FileConfiguration cfg;
     private ArrayList<SubCommand> subCommands = new ArrayList<>();
 
-    public BpCommand(Backpacks plugin){
+    public BpCommand(Backpacks plugin,HashMap<UUID,Inventory> playerBackpack){
         this.plugin = plugin;
-        playerBackpack = new HashMap<>();
+        this.playerBackpack = playerBackpack;
         file = new File(plugin.getDataFolder(), "backpacks.yml");
         cfg = YamlConfiguration.loadConfiguration(file);
 
@@ -158,7 +158,6 @@ public class BpCommand  implements TabExecutor {
                 }
             }
         }
-
         return null;
     }
 }

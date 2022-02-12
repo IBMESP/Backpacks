@@ -34,7 +34,7 @@ public class OpenSubCommand extends SubCommand {
         if (playerBackpack.containsKey(player.getUniqueId())) {
             player.openInventory(playerBackpack.get(player.getUniqueId()));
         }else{
-            player.sendMessage(ChatColor.RED + "You don't have a backpack");
+            player.sendMessage(ChatColor.RED + "You do not have a backpack");
         }
     }
 }
