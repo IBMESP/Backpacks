@@ -2,6 +2,7 @@
 Spigot plugin that adds backpacks accesible with commands
 ## Latest Version:
 [![Latest Version](https://img.shields.io/badge/Latest%20Version-1.1.0-brightgreen)](https://github.com/IBMESP/Backpacks/releases/latest)
+<a href="https://github.com/IBMESP/Backpacks/releases/latest/download/Backpacks.jar"><img src="https://img.shields.io/github/downloads/IBMESP/Backpacks/latest/total.svg" alt="Downloads"></a>
 ### Commands
 - bp create <s/m>
 - bp open
