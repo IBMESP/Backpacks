@@ -11,10 +11,10 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 **Versions (please complete the following information):**
- - Minecraft Server Version: [e.g. 1.8.8]
- - Plugin Version: [e.g. 1.7.9.4]
+ - Minecraft Server Version: [e.g. 1.18.1]
+ - Plugin Version: [e.g. 1.1.0]
 
-*Do **NOT** say Latest use `/version crazyenchantments` in the console.
+*Do **NOT** say Latest use `/bp version` in the console.
 
 **Pastebin any errors in console**
 Link: https://pastebin.com/
