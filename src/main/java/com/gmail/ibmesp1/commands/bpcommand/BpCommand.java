@@ -43,6 +43,7 @@ public class BpCommand  implements TabExecutor {
         subCommands.add(new CreateSubCommand(plugin,playerBackpack));
         subCommands.add(new OpenSubCommand(playerBackpack));
         subCommands.add(new DeleteSubCommand(plugin,playerBackpack));
+        subCommands.add(new ReloadSubCommand(plugin));
     }
 
     public static void loadBackPacks() {

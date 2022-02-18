@@ -8,9 +8,9 @@ commands:
   bp:
     description: Use /bp help to see the commands
   bpsee:
-    description: Use /bp help to see the commands
+    description: Use /bpsee to see other player's backpacks
     permission: bp.bpsee
   bgamerule:
-    description: Use /bp help to see the commands
+    description: To keep your backpack when you die
     permission: bp.gamerule
     aliases: bgr
