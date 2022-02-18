@@ -18,5 +18,5 @@ Spigot plugin that adds backpacks accesible with commands
 - bp.bpsee (for /bpsee)
 - bp.gamerule (for /bgamerule keepBackpack)
 - bp.reload (for /bp reload)
-- bp.admin (for /bp create <s/m/l> <player> and /bp delete </player/> confirm )
+- bp.admin (for /bp create <s/m/l> </player/> and /bp delete </player/> confirm )
 <p><strong><img src="https://i.imgur.com/Tt7Lyar.png" alt="" width="256" height="256" /></strong></p>
