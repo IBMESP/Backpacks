@@ -1,6 +1,8 @@
 package com.gmail.ibmesp1.commands.bpsee;
 
 import com.gmail.ibmesp1.Backpacks;
+import com.gmail.ibmesp1.commands.bpcommand.BpCommand;
+import com.gmail.ibmesp1.utils.UUIDFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -35,11 +37,19 @@ public class BpSee implements CommandExecutor {
         {
             OfflinePlayer target = Bukkit.getPlayer(args[0]);
 
-            if(target == null || !target.isOnline()){
-                player.sendMessage("This player is offline");
+            if(target == null) {
+                try {
+                    if(playerBackpack.get(UUIDFetcher.getUUIDOf(args[0])) == null){
+                        player.sendMessage(ChatColor.RED + args[0] + " no tiene mochila");
+                        return true;
+                    }
+                    player.openInventory(playerBackpack.get(UUIDFetcher.getUUIDOf(args[0])));
+                    BpCommand.savePlayerBackPacks(UUIDFetcher.getUUIDOf(args[0]));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 return true;
             }
-
             player.openInventory(playerBackpack.get(target.getUniqueId()));
         }else{
             player.sendMessage(ChatColor.RED + "/bpsee <player>");

@@ -61,7 +61,7 @@ public class DeleteSubCommand extends SubCommand {
             }
 
             playerBackpack.remove(player.getUniqueId());
-            BpCommand.savePlayerBackPacks(player);
+            BpCommand.savePlayerBackPacks(player.getUniqueId());
             player.sendMessage(ChatColor.RED + "Your backpack has been deleted");
         }else if(args.length == 2 || args.length == 3) {
 
@@ -83,13 +83,13 @@ public class DeleteSubCommand extends SubCommand {
 
                     for (int i = 0; i < size; i++) {
                         try {
-                            target.getLocation().getWorld().dropItem(player.getLocation(), prevInventory.getItem(i));
+                            target.getLocation().getWorld().dropItem(target.getLocation(), prevInventory.getItem(i));
                         } catch (IllegalArgumentException | NullPointerException e) {
                         }
                     }
 
                     playerBackpack.remove(target.getUniqueId());
-                    BpCommand.savePlayerBackPacks(target);
+                    BpCommand.savePlayerBackPacks(target.getUniqueId());
                     target.sendMessage(ChatColor.RED + "Your backpack has been deleted by " + player.getName() );
                 }
             }

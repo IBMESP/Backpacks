@@ -5,6 +5,7 @@ import com.gmail.ibmesp1.commands.bpsee.BpSee;
 import com.gmail.ibmesp1.commands.keepBackpack.keepBackpack;
 import com.gmail.ibmesp1.commands.keepBackpack.keepBackpackTab;
 import com.gmail.ibmesp1.events.PlayerEvent;
+import com.gmail.ibmesp1.utils.Metrics;
 import com.gmail.ibmesp1.utils.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,6 +30,7 @@ public final class Backpacks extends JavaPlugin {
         name = ChatColor.DARK_RED + "[" + pdffile.getName() + "]";
         Logger log = Bukkit.getLogger();
         playerBackpack = new HashMap<>();
+        new Metrics(this,14427);
 
         Bukkit.getConsoleSender().sendMessage("[Backpacks] - Version: " + version + " Enabled - By Ib");
         registrerCommands();
@@ -62,6 +64,4 @@ public final class Backpacks extends JavaPlugin {
     public void registerEvents(){
         Bukkit.getPluginManager().registerEvents(new PlayerEvent(this,playerBackpack),this);
     }
-
-
 }

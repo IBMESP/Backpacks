@@ -50,7 +50,7 @@ public class BpCommand  implements TabExecutor {
         for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
             if (cfg.contains(player.getUniqueId().toString())) {
                 String inventory = cfg.getString(player.getUniqueId().toString());
-                playerBackpack.put(player.getUniqueId(), inventoryFromBase64(inventory));
+                playerBackpack.put(player.getUniqueId(), inventoryFromBase64(inventory,player.getName() + "'s Backpack"));
             }
         }
     }
@@ -58,7 +58,7 @@ public class BpCommand  implements TabExecutor {
     public static void loadPlayerBackPacks(OfflinePlayer player) {
         if (cfg.contains(player.getUniqueId().toString())) {
             String inventory = cfg.getString(player.getUniqueId().toString());
-            playerBackpack.put(player.getUniqueId(), inventoryFromBase64(inventory));
+            playerBackpack.put(player.getUniqueId(), inventoryFromBase64(inventory,player.getName() + "'s Backpack"));
         }
     }
 
@@ -74,9 +74,9 @@ public class BpCommand  implements TabExecutor {
         }
     }
 
-    public static void savePlayerBackPacks(OfflinePlayer player) {
+    public static void savePlayerBackPacks(UUID uuid) {
 
-        cfg.set(player.getUniqueId().toString(),inventoryToBase64(playerBackpack.get(player.getUniqueId())));
+        cfg.set(uuid.toString(),inventoryToBase64(playerBackpack.get(uuid)));
 
         try {
             cfg.save(file);
@@ -101,11 +101,11 @@ public class BpCommand  implements TabExecutor {
         return null;
     }
 
-    private static Inventory inventoryFromBase64(String base64) {
+    private static Inventory inventoryFromBase64(String base64,String title) {
         try {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
             BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
-            Inventory inventory = Bukkit.createInventory(null, dataInput.readInt());
+            Inventory inventory = Bukkit.createInventory(null, dataInput.readInt(),title);
 
             for (int i = 0; i < inventory.getSize(); i++) {
                 inventory.setItem(i, (ItemStack) dataInput.readObject());

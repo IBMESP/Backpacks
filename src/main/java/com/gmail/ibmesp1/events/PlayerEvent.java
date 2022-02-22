@@ -49,7 +49,7 @@ public class PlayerEvent implements Listener {
             return;
         }
 
-        BpCommand.savePlayerBackPacks(player);
+        BpCommand.savePlayerBackPacks(player.getUniqueId());
     }
 
     @EventHandler
@@ -61,7 +61,7 @@ public class PlayerEvent implements Listener {
             return;
         }
 
-        BpCommand.savePlayerBackPacks(e.getPlayer());
+        BpCommand.savePlayerBackPacks(e.getPlayer().getUniqueId());
     }
 
     @EventHandler
@@ -81,7 +81,7 @@ public class PlayerEvent implements Listener {
             Inventory inventory = Bukkit.createInventory(null, size);
             playerBackpack.replace(player.getUniqueId(),prevInventory,inventory);
 
-            BpCommand.savePlayerBackPacks(player);
+            BpCommand.savePlayerBackPacks(player.getUniqueId());
         }
     }
 }

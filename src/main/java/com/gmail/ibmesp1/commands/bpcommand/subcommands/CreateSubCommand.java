@@ -119,7 +119,7 @@ public class CreateSubCommand extends SubCommand {
             return;
         }
 
-        Inventory inventory = Bukkit.createInventory(null, size * 9);
+        Inventory inventory = Bukkit.createInventory(null, size * 9,player.getName() + "'s Backpack");
         playerBackpack.put(player.getUniqueId(), inventory);
         player.openInventory(inventory);
     }
@@ -130,12 +130,11 @@ public class CreateSubCommand extends SubCommand {
             return;
         }
 
-        Inventory inventory = Bukkit.createInventory(target, size * 9);
+        Inventory inventory = Bukkit.createInventory(target, size * 9,target.getName() + "'s Backpack");
         target.sendMessage(player.getName() + " created you a " + Size + " backpack");
         target.sendMessage("Use /bp open to open the backpack");
         playerBackpack.put(target.getUniqueId(), inventory);
     }
-
     private void checkSize(){
         smallSize = plugin.getConfig().getInt("smallSize");
         mediumSize = plugin.getConfig().getInt("mediumSize");
