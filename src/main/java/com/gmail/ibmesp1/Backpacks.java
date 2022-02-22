@@ -30,6 +30,7 @@ public final class Backpacks extends JavaPlugin {
         name = ChatColor.DARK_RED + "[" + pdffile.getName() + "]";
         Logger log = Bukkit.getLogger();
         playerBackpack = new HashMap<>();
+
         new Metrics(this,14427);
 
         Bukkit.getConsoleSender().sendMessage("[Backpacks] - Version: " + version + " Enabled - By Ib");
