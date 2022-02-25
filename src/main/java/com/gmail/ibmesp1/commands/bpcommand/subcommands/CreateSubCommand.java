@@ -2,6 +2,7 @@ package com.gmail.ibmesp1.commands.bpcommand.subcommands;
 
 import com.gmail.ibmesp1.Backpacks;
 import com.gmail.ibmesp1.commands.SubCommand;
+import com.gmail.ibmesp1.utils.UUIDFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -48,7 +49,8 @@ public class CreateSubCommand extends SubCommand {
                         Player target = Bukkit.getPlayer(args[2]);
 
                         if (target == null) {
-                            player.sendMessage(ChatColor.RED + args[2] + " is offline");
+                            String targetOffline = args[2];
+                            createOfflineBackpack(player,targetOffline,smallSize);
                             return;
                         }
 
@@ -71,7 +73,8 @@ public class CreateSubCommand extends SubCommand {
                         Player target = Bukkit.getPlayer(args[2]);
 
                         if (target == null) {
-                            player.sendMessage(ChatColor.RED + args[2] + " is offline");
+                            String targetOffline = args[2];
+                            createOfflineBackpack(player,targetOffline,mediumSize);
                             return;
                         }
 
@@ -93,7 +96,8 @@ public class CreateSubCommand extends SubCommand {
                         Player target = Bukkit.getPlayer(args[2]);
 
                         if (target == null) {
-                            player.sendMessage(ChatColor.RED + args[2] + " is offline");
+                            String targetOffline = args[2];
+                            createOfflineBackpack(player,targetOffline,largeSize);
                             return;
                         }
 
@@ -134,6 +138,22 @@ public class CreateSubCommand extends SubCommand {
         target.sendMessage(player.getName() + " created you a " + Size + " backpack");
         target.sendMessage("Use /bp open to open the backpack");
         playerBackpack.put(target.getUniqueId(), inventory);
+    }
+
+    private void createOfflineBackpack(Player player,String target,int size){
+        try {
+            UUID targetUUID = UUIDFetcher.getUUIDOf(target);
+            if(playerBackpack.containsKey(targetUUID)){
+                player.sendMessage(ChatColor.RED + target + " already have a backpack");
+                return;
+            }
+
+            Inventory inventory = Bukkit.createInventory(null,size * 9,target + "'s Backpack");
+            playerBackpack.put(targetUUID,inventory);
+            player.sendMessage(ChatColor.GREEN + "You created a backpack to " + target);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     private void checkSize(){
         smallSize = plugin.getConfig().getInt("smallSize");

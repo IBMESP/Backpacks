@@ -7,6 +7,8 @@ import com.gmail.ibmesp1.commands.keepBackpack.keepBackpackTab;
 import com.gmail.ibmesp1.events.PlayerEvent;
 import com.gmail.ibmesp1.utils.Metrics;
 import com.gmail.ibmesp1.utils.UpdateChecker;
+import com.gmail.ibmesp1.utils.backpacks.BackpackManager;
+import com.gmail.ibmesp1.utils.backpacks.MenuListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
@@ -22,6 +24,7 @@ public final class Backpacks extends JavaPlugin {
     public String version;
     public String name;
     public static HashMap<UUID, Inventory> playerBackpack;
+    public BackpackManager bpm;
 
     @Override
     public void onEnable() {
@@ -32,11 +35,12 @@ public final class Backpacks extends JavaPlugin {
         playerBackpack = new HashMap<>();
 
         new Metrics(this,14427);
+        bpm = new BackpackManager(this,playerBackpack);
 
         Bukkit.getConsoleSender().sendMessage("[Backpacks] - Version: " + version + " Enabled - By Ib");
         registrerCommands();
         registerEvents();
-        BpCommand.loadBackPacks();
+        BackpackManager.loadBackPacks();
 
         getConfig().options().copyDefaults(true);
         saveConfig();
@@ -52,17 +56,18 @@ public final class Backpacks extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        BpCommand.saveBackPacks();
+        BackpackManager.saveBackPacks();
     }
 
     public void registrerCommands() {
         getCommand("bp").setExecutor(new BpCommand(this,playerBackpack));
-        getCommand("bpsee").setExecutor(new BpSee(this,playerBackpack));
+        getCommand("bpsee").setExecutor(new BpSee(this,playerBackpack,bpm));
         getCommand("bgamerule").setExecutor(new keepBackpack(this));
         getCommand("bgamerule").setTabCompleter(new keepBackpackTab());
     }
 
     public void registerEvents(){
         Bukkit.getPluginManager().registerEvents(new PlayerEvent(this,playerBackpack),this);
+        Bukkit.getPluginManager().registerEvents(new MenuListener(),this);
     }
 }

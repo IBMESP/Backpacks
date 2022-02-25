@@ -1,9 +1,8 @@
 package com.gmail.ibmesp1.events;
 
 import com.gmail.ibmesp1.Backpacks;
-import com.gmail.ibmesp1.commands.bpcommand.BpCommand;
+import com.gmail.ibmesp1.utils.backpacks.BackpackManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,9 +24,9 @@ public class PlayerEvent implements Listener {
         this.plugin = plugin;
         this.playerBackpack = playerBackpack;
     }
-    
+
     @EventHandler
-    public void PlayerJoins(PlayerJoinEvent e)
+    public void onJoins(PlayerJoinEvent e)
     {
         Player player = e.getPlayer();
 
@@ -36,7 +35,7 @@ public class PlayerEvent implements Listener {
             return;
         }
 
-        BpCommand.loadPlayerBackPacks(e.getPlayer());
+        BackpackManager.loadPlayerBackPacks(e.getPlayer());
     }
 
     @EventHandler
@@ -49,7 +48,7 @@ public class PlayerEvent implements Listener {
             return;
         }
 
-        BpCommand.savePlayerBackPacks(player.getUniqueId());
+        BackpackManager.savePlayerBackPacks(player.getUniqueId());
     }
 
     @EventHandler
@@ -61,7 +60,7 @@ public class PlayerEvent implements Listener {
             return;
         }
 
-        BpCommand.savePlayerBackPacks(e.getPlayer().getUniqueId());
+        BackpackManager.savePlayerBackPacks(e.getPlayer().getUniqueId());
     }
 
     @EventHandler
@@ -81,7 +80,7 @@ public class PlayerEvent implements Listener {
             Inventory inventory = Bukkit.createInventory(null, size);
             playerBackpack.replace(player.getUniqueId(),prevInventory,inventory);
 
-            BpCommand.savePlayerBackPacks(player.getUniqueId());
+            BackpackManager.savePlayerBackPacks(player.getUniqueId());
         }
     }
 }

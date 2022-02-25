@@ -10,5 +10,4 @@ public abstract class SubCommand {
     public abstract void perform(Player player, String[] args);
 
     public abstract List<String> getSubCommandsArgs(String[] args);
-
 }

@@ -2,7 +2,8 @@ package com.gmail.ibmesp1.commands.bpcommand.subcommands;
 
 import com.gmail.ibmesp1.Backpacks;
 import com.gmail.ibmesp1.commands.SubCommand;
-import com.gmail.ibmesp1.commands.bpcommand.BpCommand;
+import com.gmail.ibmesp1.utils.UUIDFetcher;
+import com.gmail.ibmesp1.utils.backpacks.BackpackManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -61,7 +62,7 @@ public class DeleteSubCommand extends SubCommand {
             }
 
             playerBackpack.remove(player.getUniqueId());
-            BpCommand.savePlayerBackPacks(player.getUniqueId());
+            BackpackManager.savePlayerBackPacks(player.getUniqueId());
             player.sendMessage(ChatColor.RED + "Your backpack has been deleted");
         }else if(args.length == 2 || args.length == 3) {
 
@@ -74,11 +75,36 @@ public class DeleteSubCommand extends SubCommand {
                     Player target = Bukkit.getPlayer(args[1]);
 
                     if (target == null) {
-                        player.sendMessage(ChatColor.RED + args[1] + " is offline");
+                        try {
+                            UUID targetUUID = UUIDFetcher.getUUIDOf(args[1]);
+                            Inventory prevInventory = playerBackpack.get(targetUUID);
+                            if(prevInventory == null){
+                                player.sendMessage(ChatColor.RED + args[1] + " does not have a backpack");
+                                return;
+                            }
+                            int size = prevInventory.getSize();
+
+                            for (int i = 0; i < size; i++) {
+                                try {
+                                    player.getLocation().getWorld().dropItem(player.getLocation(), prevInventory.getItem(i));
+                                } catch (IllegalArgumentException | NullPointerException e) {
+                                }
+                            }
+
+                            playerBackpack.remove(targetUUID);
+                            BackpackManager.savePlayerBackPacks(targetUUID);
+                            player.sendMessage(ChatColor.GREEN + args[1] +" 's has been deleted");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         return;
                     }
 
                     Inventory prevInventory = playerBackpack.get(target.getUniqueId());
+                    if(prevInventory == null){
+                        player.sendMessage(ChatColor.RED + target.getName() + " does not have a backpack");
+                        return;
+                    }
                     int size = prevInventory.getSize();
 
                     for (int i = 0; i < size; i++) {
@@ -89,7 +115,7 @@ public class DeleteSubCommand extends SubCommand {
                     }
 
                     playerBackpack.remove(target.getUniqueId());
-                    BpCommand.savePlayerBackPacks(target.getUniqueId());
+                    BackpackManager.savePlayerBackPacks(target.getUniqueId());
                     target.sendMessage(ChatColor.RED + "Your backpack has been deleted by " + player.getName() );
                 }
             }
