@@ -1,6 +1,14 @@
 package com.gmail.ibmesp1;
 
 import com.gmail.ibmesp1.commands.bpcommand.BpCommand;
+import com.gmail.ibmesp1.commands.bpmenu.BpMenu;
+import com.gmail.ibmesp1.commands.bpmenu.guis.*;
+import com.gmail.ibmesp1.commands.bpmenu.guis.config.ConfigGUI;
+import com.gmail.ibmesp1.commands.bpmenu.guis.config.SizeConfig;
+import com.gmail.ibmesp1.commands.bpmenu.guis.create.CreateGUI;
+import com.gmail.ibmesp1.commands.bpmenu.guis.create.SizeGUI;
+import com.gmail.ibmesp1.commands.bpmenu.guis.ChatEvent;
+import com.gmail.ibmesp1.commands.bpmenu.guis.delete.DeleteGUI;
 import com.gmail.ibmesp1.commands.bpsee.BpSee;
 import com.gmail.ibmesp1.commands.keepBackpack.keepBackpack;
 import com.gmail.ibmesp1.commands.keepBackpack.keepBackpackTab;
@@ -64,10 +72,18 @@ public final class Backpacks extends JavaPlugin {
         getCommand("bpsee").setExecutor(new BpSee(this,playerBackpack,bpm));
         getCommand("bgamerule").setExecutor(new keepBackpack(this));
         getCommand("bgamerule").setTabCompleter(new keepBackpackTab());
+        getCommand("bpmenu").setExecutor(new BpMenu(this,bpm,playerBackpack));
     }
 
     public void registerEvents(){
         Bukkit.getPluginManager().registerEvents(new PlayerEvent(this,playerBackpack),this);
         Bukkit.getPluginManager().registerEvents(new MenuListener(),this);
+        Bukkit.getPluginManager().registerEvents(new BpMenuEvents(this,playerBackpack),this);
+        Bukkit.getPluginManager().registerEvents(new ConfigGUI(this,playerBackpack),this);
+        Bukkit.getPluginManager().registerEvents(new SizeConfig(this,playerBackpack),this);
+        Bukkit.getPluginManager().registerEvents(new SizeGUI(this,playerBackpack),this);
+        Bukkit.getPluginManager().registerEvents(new DeleteGUI(this,playerBackpack),this);
+        Bukkit.getPluginManager().registerEvents(new CreateGUI(this,playerBackpack),this);
+        Bukkit.getPluginManager().registerEvents(new ChatEvent(this,playerBackpack),this);
     }
 }

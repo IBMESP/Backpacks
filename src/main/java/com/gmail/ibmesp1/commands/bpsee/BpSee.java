@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import java.awt.font.TextHitInfo;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -43,11 +44,12 @@ public class BpSee implements CommandExecutor {
             if(target == null) {
                 try {
                     UUID targetUUID = UUIDFetcher.getUUIDOf(args[0]);
-                    int size = playerBackpack.get(targetUUID).getSize();
-                    String title = args[0] + "'s Backpacks";
+                    Inventory inventory = playerBackpack.get(targetUUID);
+                    int size = inventory.getSize();
+                    String title = args[0] + "'s Backpack";
 
                     if(playerBackpack.get(targetUUID) == null){
-                        player.sendMessage(ChatColor.RED + args[0] + " no tiene mochila");
+                        player.sendMessage(ChatColor.RED + args[0] + " does not have a backpack");
                         return true;
                     }
 
@@ -59,8 +61,15 @@ public class BpSee implements CommandExecutor {
                 }
                 return true;
             }
-            int size = playerBackpack.get(target.getUniqueId()).getSize();
-            String title = target.getName() + "'s Backpacks";
+
+            if(playerBackpack.get(target.getUniqueId()) == null){
+                player.sendMessage(ChatColor.RED + args[0] + " does not have a backpack");
+                return true;
+            }
+
+            Inventory inventory = playerBackpack.get(target.getUniqueId());
+            int size = inventory.getSize();
+            String title = target.getName() + "'s Backpack";
             player.openInventory(new BackpackGUI(size,title,player,target.getUniqueId(),backpackManager).getInventory());
         }else{
             player.sendMessage(ChatColor.RED + "/bpsee <player>");

@@ -23,12 +23,12 @@ public class keepBackpack implements CommandExecutor {
         }
 
         if(!(sender instanceof Player)) {
-            if(args[0].equalsIgnoreCase("keepBackpack") && sender.hasPermission("bp.gamerule")){
+            if(args[0].equalsIgnoreCase("keepBackpack")){
                 if(args[1].equalsIgnoreCase("true")){
                     plugin.getConfig().set("keepBackpack",true);
                     Bukkit.getConsoleSender().sendMessage("Gamerule keepBackpack is now set: true");
                     plugin.saveConfig();
-                }else if(args[1].equalsIgnoreCase("false") && sender.hasPermission("bp.gamerule")){
+                }else if(args[1].equalsIgnoreCase("false")){
                     plugin.getConfig().set("keepBackpack",false);
                     Bukkit.getConsoleSender().sendMessage("Gamerule keepBackpack is now set: false");
                     plugin.saveConfig();
@@ -41,12 +41,12 @@ public class keepBackpack implements CommandExecutor {
 
         Player player = (Player) sender ;
 
-        if(args[0].equalsIgnoreCase("keepBackpack") && sender.hasPermission("bp.gamerule")){
+        if(args[0].equalsIgnoreCase("keepBackpack") && sender.hasPermission("bp.admin")){
             if(args[1].equalsIgnoreCase("true")){
                 plugin.getConfig().set("keepBackpack",true);
                 player.sendMessage("Gamerule keepBackpack is now set: true");
                 plugin.saveConfig();
-            }else if(args[1].equalsIgnoreCase("false") && sender.hasPermission("bp.gamerule")){
+            }else if(args[1].equalsIgnoreCase("false") && sender.hasPermission("bp.admin")){
                 plugin.getConfig().set("keepBackpack",false);
                 player.sendMessage("Gamerule keepBackpack is now set: false");
                 plugin.saveConfig();

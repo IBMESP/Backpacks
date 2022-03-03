@@ -93,7 +93,7 @@ public class DeleteSubCommand extends SubCommand {
 
                             playerBackpack.remove(targetUUID);
                             BackpackManager.savePlayerBackPacks(targetUUID);
-                            player.sendMessage(ChatColor.GREEN + args[1] +" 's has been deleted");
+                            player.sendMessage(ChatColor.GREEN + args[1] +"'s backpack has been deleted");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -116,8 +116,11 @@ public class DeleteSubCommand extends SubCommand {
 
                     playerBackpack.remove(target.getUniqueId());
                     BackpackManager.savePlayerBackPacks(target.getUniqueId());
-                    target.sendMessage(ChatColor.RED + "Your backpack has been deleted by " + player.getName() );
+                    target.sendMessage(ChatColor.RED + "Your backpack has been deleted by " + player.getName());
+                    player.sendMessage(ChatColor.GREEN + args[1] +"'s backpack has been deleted");
                 }
+            }else{
+                player.sendMessage(ChatColor.RED + "You do not have permission to delete other backpacks");
             }
 
         }else{

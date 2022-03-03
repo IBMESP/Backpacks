@@ -12,5 +12,7 @@ commands:
     permission: bp.bpsee
   bgamerule:
     description: To keep your backpack when you die
-    permission: bp.gamerule
+    permission: bp.admin
     aliases: bgr
+  bpmenu:
+    description: BpMenu
