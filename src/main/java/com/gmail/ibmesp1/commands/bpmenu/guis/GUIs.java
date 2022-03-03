@@ -59,7 +59,7 @@ public class GUIs {
 
         /*ItemStack debug = new ItemStack(Material.BARRIER);
         ItemMeta debug_meta = debug.getItemMeta();
-        debug_meta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Config");
+        debug_meta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Debug");
         debug.setItemMeta(config_meta);*/
 
         for(int slot:slots){

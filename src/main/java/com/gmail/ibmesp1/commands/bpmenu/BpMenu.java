@@ -43,7 +43,7 @@ public class BpMenu implements CommandExecutor {
             return false;
         }
 
-        if(!player.isOp() || !player.hasPermission("bp.admin")){
+        if(!player.hasPermission("bp.admin")){
             int easterEgg = (int) (Math.random() * 100);
 
             Inventory gui = Bukkit.createInventory(player,3*9,"Backpack Menu");

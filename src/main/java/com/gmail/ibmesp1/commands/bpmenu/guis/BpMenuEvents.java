@@ -55,13 +55,13 @@ public class BpMenuEvents implements Listener {
                     break;
                 }
 
-                case 26: {
+                /*case 26: {
                     if(player.hasPermission("bp.admin")){
                         player.sendMessage(player.getCustomName() + "");
                         return;
                     }
                     break;
-                }
+                }*/
             }
         }
     }
