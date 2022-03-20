@@ -3,6 +3,7 @@ package com.gmail.ibmesp1.commands.bpcommand;
 import com.gmail.ibmesp1.Backpacks;
 import com.gmail.ibmesp1.commands.SubCommand;
 import com.gmail.ibmesp1.commands.bpcommand.subcommands.*;
+import com.gmail.ibmesp1.data.DataManger;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -17,15 +18,16 @@ public class BpCommand  implements TabExecutor {
     private final Backpacks plugin;
     private static HashMap<UUID, Inventory> playerBackpack;
     private ArrayList<SubCommand> subCommands = new ArrayList<>();
+    private DataManger bpcm;
 
-    public BpCommand(Backpacks plugin,HashMap<UUID,Inventory> playerBackpack){
+    public BpCommand(Backpacks plugin, HashMap<UUID,Inventory> playerBackpack, DataManger bpcm){
         this.plugin = plugin;
         this.playerBackpack = playerBackpack;
 
         subCommands.add(new VersionSubCommand(plugin));
         subCommands.add(new HelpSubCommand());
-        subCommands.add(new CreateSubCommand(plugin,playerBackpack));
-        subCommands.add(new OpenSubCommand(playerBackpack));
+        subCommands.add(new CreateSubCommand(plugin,playerBackpack,bpcm));
+        subCommands.add(new OpenSubCommand(plugin,playerBackpack));
         subCommands.add(new DeleteSubCommand(plugin,playerBackpack));
         subCommands.add(new ReloadSubCommand(plugin));
     }
@@ -39,7 +41,7 @@ public class BpCommand  implements TabExecutor {
         Player player = (Player) sender ;
 
         if (args.length == 0){
-            player.sendMessage(plugin.name+ ChatColor.WHITE+" Use /bp help to see the commands");
+            player.sendMessage(plugin.name+ ChatColor.WHITE+ plugin.getLanguageString("config.help"));
             return true;
         }
 

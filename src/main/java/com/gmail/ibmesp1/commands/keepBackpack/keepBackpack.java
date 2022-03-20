@@ -1,6 +1,7 @@
 package com.gmail.ibmesp1.commands.keepBackpack;
 
 import com.gmail.ibmesp1.Backpacks;
+import com.gmail.ibmesp1.data.DataManger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -10,9 +11,11 @@ import org.bukkit.entity.Player;
 
 public class keepBackpack implements CommandExecutor {
     private final Backpacks plugin;
+    private DataManger bpcm;
 
-    public keepBackpack(Backpacks plugin) {
+    public keepBackpack(Backpacks plugin, DataManger bpcm) {
         this.plugin = plugin;
+        this.bpcm = bpcm;
     }
 
     @Override
@@ -25,13 +28,15 @@ public class keepBackpack implements CommandExecutor {
         if(!(sender instanceof Player)) {
             if(args[0].equalsIgnoreCase("keepBackpack")){
                 if(args[1].equalsIgnoreCase("true")){
-                    plugin.getConfig().set("keepBackpack",true);
-                    Bukkit.getConsoleSender().sendMessage("Gamerule keepBackpack is now set: true");
-                    plugin.saveConfig();
+                    bpcm.getConfig().set("keepBackpack",true);
+                    String gamerule = plugin.getLanguageString("gui.config.gamerule");
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + gamerule.replace("%bool", "true"));
+                    bpcm.saveConfig();
                 }else if(args[1].equalsIgnoreCase("false")){
-                    plugin.getConfig().set("keepBackpack",false);
-                    Bukkit.getConsoleSender().sendMessage("Gamerule keepBackpack is now set: false");
-                    plugin.saveConfig();
+                    bpcm.getConfig().set("keepBackpack",false);
+                    String gamerule = plugin.getLanguageString("gui.config.gamerule");
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + gamerule.replace("%bool", "false"));
+                    bpcm.saveConfig();
                 }else{
                     Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "You do not have permission to use this command");
                 }
@@ -43,15 +48,17 @@ public class keepBackpack implements CommandExecutor {
 
         if(args[0].equalsIgnoreCase("keepBackpack") && sender.hasPermission("bp.admin")){
             if(args[1].equalsIgnoreCase("true")){
-                plugin.getConfig().set("keepBackpack",true);
-                player.sendMessage("Gamerule keepBackpack is now set: true");
-                plugin.saveConfig();
+                bpcm.getConfig().set("keepBackpack",true);
+                String gamerule = plugin.getLanguageString("gui.config.gamerule");
+                player.sendMessage(ChatColor.RED + gamerule.replace("%bool", "true"));
+                bpcm.saveConfig();
             }else if(args[1].equalsIgnoreCase("false") && sender.hasPermission("bp.admin")){
-                plugin.getConfig().set("keepBackpack",false);
-                player.sendMessage("Gamerule keepBackpack is now set: false");
-                plugin.saveConfig();
+                bpcm.getConfig().set("keepBackpack",false);
+                String gamerule = plugin.getLanguageString("gui.config.gamerule");
+                player.sendMessage(ChatColor.RED + gamerule.replace("%bool", "false"));
+                bpcm.saveConfig();
             }else{
-                player.sendMessage(ChatColor.RED + "You do not have permission to use this command");
+                player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
             }
         }
         return false;

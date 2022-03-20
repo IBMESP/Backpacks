@@ -2,6 +2,7 @@ package com.gmail.ibmesp1.commands.bpmenu.guis;
 
 import com.gmail.ibmesp1.Backpacks;
 import com.gmail.ibmesp1.commands.bpmenu.BpEasterEgg;
+import com.gmail.ibmesp1.data.DataManger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,10 +21,12 @@ public class GUIs {
 
     private Backpacks plugin;
     private HashMap<UUID,Inventory> playerBackpacks;
+    private DataManger bpcm;
 
-    public GUIs(Backpacks plugin, HashMap<UUID, Inventory> playerBackpacks) {
+    public GUIs(Backpacks plugin, HashMap<UUID, Inventory> playerBackpacks,DataManger bpcm) {
         this.plugin = plugin;
         this.playerBackpacks = playerBackpacks;
+        this.bpcm = bpcm;
     }
 
     private ItemStack glass(){
@@ -44,17 +47,17 @@ public class GUIs {
 
         ItemStack create = new ItemStack(Material.CHEST);
         ItemMeta create_meta = glass.getItemMeta();
-        create_meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Create a bakcpack");
+        create_meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + plugin.getLanguageString("gui.items.create"));
         create.setItemMeta(create_meta);
 
         ItemStack delete = new ItemStack(Material.TNT);
         ItemMeta delete_meta = glass.getItemMeta();
-        delete_meta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Delete a bakcpack");
+        delete_meta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + plugin.getLanguageString("gui.items.delete"));
         delete.setItemMeta(delete_meta);
 
         ItemStack config = new ItemStack(Material.REDSTONE);
         ItemMeta config_meta = config.getItemMeta();
-        config_meta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Config");
+        config_meta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + plugin.getLanguageString("gui.items.config"));
         config.setItemMeta(config_meta);
 
         /*ItemStack debug = new ItemStack(Material.BARRIER);
@@ -86,12 +89,12 @@ public class GUIs {
 
         ItemStack create = new ItemStack(Material.CHEST);
         ItemMeta create_meta = glass.getItemMeta();
-        create_meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Create a bakcpack");
+        create_meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + plugin.getLanguageString("gui.items.create"));
         create.setItemMeta(create_meta);
 
         ItemStack delete = new ItemStack(Material.TNT);
         ItemMeta delete_meta = glass.getItemMeta();
-        delete_meta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Delete a bakcpack");
+        delete_meta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + plugin.getLanguageString("gui.items.delete"));
         delete.setItemMeta(delete_meta);
 
 
@@ -109,35 +112,35 @@ public class GUIs {
 
     public Inventory configGUI(Player player){
 
-        Inventory configGUI = Bukkit.createInventory(player, 4*9, "Configuration");
+        Inventory configGUI = Bukkit.createInventory(player, 4*9, plugin.getLanguageString("gui.items.configuration"));
         int[] slots = {0,1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,19,21,23,25,26,27,28,29,30,31,32,33,34};
 
         ItemStack keepBackpack = new ItemStack(Material.TOTEM_OF_UNDYING);
         ItemMeta kbMeta = keepBackpack.getItemMeta();
-        kbMeta.setDisplayName("Keep Backpack");
+        kbMeta.setDisplayName(plugin.getLanguageString("gui.items.keepBackpack"));
         ArrayList<String> kbLore = new ArrayList<>();
-        kbLore.add("Current: " + plugin.getConfig().getBoolean("keepBackpack"));
+        kbLore.add(plugin.getLanguageString("gui.items.current") + plugin.getConfig().getBoolean("keepBackpack"));
         kbMeta.setLore(kbLore);
         keepBackpack.setItemMeta(kbMeta);
 
         ItemStack small = new ItemStack(Material.CHEST);
         ItemMeta small_meta = small.getItemMeta();
-        small_meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Small Backpack");
+        small_meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + plugin.getLanguageString("gui.size.small"));
         small.setItemMeta(small_meta);
 
         ItemStack medium = new ItemStack(Material.CHEST);
         ItemMeta medium_meta = medium.getItemMeta();
-        medium_meta.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Medium Backpack");
+        medium_meta.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + plugin.getLanguageString("gui.size.medium"));
         medium.setItemMeta(medium_meta);
 
         ItemStack large = new ItemStack(Material.CHEST);
         ItemMeta large_meta = large.getItemMeta();
-        large_meta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Large Backpack");
+        large_meta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + plugin.getLanguageString("gui.size.large"));
         large.setItemMeta(large_meta);
 
         ItemStack back = new ItemStack(Material.ARROW);
         ItemMeta back_meta = back.getItemMeta();
-        back_meta.setDisplayName(ChatColor.DARK_RED + "Back");
+        back_meta.setDisplayName(ChatColor.DARK_RED + plugin.getLanguageString("gui.items.back"));
         back.setItemMeta(back_meta);
 
         for (int slot : slots) {
@@ -154,27 +157,27 @@ public class GUIs {
     }
 
     public Inventory createGUI(Player player){
-        Inventory createGUI = Bukkit.createInventory(player, 9, "Size");
+        Inventory createGUI = Bukkit.createInventory(player, 9, plugin.getLanguageString("gui.items.size"));
         int[] slots = {0, 1, 3, 5, 7};
 
         ItemStack small = new ItemStack(Material.CHEST);
         ItemMeta small_meta = small.getItemMeta();
-        small_meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Small Backpack");
+        small_meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + capitalizeFirstLetter(plugin.getLanguageString("gui.size.small")));
         small.setItemMeta(small_meta);
 
         ItemStack medium = new ItemStack(Material.CHEST);
         ItemMeta medium_meta = medium.getItemMeta();
-        medium_meta.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Medium Backpack");
+        medium_meta.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + plugin.getLanguageString("gui.size.medium"));
         medium.setItemMeta(medium_meta);
 
         ItemStack large = new ItemStack(Material.CHEST);
         ItemMeta large_meta = large.getItemMeta();
-        large_meta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Large Backpack");
+        large_meta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + plugin.getLanguageString("gui.size.large"));
         large.setItemMeta(large_meta);
 
         ItemStack back = new ItemStack(Material.ARROW);
         ItemMeta back_meta = back.getItemMeta();
-        back_meta.setDisplayName(ChatColor.DARK_RED + "Back");
+        back_meta.setDisplayName(ChatColor.DARK_RED + plugin.getLanguageString("gui.items.back"));
         back.setItemMeta(back_meta);
 
         for (int slot : slots) {
@@ -190,17 +193,17 @@ public class GUIs {
     }
 
     public Inventory deleteGUI(){
-        Inventory deleteGUI = Bukkit.createInventory(null, 54, "Players Online (Delete)");
+        Inventory deleteGUI = Bukkit.createInventory(null, 54, plugin.getLanguageString("gui.delete.title"));
 
         ItemStack anvil = new ItemStack(Material.ANVIL);
         ItemMeta anvilMeta = anvil.getItemMeta();
-        anvilMeta.setDisplayName("Search a player");
+        anvilMeta.setDisplayName(plugin.getLanguageString("gui.items.search"));
         anvil.setItemMeta(anvilMeta);
         deleteGUI.setItem(49,anvil);
 
         ItemStack back = new ItemStack(Material.ARROW);
         ItemMeta back_meta = back.getItemMeta();
-        back_meta.setDisplayName(ChatColor.DARK_RED + "Back");
+        back_meta.setDisplayName(ChatColor.DARK_RED + plugin.getLanguageString("gui.items.back"));
         back.setItemMeta(back_meta);
 
         deleteGUI.setItem(53,back);
@@ -219,9 +222,9 @@ public class GUIs {
             meta.setOwningPlayer(p);
 
             if(playerBackpacks.containsKey(p.getUniqueId())){
-                lore.add(ChatColor.GREEN + name + " has a backpack");
+                lore.add(ChatColor.GREEN + name + plugin.getLanguageString("gui.items.has"));
             }else {
-                lore.add(ChatColor.RED + name + " does not have a backpack");
+                lore.add(ChatColor.RED + name + plugin.getLanguageString("gui.items.hasNot"));
             }
             meta.setLore(lore);
             meta.setDisplayName(ChatColor.GOLD + name);
@@ -234,13 +237,13 @@ public class GUIs {
     }
 
     public Inventory sizeConfigGUI(String path,String title){
-        int size = plugin.getConfig().getInt(path + "Size");
+        int size = bpcm.getConfig().getInt(path + "Size");
 
-        Inventory sizeGUI = Bukkit.createInventory(null,9, title + " Size");
+        Inventory sizeGUI = Bukkit.createInventory(null,9, title);
 
         ItemStack back = new ItemStack(Material.ARROW);
         ItemMeta back_meta = back.getItemMeta();
-        back_meta.setDisplayName(ChatColor.DARK_RED + "Back");
+        back_meta.setDisplayName(ChatColor.DARK_RED + plugin.getLanguageString("gui.items.back"));
         back.setItemMeta(back_meta);
 
         for(int i=1;i<7;i++){
@@ -267,18 +270,21 @@ public class GUIs {
     }
 
     public Inventory sizeGUI(String size){
-        Inventory sizeGUI = Bukkit.createInventory(null, 54, "Players Online ("+ size +")");
+
+        String create = plugin.getLanguageString("gui.create.title");
+
+        Inventory sizeGUI = Bukkit.createInventory(null, 54, create.replace("%size", size));
         int[] glass_slots = {0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,48,50,51,52};
 
         ItemStack anvil = new ItemStack(Material.ANVIL);
         ItemMeta anvilMeta = anvil.getItemMeta();
-        anvilMeta.setDisplayName("Search a player");
+        anvilMeta.setDisplayName(plugin.getLanguageString("gui.items.search"));
         anvil.setItemMeta(anvilMeta);
         sizeGUI.setItem(49,anvil);
 
         ItemStack back = new ItemStack(Material.ARROW);
         ItemMeta back_meta = back.getItemMeta();
-        back_meta.setDisplayName(ChatColor.DARK_RED + "Back");
+        back_meta.setDisplayName(ChatColor.DARK_RED + plugin.getLanguageString("gui.items.back"));
         back.setItemMeta(back_meta);
 
         for (int slot : glass_slots) {
@@ -296,9 +302,9 @@ public class GUIs {
 
             meta.setOwningPlayer(p);
             if(playerBackpacks.containsKey(p.getUniqueId())){
-                lore.add(ChatColor.GREEN + name + " has a backpack");
+                lore.add(ChatColor.GREEN + name + plugin.getLanguageString("gui.items.has"));
             }else{
-                lore.add(ChatColor.RED + name + " does not have a backpack");
+                lore.add(ChatColor.RED + name + plugin.getLanguageString("gui.items.hasNot"));
             }
             meta.setLore(lore);
             meta.setDisplayName(ChatColor.GOLD + name);
@@ -308,5 +314,9 @@ public class GUIs {
         }
 
         return sizeGUI;
+    }
+
+    private String capitalizeFirstLetter(String string) {
+        return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 }

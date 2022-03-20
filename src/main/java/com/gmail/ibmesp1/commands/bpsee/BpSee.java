@@ -46,10 +46,11 @@ public class BpSee implements CommandExecutor {
                     UUID targetUUID = UUIDFetcher.getUUIDOf(args[0]);
                     Inventory inventory = playerBackpack.get(targetUUID);
                     int size = inventory.getSize();
-                    String title = args[0] + "'s Backpack";
+                    String getTitle = plugin.getLanguageString("config.title");
+                    String title = getTitle.replace("%player",player.getName());
 
                     if(playerBackpack.get(targetUUID) == null){
-                        player.sendMessage(ChatColor.RED + args[0] + " does not have a backpack");
+                        player.sendMessage(ChatColor.RED + args[0] + plugin.getLanguageString("gui.item.hasNot"));
                         return true;
                     }
 
@@ -63,13 +64,14 @@ public class BpSee implements CommandExecutor {
             }
 
             if(playerBackpack.get(target.getUniqueId()) == null){
-                player.sendMessage(ChatColor.RED + args[0] + " does not have a backpack");
+                player.sendMessage(ChatColor.RED + args[0] + plugin.getLanguageString("gui.item.hasNot"));
                 return true;
             }
 
             Inventory inventory = playerBackpack.get(target.getUniqueId());
             int size = inventory.getSize();
-            String title = target.getName() + "'s Backpack";
+            String getTitle = plugin.getLanguageString("config.title");
+            String title = getTitle.replace("%player",player.getName());
             player.openInventory(new BackpackGUI(size,title,player,target.getUniqueId(),backpackManager).getInventory());
         }else{
             player.sendMessage(ChatColor.RED + "/bpsee <player>");

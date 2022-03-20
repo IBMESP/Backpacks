@@ -4,6 +4,7 @@ package com.gmail.ibmesp1.commands.bpmenu.guis.create;
 import com.gmail.ibmesp1.Backpacks;
 import com.gmail.ibmesp1.commands.bpmenu.BpEasterEgg;
 import com.gmail.ibmesp1.commands.bpmenu.guis.GUIs;
+import com.gmail.ibmesp1.data.DataManger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,16 +21,18 @@ public class SizeGUI implements Listener {
     private GUIs guis;
     private BpEasterEgg bpEasterEgg;
     private HashMap<UUID,Inventory> playerBackpacks;
+    private DataManger bpcm;
 
-    public SizeGUI(Backpacks plugin,HashMap<UUID,Inventory> playerBackpacks) {
+    public SizeGUI(Backpacks plugin,HashMap<UUID,Inventory> playerBackpacks,DataManger bpcm) {
         this.plugin = plugin;
         this.playerBackpacks = playerBackpacks;
-        this.guis = new GUIs(plugin,playerBackpacks);
+        this.guis = new GUIs(plugin,playerBackpacks,bpcm);
+        this.bpcm = bpcm;
     }
 
     @EventHandler
     public void clickGUI(InventoryClickEvent e) {
-        if (e.getView().getTitle().equalsIgnoreCase("Size")) {
+        if (e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.items.size"))) {
             e.setCancelled(true);
 
             Player player = (Player) e.getWhoClicked();
@@ -37,19 +40,19 @@ public class SizeGUI implements Listener {
 
             switch (e.getSlot()) {
                 case 2:{
-                    Inventory sizeGUI = guis.sizeGUI("Small");
+                    Inventory sizeGUI = guis.sizeGUI(capitalizeFirstLetter(plugin.getLanguageString("gui.small")));
 
                     player.openInventory(sizeGUI);
                     break;
                 }
                 case 4:{
-                    Inventory sizeGUI = guis.sizeGUI("Medium");
+                    Inventory sizeGUI = guis.sizeGUI(capitalizeFirstLetter(plugin.getLanguageString("gui.medium")));
 
                     player.openInventory(sizeGUI);
                     break;
                 }
                 case 6:{
-                    Inventory sizeGUI = guis.sizeGUI("Large");
+                    Inventory sizeGUI = guis.sizeGUI(capitalizeFirstLetter(plugin.getLanguageString("gui.large")));
 
                     player.openInventory(sizeGUI);
                     break;
@@ -59,7 +62,7 @@ public class SizeGUI implements Listener {
                     if(!player.hasPermission("bp.admin")){
                         int easterEgg = (int) (Math.random() * 100);
 
-                        Inventory gui = Bukkit.createInventory(player,3*9,"Backpack Menu");
+                        Inventory gui = Bukkit.createInventory(player,3*9,plugin.getLanguageString("gui.title"));
                         bpEasterEgg = new BpEasterEgg(gui);
 
                         gui = guis.menuGUI(gui,bpEasterEgg,easterEgg);
@@ -69,7 +72,7 @@ public class SizeGUI implements Listener {
                     }
 
                     int easterEgg = (int) (Math.random() * 100);
-                    Inventory gui = Bukkit.createInventory(player,3*9,"Backpack Menu");
+                    Inventory gui = Bukkit.createInventory(player,3*9,plugin.getLanguageString("gui.title"));
                     bpEasterEgg = new BpEasterEgg(gui);
 
                     gui = guis.menuOPGUI(gui,bpEasterEgg,easterEgg);
@@ -79,5 +82,9 @@ public class SizeGUI implements Listener {
                 }
             }
         }
+    }
+
+    private String capitalizeFirstLetter(String string) {
+        return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 }

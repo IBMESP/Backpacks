@@ -1,5 +1,4 @@
-keepBackpack: false
-
-smallSize: 1
-mediumSize: 3
-largeSize: 6
+#Available languages
+#en_US
+#es_ES
+locale: en_US

@@ -2,6 +2,7 @@ package com.gmail.ibmesp1.commands.bpcommand.subcommands;
 
 import com.gmail.ibmesp1.Backpacks;
 import com.gmail.ibmesp1.commands.SubCommand;
+import com.gmail.ibmesp1.data.DataManger;
 import com.gmail.ibmesp1.utils.UUIDFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,10 +17,12 @@ public class CreateSubCommand extends SubCommand {
     private int smallSize;
     private int mediumSize;
     private int largeSize;
+    private DataManger bpcm;
 
-    public CreateSubCommand(Backpacks plugin,HashMap<UUID,Inventory> playerBackpack) {
+    public CreateSubCommand(Backpacks plugin, HashMap<UUID,Inventory> playerBackpack, DataManger bpcm) {
         this.plugin = plugin;
         this.playerBackpack = playerBackpack;
+        this.bpcm = bpcm;
     }
 
     @Override
@@ -54,17 +57,17 @@ public class CreateSubCommand extends SubCommand {
                             return;
                         }
 
-                        createTargetBackpack(player, target, smallSize, "small");
+                        createTargetBackpack(player, target, smallSize, plugin.getLanguageString("gui.small"));
                         return;
                     }else{
-                        player.sendMessage(ChatColor.RED + "You do not have permission to use this command");
+                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
                     }
                 }
 
                 createBackpack(player,smallSize);
 
             }else {
-                player.sendMessage(ChatColor.RED + "You do not have permission to use this command");
+                player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
             }
         }else if (args[1].equalsIgnoreCase("m")) {
             if(player.hasPermission("bp.medium")) {
@@ -78,16 +81,16 @@ public class CreateSubCommand extends SubCommand {
                             return;
                         }
 
-                        createTargetBackpack(player, target, mediumSize, "medium");
+                        createTargetBackpack(player, target, mediumSize, plugin.getLanguageString("gui.medium"));
                         return;
                     }else{
-                        player.sendMessage(ChatColor.RED + "You do not have permission to use this command");
+                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
                     }
                 }
 
                 createBackpack(player,mediumSize);
             }else{
-                player.sendMessage(ChatColor.RED + "You do not have permission to use this command");
+                player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
             }
         }else if (args[1].equalsIgnoreCase("l")) {
             if (player.hasPermission("bp.large")) {
@@ -101,42 +104,47 @@ public class CreateSubCommand extends SubCommand {
                             return;
                         }
 
-                        createTargetBackpack(player, target, largeSize, "large");
+                        createTargetBackpack(player, target, largeSize, plugin.getLanguageString("gui.large"));
                         return;
                     }else{
-                        player.sendMessage(ChatColor.RED + "You do not have permission to use this command");
+                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
                     }
                 }
 
                 createBackpack(player,largeSize);
             } else {
-                player.sendMessage(ChatColor.RED + "You do not have permission to use this command");
+                player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
             }
         }else{
-            player.sendMessage(plugin.name + ChatColor.RED + " This command doesn't exists");
+            player.sendMessage(plugin.name + ChatColor.RED + plugin.getLanguageString("config.exist"));
         }
     }
 
     private void createBackpack(Player player,int size){
         if (playerBackpack.containsKey(player.getUniqueId())) {
-            player.sendMessage(ChatColor.RED + "You already have a backpack");
+            player.sendMessage(ChatColor.RED + plugin.getLanguageString("create.already"));
             return;
         }
 
-        Inventory inventory = Bukkit.createInventory(null, size * 9,player.getName() + "'s Backpack");
+        String title = plugin.getLanguageString("config.title");
+
+        Inventory inventory = Bukkit.createInventory(null, size * 9,title.replace("%player",player.getName()));
         playerBackpack.put(player.getUniqueId(), inventory);
         player.openInventory(inventory);
     }
 
     private void createTargetBackpack(Player player,Player target,int size,String Size){
         if (playerBackpack.containsKey(target.getUniqueId())) {
-            player.sendMessage(ChatColor.RED + target.getName() + " already have a backpack");
+            player.sendMessage(ChatColor.RED + target.getName() + plugin.getLanguageString("create.target.already"));
             return;
         }
 
-        Inventory inventory = Bukkit.createInventory(target, size * 9,target.getName() + "'s Backpack");
-        target.sendMessage(player.getName() + " created you a " + Size + " backpack");
-        target.sendMessage("Use /bp open to open the backpack");
+        String title = plugin.getLanguageString("config.title");
+
+        Inventory inventory = Bukkit.createInventory(target, size * 9,title.replace("%player",target.getName()));
+        String created = plugin.getLanguageString("create.target.create");
+        target.sendMessage(created.replace("%player",player.getName()).replace("%size", Size));
+        target.sendMessage(plugin.getLanguageString("config.open"));
         playerBackpack.put(target.getUniqueId(), inventory);
     }
 
@@ -144,30 +152,32 @@ public class CreateSubCommand extends SubCommand {
         try {
             UUID targetUUID = UUIDFetcher.getUUIDOf(target);
             if(playerBackpack.containsKey(targetUUID)){
-                player.sendMessage(ChatColor.RED + target + " already have a backpack");
+                player.sendMessage(ChatColor.RED + target + plugin.getLanguageString("create.target.already"));
                 return;
             }
 
-            Inventory inventory = Bukkit.createInventory(null,size * 9,target + "'s Backpack");
+            String title = plugin.getLanguageString("config.title");
+
+            Inventory inventory = Bukkit.createInventory(null,size * 9,title.replace("%palyer",target));
             playerBackpack.put(targetUUID,inventory);
-            player.sendMessage(ChatColor.GREEN + "You created a backpack to " + target);
+            player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("create.target.created") + target);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     private void checkSize(){
-        smallSize = plugin.getConfig().getInt("smallSize");
-        mediumSize = plugin.getConfig().getInt("mediumSize");
-        largeSize = plugin.getConfig().getInt("largeSize");
+        smallSize = bpcm.getConfig().getInt("smallSize");
+        mediumSize = bpcm.getConfig().getInt("mediumSize");
+        largeSize = bpcm.getConfig().getInt("largeSize");
 
         if(smallSize > 6 || smallSize < 1){
             if(smallSize < 1){
                 smallSize = 1;
-                plugin.getConfig().set("smallSize",1);
+                bpcm.getConfig().set("smallSize",1);
                 return;
             }
             smallSize = 6;
-            plugin.getConfig().set("smallSize",6);
+            bpcm.getConfig().set("smallSize",6);
         }
         if(mediumSize > 6 || mediumSize < 1){
             if(mediumSize < 1){
@@ -176,16 +186,16 @@ public class CreateSubCommand extends SubCommand {
                 return;
             }
             mediumSize = 6;
-            plugin.getConfig().set("mediumSize",6);
+            bpcm.getConfig().set("mediumSize",6);
         }
         if (largeSize > 6|| largeSize < 1){
             if(largeSize < 1){
                 largeSize = 1;
-                plugin.getConfig().set("largeSize",1);
+                bpcm.getConfig().set("largeSize",1);
                 return;
             }
             largeSize = 6;
-            plugin.getConfig().set("largeSize",6);
+            bpcm.getConfig().set("largeSize",6);
         }
     }
 }

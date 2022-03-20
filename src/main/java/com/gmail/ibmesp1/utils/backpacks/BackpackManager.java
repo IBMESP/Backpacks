@@ -44,7 +44,8 @@ public class BackpackManager {
         for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
             if (cfg.contains(player.getUniqueId().toString())) {
                 String inventory = cfg.getString(player.getUniqueId().toString());
-                playerBackpack.put(player.getUniqueId(), inventoryFromBase64(inventory,player.getName() + "'s Backpack"));
+                String title = plugin.getLanguageString("config.title");
+                playerBackpack.put(player.getUniqueId(), inventoryFromBase64(inventory,title.replace("%player",player.getName())));
             }
         }
     }
@@ -52,7 +53,8 @@ public class BackpackManager {
     public static void loadPlayerBackPacks(OfflinePlayer player) {
         if (cfg.contains(player.getUniqueId().toString())) {
             String inventory = cfg.getString(player.getUniqueId().toString());
-            playerBackpack.put(player.getUniqueId(), inventoryFromBase64(inventory,player.getName() + "'s Backpack"));
+            String title = plugin.getLanguageString("config.title");
+            playerBackpack.put(player.getUniqueId(), inventoryFromBase64(inventory,title.replace("%player",player.getName())));
         }
     }
 

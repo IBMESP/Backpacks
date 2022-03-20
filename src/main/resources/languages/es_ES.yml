@@ -1,0 +1,58 @@
+create:
+  already: "Ya tienes una mochila"
+  perm: "No tienes permiso para crear una mochila %size"
+  target:
+    already: " ya tiene una mochila"
+    created: "Has creado una mochila a "
+    create: "%player te ha creado una mochila %size"
+    perm: "No tines permiso para crear mochilas a otros"
+delete:
+  firtsmsg: "Esto eliminara tu mochila y los objetos seran soltados"
+  secondmsg: "/bp delete confirm para eliminar tu mochila"
+  notBackpack: "No tienes una mochila"
+  deleted: "Tu mochila ha sido eliminada"
+  target:
+    firstmsg: "Esto eliminara la mochila de %target y los obejetos de %target seran soltados"
+    secondmsg: "/bp delete %target confirm para eliminar su mochila"
+    notBackpack: " no tiene una mochila"
+    deleted: "'s backpack ha sido eliminada"
+    perm: "No tienes permiso para eliminar la mochila de otros"
+    deletedBy: "Tu mochila ha sido eliminado por "
+gui:
+  small: "pequeño"
+  medium: "mediano"
+  large: "grande"
+  title: "Backpack Menu"
+  browser: "Escribe el nombre"
+  size:
+    small: "Tamaño pequeño"
+    medium: "Tamaño mediano"
+    large: "Tamaño grande"
+  items:
+    create: "Crear una mochila"
+    delete: "Eliminar una mochila"
+    config: "Config"
+    configuration: "Configuracion"
+    keepBackpack: "Mantener mochila"
+    current: "Actualmente: "
+    back: "Atras"
+    search: "Busca un jugador"
+    has: " tiene una mochila"
+    hasNot: " no tiene una mochila"
+    size: "Tamaño"
+  config:
+    gamerule: "Gamerule keepBackpack is now set: %bool"
+    changeSize: "Tamaño %size establecido a %num fila"
+  create:
+    title: "Jugadores Online (%size)"
+  delete:
+    title: "Jugadores Online (Eliminar)"
+config:
+  reloaded: "[Backpacks] Configuracion recargada!"
+  perms: "No tienes permiso de usar este comando"
+  exist: "Este coamndo no existe"
+  open: "Usa /bp open para abrir la mochila"
+  help: "Usa /bp help para ver los comandos"
+  update: "Backpacks tiene una nueva actualizacion"
+  notUpdate: "Backpacks esta actualizado"
+  title: "Mochila de %player"

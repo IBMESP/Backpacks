@@ -3,6 +3,7 @@ package com.gmail.ibmesp1.commands.bpmenu.guis.delete;
 import com.gmail.ibmesp1.Backpacks;
 import com.gmail.ibmesp1.commands.bpmenu.BpEasterEgg;
 import com.gmail.ibmesp1.commands.bpmenu.guis.GUIs;
+import com.gmail.ibmesp1.data.DataManger;
 import com.gmail.ibmesp1.utils.backpacks.BackpackManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,19 +21,24 @@ public class DeleteGUI implements Listener {
 
     private Backpacks plugin;
     private HashMap<UUID, Inventory> playerBackpacks;
+    private HashMap<UUID, String> customName;
     private boolean head;
     private GUIs guis;
     private BpEasterEgg bpEasterEgg;
+    private DataManger bpcm;
 
-    public DeleteGUI(Backpacks plugin,HashMap<UUID,Inventory> playerBackpacks) {
+
+    public DeleteGUI(Backpacks plugin,HashMap<UUID,Inventory> playerBackpacks,HashMap<UUID, String> customName,DataManger bpcm) {
         this.plugin = plugin;
         this.playerBackpacks = playerBackpacks;
-        this.guis = new GUIs(plugin,playerBackpacks);
+        this.customName = customName;
+        this.guis = new GUIs(plugin,playerBackpacks,bpcm);
+        this.bpcm = bpcm;
     }
 
     @EventHandler
     public void clickGUI(InventoryClickEvent e) {
-        if (e.getView().getTitle().equalsIgnoreCase("Players Online (Delete)")) {
+        if (e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.delete.title"))) {
             e.setCancelled(true);
             Player player = (Player) e.getWhoClicked();
 
@@ -41,13 +47,14 @@ public class DeleteGUI implements Listener {
             if(e.getSlot() == 49){
 
                 if (!player.hasPermission("bp.admin")){
-                    player.sendMessage(ChatColor.RED + "You do not have permission to delete other backpacks");
+                    player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.perm"));
                     return;
                 }
 
                 player.closeInventory();
+                customName.put(player.getUniqueId(),player.getCustomName());
                 player.setCustomName("delete");
-                player.sendMessage(ChatColor.GRAY + "Write the name");
+                player.sendMessage(ChatColor.GRAY + plugin.getLanguageString("gui.browser"));
                 return;
             }
 
@@ -56,7 +63,7 @@ public class DeleteGUI implements Listener {
                 if(!player.hasPermission("bp.admin")){
                     int easterEgg = (int) (Math.random() * 100);
 
-                    Inventory gui = Bukkit.createInventory(player,3*9,"Backpack Menu");
+                    Inventory gui = Bukkit.createInventory(player,3*9,plugin.getLanguageString("gui.title"));
                     bpEasterEgg = new BpEasterEgg(gui);
 
                     gui = guis.menuGUI(gui,bpEasterEgg,easterEgg);
@@ -66,7 +73,7 @@ public class DeleteGUI implements Listener {
                 }
 
                 int easterEgg = (int) (Math.random() * 100);
-                Inventory gui = Bukkit.createInventory(player,3*9,"Backpack Menu");
+                Inventory gui = Bukkit.createInventory(player,3*9,plugin.getLanguageString("gui.title"));
                 bpEasterEgg = new BpEasterEgg(gui);
 
                 gui = guis.menuOPGUI(gui,bpEasterEgg,easterEgg);
@@ -93,7 +100,7 @@ public class DeleteGUI implements Listener {
 
                         if(!playerBackpacks.containsKey(target.getUniqueId())){
                             e.setCancelled(true);
-                            player.sendMessage(ChatColor.RED + "You do not have a backpack");
+                            player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.notBackpack"));
                             return;
                         }
 
@@ -110,17 +117,17 @@ public class DeleteGUI implements Listener {
 
                         playerBackpacks.remove(target.getUniqueId());
                         BackpackManager.savePlayerBackPacks(target.getUniqueId());
-                        player.sendMessage(ChatColor.GREEN +"Your backpack has been deleted");
+                        player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("delete.deleted"));
                         player.closeInventory();
                     }else{
-                        player.sendMessage(ChatColor.RED + "You do not have permission to delete other backpacks");
+                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.perm"));
                     }
                     return;
                 }
 
                 if(!playerBackpacks.containsKey(target.getUniqueId())){
                     e.setCancelled(true);
-                    player.sendMessage(ChatColor.RED + target.getName() + " does not have a backpack");
+                    player.sendMessage(ChatColor.RED + target.getName() + plugin.getLanguageString("delete.target.notBackpack"));
                     return;
                 }
 
@@ -138,10 +145,10 @@ public class DeleteGUI implements Listener {
                 playerBackpacks.remove(target.getUniqueId());
                 BackpackManager.savePlayerBackPacks(target.getUniqueId());
                 if(!(player.getUniqueId() == target.getUniqueId())){
-                    target.sendMessage(ChatColor.RED + "Your backpack has been deleted by " + player.getName());
-                    player.sendMessage(ChatColor.GREEN + target.getName() +"'s backpack has been deleted");
+                    target.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.deletedBy") + player.getName());
+                    player.sendMessage(ChatColor.GREEN + target.getName() + plugin.getLanguageString("delete.target.deleted"));
                 }else if(player.getUniqueId() == target.getUniqueId()){
-                    player.sendMessage(ChatColor.GREEN + "Your backpack has been deleted");
+                    player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("delete.deleted"));
                 }
                 player.closeInventory();
 

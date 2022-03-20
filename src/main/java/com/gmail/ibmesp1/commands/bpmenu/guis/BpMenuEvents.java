@@ -1,10 +1,12 @@
 package com.gmail.ibmesp1.commands.bpmenu.guis;
 
 import com.gmail.ibmesp1.Backpacks;
+import com.gmail.ibmesp1.data.DataManger;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;
@@ -15,16 +17,18 @@ public class BpMenuEvents implements Listener {
     private Backpacks plugin;
     private GUIs guis;
     private HashMap<UUID,Inventory> playerBackpacks;
+    private DataManger bpcm;
 
-    public BpMenuEvents(Backpacks plugin,HashMap<UUID,Inventory> playerBackpacks) {
+    public BpMenuEvents(Backpacks plugin,HashMap<UUID,Inventory> playerBackpacks,DataManger bpcm) {
         this.plugin = plugin;
         this.playerBackpacks = playerBackpacks;
-        this.guis = new GUIs(plugin,playerBackpacks);
+        this.bpcm = bpcm;
+        this.guis = new GUIs(plugin,playerBackpacks,bpcm);
     }
 
     @EventHandler
     public void clickEvent(InventoryClickEvent e){
-        if(e.getView().getTitle().equalsIgnoreCase("Backpack Menu")){
+        if(e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.title"))){
             e.setCancelled(true);
 
             Player player = (Player) e.getWhoClicked();

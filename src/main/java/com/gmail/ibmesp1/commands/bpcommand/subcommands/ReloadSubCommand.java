@@ -25,10 +25,10 @@ public class ReloadSubCommand extends SubCommand {
         if(args.length == 1){
             if (player.hasPermission("bp.reload")) {
                 plugin.reloadConfig();
-                player.sendMessage(ChatColor.GREEN + "[Backpacks] Config reloaded!");
-                System.out.println("[Backpacks] Config reloaded!");
+                player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("config.reloaded"));
+                System.out.println(plugin.getLanguageString("config.reloaded"));
             }else{
-                player.sendMessage(ChatColor.RED + "You do not have permission to use this command");
+                player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
             }
         }
     }

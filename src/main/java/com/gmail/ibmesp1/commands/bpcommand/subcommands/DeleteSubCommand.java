@@ -45,11 +45,11 @@ public class DeleteSubCommand extends SubCommand {
         Inventory inventory = playerBackpack.get(player.getUniqueId());
 
         if(args.length == 1){
-            player.sendMessage(ChatColor.RED + "This will remove your backpack and your items will be dropped");
-            player.sendMessage(ChatColor.RED + "/bp delete confirm to delete the backpack");
+            player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.firstmsg") );
+            player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.secondmsg"));
         }else if(args[1].equalsIgnoreCase("confirm")){
             if(inventory == null){
-                player.sendMessage(ChatColor.RED + "You do not have a backpack");
+                player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.notBackpack"));
                 return;
             }
             Inventory prevInventory = playerBackpack.get(player.getUniqueId());
@@ -63,14 +63,16 @@ public class DeleteSubCommand extends SubCommand {
 
             playerBackpack.remove(player.getUniqueId());
             BackpackManager.savePlayerBackPacks(player.getUniqueId());
-            player.sendMessage(ChatColor.RED + "Your backpack has been deleted");
+            player.sendMessage(ChatColor.RED +  plugin.getLanguageString("delete.deleted"));
         }else if(args.length == 2 || args.length == 3) {
 
             if(player.hasPermission("bp.admin")) {
 
                 if(args.length == 2){
-                    player.sendMessage(ChatColor.RED + "This will remove " + args[1] + " backpack and " + args[1] +  " items will be dropped");
-                    player.sendMessage(ChatColor.RED + "/bp delete " + args[1] + " confirm to delete the backpack");
+                    String delete1 = plugin.getLanguageString("delete.target.firtsmsg");
+                    String delete2 = plugin.getLanguageString("delete.target.secondmsg");
+                    player.sendMessage(ChatColor.RED + delete1.replace("%target", args[1]));
+                    player.sendMessage(ChatColor.RED + delete2.replace("%target", args[1]));
                 }else if(args[2].equalsIgnoreCase("confirm")) {
                     Player target = Bukkit.getPlayer(args[1]);
 
@@ -79,7 +81,7 @@ public class DeleteSubCommand extends SubCommand {
                             UUID targetUUID = UUIDFetcher.getUUIDOf(args[1]);
                             Inventory prevInventory = playerBackpack.get(targetUUID);
                             if(prevInventory == null){
-                                player.sendMessage(ChatColor.RED + args[1] + " does not have a backpack");
+                                player.sendMessage(ChatColor.RED + args[1] + plugin.getLanguageString("delete.target.notBackpack"));
                                 return;
                             }
                             int size = prevInventory.getSize();
@@ -93,7 +95,7 @@ public class DeleteSubCommand extends SubCommand {
 
                             playerBackpack.remove(targetUUID);
                             BackpackManager.savePlayerBackPacks(targetUUID);
-                            player.sendMessage(ChatColor.GREEN + args[1] +"'s backpack has been deleted");
+                            player.sendMessage(ChatColor.GREEN + args[1] + plugin.getLanguageString("delete.target.deleted"));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -102,7 +104,7 @@ public class DeleteSubCommand extends SubCommand {
 
                     Inventory prevInventory = playerBackpack.get(target.getUniqueId());
                     if(prevInventory == null){
-                        player.sendMessage(ChatColor.RED + target.getName() + " does not have a backpack");
+                        player.sendMessage(ChatColor.RED + target.getName() + plugin.getLanguageString("delete.target.notBackpack"));
                         return;
                     }
                     int size = prevInventory.getSize();
@@ -116,15 +118,15 @@ public class DeleteSubCommand extends SubCommand {
 
                     playerBackpack.remove(target.getUniqueId());
                     BackpackManager.savePlayerBackPacks(target.getUniqueId());
-                    target.sendMessage(ChatColor.RED + "Your backpack has been deleted by " + player.getName());
-                    player.sendMessage(ChatColor.GREEN + args[1] +"'s backpack has been deleted");
+                    target.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.deletedBy") + player.getName());
+                    player.sendMessage(ChatColor.GREEN + args[1] + plugin.getLanguageString("delete.target.deleted"));
                 }
             }else{
-                player.sendMessage(ChatColor.RED + "You do not have permission to delete other backpacks");
+                player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.delete"));
             }
 
         }else{
-            player.sendMessage(plugin.name + ChatColor.RED + " This command doesn't exists");
+            player.sendMessage(plugin.name + ChatColor.RED + plugin.getLanguageString("delete.config.exist"));
         }
     }
 }
