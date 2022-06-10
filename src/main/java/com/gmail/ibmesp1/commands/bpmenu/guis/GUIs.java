@@ -119,7 +119,7 @@ public class GUIs {
         ItemMeta kbMeta = keepBackpack.getItemMeta();
         kbMeta.setDisplayName(plugin.getLanguageString("gui.items.keepBackpack"));
         ArrayList<String> kbLore = new ArrayList<>();
-        kbLore.add(plugin.getLanguageString("gui.items.current") + plugin.getConfig().getBoolean("keepBackpack"));
+        kbLore.add(plugin.getLanguageString("gui.items.current") + bpcm.getConfig().getBoolean("keepBackpack"));
         kbMeta.setLore(kbLore);
         keepBackpack.setItemMeta(kbMeta);
 

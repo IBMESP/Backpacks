@@ -1,6 +1,7 @@
 package com.gmail.ibmesp1.events;
 
 import com.gmail.ibmesp1.Backpacks;
+import com.gmail.ibmesp1.data.DataManger;
 import com.gmail.ibmesp1.utils.backpacks.BackpackManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,10 +20,12 @@ public class PlayerEvent implements Listener {
 
     private final Backpacks plugin;
     private HashMap<UUID, Inventory> playerBackpack;
+    private DataManger bpcm;
 
-    public PlayerEvent(Backpacks plugin, HashMap<UUID, Inventory> playerBackpack) {
+    public PlayerEvent(Backpacks plugin, HashMap<UUID, Inventory> playerBackpack,DataManger bpcm) {
         this.plugin = plugin;
         this.playerBackpack = playerBackpack;
+        this.bpcm = bpcm;
     }
 
     @EventHandler
@@ -67,7 +70,7 @@ public class PlayerEvent implements Listener {
     public void PlayerDeath(PlayerDeathEvent event){
         Player player = event.getEntity();
 
-        if(!plugin.getConfig().getBoolean("keepBackpack")){
+        if(!bpcm.getConfig().getBoolean("keepBackpack")){
             Inventory prevInventory = playerBackpack.get(player.getUniqueId());
             int size = prevInventory.getSize();
 

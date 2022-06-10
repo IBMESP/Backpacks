@@ -4,6 +4,7 @@ import com.gmail.ibmesp1.Backpacks;
 import com.gmail.ibmesp1.commands.SubCommand;
 import com.gmail.ibmesp1.commands.bpcommand.subcommands.*;
 import com.gmail.ibmesp1.data.DataManger;
+import com.gmail.ibmesp1.utils.backpacks.BackpackManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -19,15 +20,16 @@ public class BpCommand  implements TabExecutor {
     private static HashMap<UUID, Inventory> playerBackpack;
     private ArrayList<SubCommand> subCommands = new ArrayList<>();
     private DataManger bpcm;
+    private BackpackManager bpm;
 
-    public BpCommand(Backpacks plugin, HashMap<UUID,Inventory> playerBackpack, DataManger bpcm){
+    public BpCommand(Backpacks plugin, HashMap<UUID,Inventory> playerBackpack, DataManger bpcm,BackpackManager bpm){
         this.plugin = plugin;
         this.playerBackpack = playerBackpack;
 
         subCommands.add(new VersionSubCommand(plugin));
         subCommands.add(new HelpSubCommand());
         subCommands.add(new CreateSubCommand(plugin,playerBackpack,bpcm));
-        subCommands.add(new OpenSubCommand(plugin,playerBackpack));
+        subCommands.add(new OpenSubCommand(plugin,playerBackpack,bpm));
         subCommands.add(new DeleteSubCommand(plugin,playerBackpack));
         subCommands.add(new ReloadSubCommand(plugin));
     }

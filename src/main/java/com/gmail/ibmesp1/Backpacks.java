@@ -84,7 +84,7 @@ public final class Backpacks extends JavaPlugin {
     }
 
     public void registrerCommands() {
-        getCommand("bp").setExecutor(new BpCommand(this,playerBackpack,bpcm));
+        getCommand("bp").setExecutor(new BpCommand(this,playerBackpack,bpcm,bpm));
         getCommand("bpsee").setExecutor(new BpSee(this,playerBackpack,bpm));
         getCommand("bgamerule").setExecutor(new keepBackpack(this,bpcm));
         getCommand("bgamerule").setTabCompleter(new keepBackpackTab());
@@ -92,7 +92,7 @@ public final class Backpacks extends JavaPlugin {
     }
 
     public void registerEvents(){
-        Bukkit.getPluginManager().registerEvents(new PlayerEvent(this,playerBackpack),this);
+        Bukkit.getPluginManager().registerEvents(new PlayerEvent(this,playerBackpack,bpcm),this);
         Bukkit.getPluginManager().registerEvents(new MenuListener(),this);
         Bukkit.getPluginManager().registerEvents(new BpMenuEvents(this,playerBackpack,bpcm),this);
         Bukkit.getPluginManager().registerEvents(new ConfigGUI(this,playerBackpack,bpcm),this);
