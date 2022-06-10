@@ -20,5 +20,4 @@ Spigot plugin that adds backpacks accessible with commands
 - bp.reload (for /bp reload)
 - bp.admin (for /bp create <s/m/l> </player/>, /bp delete </player/> confirm and bgr keepBackpack <true/false>)
 <p><strong><img src="https://bstats.org/signatures/bukkit/Backpacks%20-%20by%20Ib.svg" alt="" width="640" height="360" /></strong></p>
-<p><strong><img src="https://i.imgur.com/Tt7Lyar.png" alt="" width="256" height="256" /></strong></p>
-
+  
