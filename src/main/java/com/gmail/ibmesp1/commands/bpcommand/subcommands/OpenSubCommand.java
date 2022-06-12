@@ -5,6 +5,7 @@ import com.gmail.ibmesp1.commands.SubCommand;
 import com.gmail.ibmesp1.utils.UUIDFetcher;
 import com.gmail.ibmesp1.utils.backpacks.BackpackGUI;
 import com.gmail.ibmesp1.utils.backpacks.BackpackManager;
+import com.gmail.ibmesp1.utils.backpacks.open.BackpackOpen;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -47,7 +48,7 @@ public class OpenSubCommand extends SubCommand {
             String getTitle = plugin.getLanguageString("config.title");
             String title = getTitle.replace("%player",player.getName());
 
-            player.openInventory(new BackpackGUI(size,title,player,uuid,bpm).getInventory());
+            player.openInventory(new BackpackOpen(size,title,player,uuid,bpm).getInventory());
         }else{
             player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.notBackpack"));
         }

@@ -44,7 +44,7 @@ public class CreateSubCommand extends SubCommand {
     public void perform(Player player, String[] args) {
         checkSize();
         if(args.length == 1) {
-            player.sendMessage(ChatColor.RED + "/bp create <s/m>");
+            player.sendMessage(ChatColor.RED + "/bp create <s/m/l>");
         }else if (args[1].equalsIgnoreCase("s")) { // add backpack mechanics
             if(player.hasPermission("bp.small")) {
                 if(args.length == 3){
