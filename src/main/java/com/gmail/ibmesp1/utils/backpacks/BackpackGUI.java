@@ -40,6 +40,8 @@ public class BackpackGUI extends Menu{
 
     @Override
     public void onClick(InventoryClickEvent event) {
+        if(viewer.getUniqueId().equals(ownerId)) return;
+
         event.setCancelled(true);
     }
 

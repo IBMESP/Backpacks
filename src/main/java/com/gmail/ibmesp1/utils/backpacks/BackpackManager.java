@@ -66,7 +66,6 @@ public class BackpackManager {
         try {
             cfg.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -77,7 +76,6 @@ public class BackpackManager {
         try {
             cfg.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -92,7 +90,6 @@ public class BackpackManager {
             dataOutput.close();
             return Base64Coder.encodeLines(outputStream.toByteArray());
         } catch (Exception ex) {
-            ex.printStackTrace();
         }
         return null;
     }
@@ -109,7 +106,6 @@ public class BackpackManager {
             dataInput.close();
             return inventory;
         } catch (Exception ex) {
-            ex.printStackTrace();
         }
         return null;
     }

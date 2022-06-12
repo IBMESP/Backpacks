@@ -159,12 +159,11 @@ public class ChatEvent implements Listener {
                 try {
                     uuid = UUIDFetcher.getUUIDOf(msg);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
             }
 
             if(playerBackpacks.containsKey(uuid)){
-                player.sendMessage(ChatColor.RED + msg + plugin.getLanguageString("delete.target.already"));;
+                player.sendMessage(ChatColor.RED + msg + plugin.getLanguageString("create.target.already"));;
                 e.setCancelled(true);
                 return;
             }
@@ -206,12 +205,11 @@ public class ChatEvent implements Listener {
                 try {
                     uuid = UUIDFetcher.getUUIDOf(msg);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
             }
 
             if(playerBackpacks.containsKey(uuid)){
-                player.sendMessage(ChatColor.RED + msg + plugin.getLanguageString("delete.target.already"));;
+                player.sendMessage(ChatColor.RED + msg + plugin.getLanguageString("create.target.already"));;
                 e.setCancelled(true);
                 return;
             }
@@ -253,12 +251,11 @@ public class ChatEvent implements Listener {
                 try {
                     uuid = UUIDFetcher.getUUIDOf(msg);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
             }
 
             if(playerBackpacks.containsKey(uuid)){
-                player.sendMessage(ChatColor.RED + msg + plugin.getLanguageString("delete.target.already"));;
+                player.sendMessage(ChatColor.RED + msg + plugin.getLanguageString("create.target.already"));;
                 e.setCancelled(true);
                 return;
             }

@@ -71,13 +71,16 @@ public class PlayerEvent implements Listener {
         Player player = event.getEntity();
 
         if(!bpcm.getConfig().getBoolean("keepBackpack")){
+            player.sendMessage(String.valueOf(bpcm.getConfig().getBoolean("keepBackpack")));
             Inventory prevInventory = playerBackpack.get(player.getUniqueId());
             int size = prevInventory.getSize();
 
             for (int i = 0;i<size;i++){
                 try {
                     player.getLocation().getWorld().dropItem(player.getLocation(), prevInventory.getItem(i));
-                }catch (IllegalArgumentException e){}
+                }catch (IllegalArgumentException e){
+                    e.printStackTrace();
+                }
             }
 
             Inventory inventory = Bukkit.createInventory(null, size);

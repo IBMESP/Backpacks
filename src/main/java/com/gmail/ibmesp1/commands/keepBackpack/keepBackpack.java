@@ -40,6 +40,8 @@ public class keepBackpack implements CommandExecutor {
                 }else{
                     Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "You do not have permission to use this command");
                 }
+            }else{
+                Bukkit.getConsoleSender().sendMessage("keepBackpack = " + bpcm.getConfig().getBoolean("keepBackpack"));
             }
             return false;
         }
@@ -60,6 +62,8 @@ public class keepBackpack implements CommandExecutor {
             }else{
                 player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
             }
+        }else{
+            Bukkit.getConsoleSender().sendMessage("keepBackpack = " + bpcm.getConfig().getBoolean("keepBackpack"));
         }
         return false;
     }

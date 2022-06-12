@@ -2,7 +2,6 @@ package com.gmail.ibmesp1.commands.bpmenu.guis;
 
 import com.gmail.ibmesp1.Backpacks;
 import com.gmail.ibmesp1.data.DataManger;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -44,21 +44,21 @@ public class BpSee implements CommandExecutor {
             if(target == null) {
                 try {
                     UUID targetUUID = UUIDFetcher.getUUIDOf(args[0]);
+
+                    if(playerBackpack.get(targetUUID) == null){
+                        player.sendMessage(ChatColor.RED + args[0] + plugin.getLanguageString("gui.items.hasNot"));
+                        return true;
+                    }
+
                     Inventory inventory = playerBackpack.get(targetUUID);
                     int size = inventory.getSize();
                     String getTitle = plugin.getLanguageString("config.title");
-                    String title = getTitle.replace("%player",player.getName());
-
-                    if(playerBackpack.get(targetUUID) == null){
-                        player.sendMessage(ChatColor.RED + args[0] + plugin.getLanguageString("gui.item.hasNot"));
-                        return true;
-                    }
+                    String title = getTitle.replace("%player",args[0]);
 
                     player.openInventory(new BackpackGUI(size,title,player,targetUUID,backpackManager).getInventory());
 
 
                 } catch (Exception e) {
-                    e.printStackTrace();
                 }
                 return true;
             }

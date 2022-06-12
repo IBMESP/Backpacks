@@ -52,6 +52,7 @@ public class DeleteSubCommand extends SubCommand {
                 player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.notBackpack"));
                 return;
             }
+
             Inventory prevInventory = playerBackpack.get(player.getUniqueId());
             int size = prevInventory.getSize();
 
@@ -69,7 +70,7 @@ public class DeleteSubCommand extends SubCommand {
             if(player.hasPermission("bp.admin")) {
 
                 if(args.length == 2){
-                    String delete1 = plugin.getLanguageString("delete.target.firtsmsg");
+                    String delete1 = plugin.getLanguageString("delete.target.firstmsg");
                     String delete2 = plugin.getLanguageString("delete.target.secondmsg");
                     player.sendMessage(ChatColor.RED + delete1.replace("%target", args[1]));
                     player.sendMessage(ChatColor.RED + delete2.replace("%target", args[1]));
@@ -97,7 +98,6 @@ public class DeleteSubCommand extends SubCommand {
                             BackpackManager.savePlayerBackPacks(targetUUID);
                             player.sendMessage(ChatColor.GREEN + args[1] + plugin.getLanguageString("delete.target.deleted"));
                         } catch (Exception e) {
-                            e.printStackTrace();
                         }
                         return;
                     }
