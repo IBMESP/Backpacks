@@ -2,6 +2,7 @@ package com.gmail.ibmesp1.events;
 
 import com.gmail.ibmesp1.Backpacks;
 import com.gmail.ibmesp1.data.DataManger;
+//import com.gmail.ibmesp1.utils.backpacks.BackpackManager;
 import com.gmail.ibmesp1.utils.backpacks.BackpackManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -22,7 +23,7 @@ public class PlayerEvent implements Listener {
     private HashMap<UUID, Inventory> playerBackpack;
     private DataManger bpcm;
 
-    public PlayerEvent(Backpacks plugin, HashMap<UUID, Inventory> playerBackpack,DataManger bpcm) {
+    public PlayerEvent(Backpacks plugin, HashMap<UUID, Inventory> playerBackpack, DataManger bpcm) {
         this.plugin = plugin;
         this.playerBackpack = playerBackpack;
         this.bpcm = bpcm;
@@ -71,19 +72,18 @@ public class PlayerEvent implements Listener {
         Player player = event.getEntity();
 
         if(!bpcm.getConfig().getBoolean("keepBackpack")){
-            player.sendMessage(String.valueOf(bpcm.getConfig().getBoolean("keepBackpack")));
             Inventory prevInventory = playerBackpack.get(player.getUniqueId());
             int size = prevInventory.getSize();
+            String title = plugin.getLanguageString("config.title");
+
 
             for (int i = 0;i<size;i++){
                 try {
                     player.getLocation().getWorld().dropItem(player.getLocation(), prevInventory.getItem(i));
-                }catch (IllegalArgumentException e){
-                    e.printStackTrace();
-                }
+                }catch (IllegalArgumentException e){}
             }
 
-            Inventory inventory = Bukkit.createInventory(null, size);
+            Inventory inventory = Bukkit.createInventory(null, size,title.replace("%player",player.getName()));
             playerBackpack.replace(player.getUniqueId(),prevInventory,inventory);
 
             BackpackManager.savePlayerBackPacks(player.getUniqueId());

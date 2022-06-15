@@ -7,7 +7,7 @@ create:
     create: "%player created you a %size backpack"
     perm: "You do not have permission to create other backpacks"
 delete:
-  firtsmsg: "This will remove your backpack and your items will be dropped"
+  firstmsg: "This will remove your backpack and your items will be dropped"
   secondmsg: "/bp delete confirm to delete the backpack"
   notBackpack: "You do not have a backpack"
   deleted: "Your backpack has been deleted"

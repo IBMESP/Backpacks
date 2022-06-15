@@ -25,7 +25,7 @@ public class BackpackManager {
     private static File file;
     private static FileConfiguration cfg;
 
-    public BackpackManager(Backpacks plugin,HashMap<UUID, Inventory> playerBackpack) {
+    public BackpackManager(Backpacks plugin, HashMap<UUID, Inventory> playerBackpack) {
         this.plugin = plugin;
         this.playerBackpack = playerBackpack;
         file = new File(plugin.getDataFolder(), "backpacks.yml");
@@ -89,7 +89,7 @@ public class BackpackManager {
             }
             dataOutput.close();
             return Base64Coder.encodeLines(outputStream.toByteArray());
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
         return null;
     }
@@ -105,7 +105,7 @@ public class BackpackManager {
             }
             dataInput.close();
             return inventory;
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
         return null;
     }

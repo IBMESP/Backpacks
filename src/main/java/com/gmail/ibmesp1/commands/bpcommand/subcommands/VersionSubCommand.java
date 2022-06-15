@@ -19,7 +19,6 @@ public class VersionSubCommand extends SubCommand {
         return "version";
     }
 
-
     @Override
     public List<String> getSubCommandsArgs(String[] args) {
         return null;

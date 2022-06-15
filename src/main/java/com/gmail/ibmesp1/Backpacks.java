@@ -2,12 +2,12 @@ package com.gmail.ibmesp1;
 
 import com.gmail.ibmesp1.commands.bpcommand.BpCommand;
 import com.gmail.ibmesp1.commands.bpmenu.BpMenu;
-import com.gmail.ibmesp1.commands.bpmenu.guis.*;
+import com.gmail.ibmesp1.commands.bpmenu.guis.BpMenuEvents;
+import com.gmail.ibmesp1.commands.bpmenu.guis.ChatEvent;
 import com.gmail.ibmesp1.commands.bpmenu.guis.config.ConfigGUI;
 import com.gmail.ibmesp1.commands.bpmenu.guis.config.SizeConfig;
 import com.gmail.ibmesp1.commands.bpmenu.guis.create.CreateGUI;
 import com.gmail.ibmesp1.commands.bpmenu.guis.create.SizeGUI;
-import com.gmail.ibmesp1.commands.bpmenu.guis.ChatEvent;
 import com.gmail.ibmesp1.commands.bpmenu.guis.delete.DeleteGUI;
 import com.gmail.ibmesp1.commands.bpsee.BpSee;
 import com.gmail.ibmesp1.commands.keepBackpack.keepBackpack;
@@ -39,11 +39,13 @@ public final class Backpacks extends JavaPlugin {
     public DataManger bpcm;
     public DataManger languageData;
 
+    public final int languageFileVersion = 2;
+
     @Override
     public void onEnable() {
         PluginDescriptionFile pdffile = getDescription();
         version = pdffile.getVersion();
-        name = ChatColor.DARK_RED + "[" + pdffile.getName() + "]";
+        name = ChatColor.GOLD + "[" + pdffile.getName() + "]";
         Logger log = Bukkit.getLogger();
 
         playerBackpack = new HashMap<>();
@@ -71,11 +73,18 @@ public final class Backpacks extends JavaPlugin {
 
         new UpdateChecker(this,99840).getLatestVersion(version -> {
             if(this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                log.info("[Backpacks] " + getLanguageString("config.notUpdate") );
+                log.info("[Backpacks] " + getLanguageString("config.notUpdate"));
             } else {
                 log.warning("[Backpacks] " + getLanguageString("config.update"));
             }
         });
+
+        if (getConfig().getInt("languageFile") < languageFileVersion) {
+            urgentConsoleWarning("You language files are no longer supported with this version!");
+            urgentConsoleWarning("Please update en_US.yml and update any other language files to version " +
+                    ChatColor.AQUA + languageFileVersion + ChatColor.RED + ".");
+            urgentConsoleWarning("Please do not update your config.yml until your language files have been updated.");
+        }
     }
 
     @Override
@@ -111,4 +120,7 @@ public final class Backpacks extends JavaPlugin {
         return languageData.getConfig().getString(path);
     }
 
+    private void urgentConsoleWarning(String msg) {
+        Bukkit.getConsoleSender().sendMessage("[Backpacks] " + ChatColor.RED + msg);
+    }
 }

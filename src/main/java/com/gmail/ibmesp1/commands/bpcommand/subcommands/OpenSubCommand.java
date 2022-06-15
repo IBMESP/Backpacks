@@ -2,7 +2,6 @@ package com.gmail.ibmesp1.commands.bpcommand.subcommands;
 
 import com.gmail.ibmesp1.Backpacks;
 import com.gmail.ibmesp1.commands.SubCommand;
-import com.gmail.ibmesp1.utils.backpacks.BackpackGUI;
 import com.gmail.ibmesp1.utils.backpacks.BackpackManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

@@ -19,11 +19,11 @@ import java.util.UUID;
 
 public class DeleteGUI implements Listener {
 
-    private Backpacks plugin;
+    private final Backpacks plugin;
     private HashMap<UUID, Inventory> playerBackpacks;
     private HashMap<UUID, String> customName;
     private boolean head;
-    private GUIs guis;
+    private final GUIs guis;
     private BpEasterEgg bpEasterEgg;
     private DataManger bpcm;
 
@@ -42,116 +42,123 @@ public class DeleteGUI implements Listener {
             e.setCancelled(true);
             Player player = (Player) e.getWhoClicked();
 
-            int[] glass_slots = {0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,48,50,51,52};
+            int[] glass_slots = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 50, 51, 52};
 
-            if(e.getSlot() == 49){
+            if (e.getSlot() == 49) {
 
-                if (!player.hasPermission("bp.admin")){
+                if (!player.hasPermission("bp.admin")) {
                     player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.perm"));
                     return;
                 }
 
                 player.closeInventory();
-                customName.put(player.getUniqueId(),player.getCustomName());
+                customName.put(player.getUniqueId(), player.getCustomName());
                 player.setCustomName("delete");
                 player.sendMessage(ChatColor.GRAY + plugin.getLanguageString("gui.browser"));
                 return;
             }
 
-            if(e.getSlot() == 53){
+            if (e.getSlot() == 53) {
 
-                if(!player.hasPermission("bp.admin")){
+                if (!player.hasPermission("bp.admin")) {
                     int easterEgg = (int) (Math.random() * 100);
 
-                    Inventory gui = Bukkit.createInventory(player,3*9,plugin.getLanguageString("gui.title"));
+                    Inventory gui = Bukkit.createInventory(player, 3 * 9, plugin.getLanguageString("gui.title"));
                     bpEasterEgg = new BpEasterEgg(gui);
 
-                    gui = guis.menuGUI(gui,bpEasterEgg,easterEgg);
+                    gui = guis.menuGUI(gui, bpEasterEgg, easterEgg);
 
                     player.openInventory(gui);
                     return;
                 }
 
                 int easterEgg = (int) (Math.random() * 100);
-                Inventory gui = Bukkit.createInventory(player,3*9,plugin.getLanguageString("gui.title"));
+                Inventory gui = Bukkit.createInventory(player, 3 * 9, plugin.getLanguageString("gui.title"));
                 bpEasterEgg = new BpEasterEgg(gui);
 
-                gui = guis.menuOPGUI(gui,bpEasterEgg,easterEgg);
+                gui = guis.menuOPGUI(gui, bpEasterEgg, easterEgg);
 
                 player.openInventory(gui);
                 return;
             }
 
-            for (int i=0;i<glass_slots.length;i++){
-                if(e.getSlot() == glass_slots[i]){
+            for (int i = 0; i < glass_slots.length; i++) {
+                if (e.getSlot() == glass_slots[i]) {
                     head = false;
                     i = glass_slots.length;
-                }else{
+                } else {
                     head = true;
                 }
             }
-            if(head){
+            if (head) {
+                try {
+                    SkullMeta skullMeta = (SkullMeta) e.getCurrentItem().getItemMeta();
+                    Player target = (Player) skullMeta.getOwningPlayer();
 
-                SkullMeta skullMeta = (SkullMeta) e.getCurrentItem().getItemMeta();
-                Player target = (Player) skullMeta.getOwningPlayer();
+                    if (!player.hasPermission("bp.admin")) {
+                        if (target.getUniqueId() == player.getUniqueId()) {
 
-                if(!player.hasPermission("bp.admin")){
-                    if(target.getUniqueId() == player.getUniqueId()){
-
-                        if(!playerBackpacks.containsKey(target.getUniqueId())){
-                            e.setCancelled(true);
-                            player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.notBackpack"));
-                            return;
-                        }
-
-                        Inventory prevInventory = playerBackpacks.get(target.getUniqueId());
-
-                        int size = prevInventory.getSize();
-
-                        for (int i = 0; i < size; i++) {
-                            try {
-                                target.getLocation().getWorld().dropItem(target.getLocation(), prevInventory.getItem(i));
-                            } catch (IllegalArgumentException | NullPointerException ex) {
+                            if (!playerBackpacks.containsKey(target.getUniqueId())) {
+                                e.setCancelled(true);
+                                player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.notBackpack"));
+                                return;
                             }
+
+                            Inventory prevInventory = playerBackpacks.get(target.getUniqueId());
+
+                            int size = prevInventory.getSize();
+
+                            for (int i = 0; i < size; i++) {
+                                try {
+                                    target.getLocation().getWorld().dropItem(target.getLocation(), prevInventory.getItem(i));
+                                } catch (IllegalArgumentException | NullPointerException ex) {
+                                }
+                            }
+
+                            playerBackpacks.remove(target.getUniqueId());
+                            BackpackManager.savePlayerBackPacks(target.getUniqueId());
+                            player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("delete.deleted"));
+                            player.closeInventory();
+                        } else {
+                            player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.perm"));
                         }
+                        return;
+                    }
 
-                        playerBackpacks.remove(target.getUniqueId());
-                        BackpackManager.savePlayerBackPacks(target.getUniqueId());
+                    if (!playerBackpacks.containsKey(target.getUniqueId())) {
+                        e.setCancelled(true);
+                        player.sendMessage(ChatColor.RED + target.getName() + plugin.getLanguageString("delete.target.notBackpack"));
+                        return;
+                    }
+
+                    Inventory prevInventory = playerBackpacks.get(target.getUniqueId());
+                    String title = plugin.getLanguageString("config.title");
+
+                    if(target.getOpenInventory().getTitle().equals(title.replace("%player",target.getName()))){
+                        target.closeInventory();
+                    }
+
+                    int size = prevInventory.getSize();
+
+                    for (int i = 0; i < size; i++) {
+                        try {
+                            target.getLocation().getWorld().dropItem(target.getLocation(), prevInventory.getItem(i));
+                        } catch (IllegalArgumentException | NullPointerException ex) {
+                        }
+                    }
+
+                    playerBackpacks.remove(target.getUniqueId());
+                    BackpackManager.savePlayerBackPacks(target.getUniqueId());
+                    if (!(player.getUniqueId() == target.getUniqueId())) {
+                        target.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.deletedBy") + player.getName());
+                        player.sendMessage(ChatColor.GREEN + target.getName() + plugin.getLanguageString("delete.target.deleted"));
+                    } else if (player.getUniqueId() == target.getUniqueId()) {
                         player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("delete.deleted"));
-                        player.closeInventory();
-                    }else{
-                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.perm"));
                     }
-                    return;
+                    player.closeInventory();
+
+                } catch (Exception ignored) {
                 }
-
-                if(!playerBackpacks.containsKey(target.getUniqueId())){
-                    e.setCancelled(true);
-                    player.sendMessage(ChatColor.RED + target.getName() + plugin.getLanguageString("delete.target.notBackpack"));
-                    return;
-                }
-
-                Inventory prevInventory = playerBackpacks.get(target.getUniqueId());
-
-                int size = prevInventory.getSize();
-
-                for (int i = 0; i < size; i++) {
-                    try {
-                        target.getLocation().getWorld().dropItem(target.getLocation(), prevInventory.getItem(i));
-                    } catch (IllegalArgumentException | NullPointerException ex) {
-                    }
-                }
-
-                playerBackpacks.remove(target.getUniqueId());
-                BackpackManager.savePlayerBackPacks(target.getUniqueId());
-                if(!(player.getUniqueId() == target.getUniqueId())){
-                    target.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.deletedBy") + player.getName());
-                    player.sendMessage(ChatColor.GREEN + target.getName() + plugin.getLanguageString("delete.target.deleted"));
-                }else if(player.getUniqueId() == target.getUniqueId()){
-                    player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("delete.deleted"));
-                }
-                player.closeInventory();
-
             }
         }
 

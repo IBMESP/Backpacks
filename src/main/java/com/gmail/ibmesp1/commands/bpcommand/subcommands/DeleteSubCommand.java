@@ -52,14 +52,13 @@ public class DeleteSubCommand extends SubCommand {
                 player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.notBackpack"));
                 return;
             }
-
             Inventory prevInventory = playerBackpack.get(player.getUniqueId());
             int size = prevInventory.getSize();
 
             for (int i = 0;i<size;i++){
                 try {
                     player.getLocation().getWorld().dropItem(player.getLocation(), prevInventory.getItem(i));
-                }catch (IllegalArgumentException | NullPointerException e){}
+                }catch (IllegalArgumentException | NullPointerException ignored){}
             }
 
             playerBackpack.remove(player.getUniqueId());
@@ -70,7 +69,7 @@ public class DeleteSubCommand extends SubCommand {
             if(player.hasPermission("bp.admin")) {
 
                 if(args.length == 2){
-                    String delete1 = plugin.getLanguageString("delete.target.firstmsg");
+                    String delete1 = plugin.getLanguageString("delete.target.firstsmsg");
                     String delete2 = plugin.getLanguageString("delete.target.secondmsg");
                     player.sendMessage(ChatColor.RED + delete1.replace("%target", args[1]));
                     player.sendMessage(ChatColor.RED + delete2.replace("%target", args[1]));
@@ -90,7 +89,7 @@ public class DeleteSubCommand extends SubCommand {
                             for (int i = 0; i < size; i++) {
                                 try {
                                     player.getLocation().getWorld().dropItem(player.getLocation(), prevInventory.getItem(i));
-                                } catch (IllegalArgumentException | NullPointerException e) {
+                                } catch (IllegalArgumentException | NullPointerException ignored) {
                                 }
                             }
 
@@ -98,21 +97,29 @@ public class DeleteSubCommand extends SubCommand {
                             BackpackManager.savePlayerBackPacks(targetUUID);
                             player.sendMessage(ChatColor.GREEN + args[1] + plugin.getLanguageString("delete.target.deleted"));
                         } catch (Exception e) {
+                            e.printStackTrace();
                         }
                         return;
                     }
 
                     Inventory prevInventory = playerBackpack.get(target.getUniqueId());
+
                     if(prevInventory == null){
                         player.sendMessage(ChatColor.RED + target.getName() + plugin.getLanguageString("delete.target.notBackpack"));
                         return;
                     }
+
                     int size = prevInventory.getSize();
+                    String title = plugin.getLanguageString("config.title");
+
+                    if(target.getOpenInventory().getTitle().equals(title.replace("%player",target.getName()))){
+                        target.closeInventory();
+                    }
 
                     for (int i = 0; i < size; i++) {
                         try {
                             target.getLocation().getWorld().dropItem(target.getLocation(), prevInventory.getItem(i));
-                        } catch (IllegalArgumentException | NullPointerException e) {
+                        } catch (IllegalArgumentException | NullPointerException ignored) {
                         }
                     }
 

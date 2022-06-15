@@ -17,15 +17,16 @@ import java.util.UUID;
 
 public class CreateGUI implements Listener {
 
-    private Backpacks plugin;
+    private final Backpacks plugin;
     private HashMap<UUID, Inventory> playerBackpacks;
     private HashMap<UUID, String> customName;
     private boolean head;
-    private GUIs guis;
+    private final GUIs guis;
     private int smallSize;
     private int mediumSize;
     private int largeSize;
-    private DataManger bpcm;
+    private final DataManger bpcm;
+    private final int[] glass_slots;
 
     public CreateGUI(Backpacks plugin, HashMap<UUID, Inventory> playerBackpacks, HashMap<UUID, String> customName, DataManger bpcm) {
         this.plugin = plugin;
@@ -33,6 +34,7 @@ public class CreateGUI implements Listener {
         this.customName = customName;
         this.guis = new GUIs(plugin,playerBackpacks,bpcm);
         this.bpcm = bpcm;
+        glass_slots  = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 50, 51, 52};
     }
 
     @EventHandler
@@ -43,7 +45,6 @@ public class CreateGUI implements Listener {
         largeSize = bpcm.getConfig().getInt("largeSize");
 
         Player player = (Player) e.getWhoClicked();
-        int[] glass_slots = {0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,48,50,51,52};
 
         String small = plugin.getLanguageString("gui.create.title");
 
@@ -52,242 +53,101 @@ public class CreateGUI implements Listener {
         String large = plugin.getLanguageString("gui.create.title");
 
         if (e.getView().getTitle().equalsIgnoreCase(small.replace("%size", capitalizeFirstLetter(plugin.getLanguageString("gui.small"))))) {
-            e.setCancelled(true);
-
-            if(e.getSlot() == 53){
-                Inventory createGUI = guis.createGUI(player);
-                player.openInventory(createGUI);
-                return;
-            }
-
-            if(player.hasPermission("bp.small")) {
-
-
-                if (e.getSlot() == 49) {
-                    player.closeInventory();
-                    customName.put(player.getUniqueId(),player.getCustomName());
-                    player.setCustomName("createSmall");
-                    player.sendMessage(ChatColor.GRAY + plugin.getLanguageString("gui.browser"));
-                    return;
-                }
-
-                for (int i = 0; i < glass_slots.length; i++) {
-                    if (e.getSlot() == glass_slots[i]) {
-                        head = false;
-                    } else {
-                        head = true;
-                    }
-                }
-
-                if (head) {
-                    SkullMeta skullMeta = (SkullMeta) e.getCurrentItem().getItemMeta();
-                    Player target = (Player) skullMeta.getOwningPlayer();
-
-                    if (!player.hasPermission("bp.admin")) {
-                        if (target.getUniqueId() == player.getUniqueId()) {
-
-                            if (playerBackpacks.containsKey(target.getUniqueId())) {
-                                e.setCancelled(true);
-                                player.sendMessage(ChatColor.RED + plugin.getLanguageString("create.already"));
-                                return;
-                            }
-                            String title = plugin.getLanguageString("config.title");
-                            Inventory inventory = Bukkit.createInventory(player, smallSize * 9, title.replace("%player",player.getName()) );
-                            playerBackpacks.put(player.getUniqueId(), inventory);
-                            player.openInventory(inventory);
-                            return;
-                        } else {
-                            player.sendMessage(ChatColor.RED + plugin.getLanguageString("create.target.perm"));
-                        }
-                        return;
-                    }
-
-                    if (playerBackpacks.containsKey(target.getUniqueId())) {
-                        e.setCancelled(true);
-                        player.sendMessage(ChatColor.RED + target.getName() + plugin.getLanguageString("create.target.already"));
-                        return;
-                    }
-
-                    if (target.getUniqueId() == player.getUniqueId()) {
-                        String title = plugin.getLanguageString("config.title");
-                        Inventory inventory = Bukkit.createInventory(null, smallSize * 9, title.replace("%player",player.getName()));
-                        playerBackpacks.put(player.getUniqueId(), inventory);
-                        player.openInventory(inventory);
-                        return;
-                    }
-
-                    String title = plugin.getLanguageString("config.title");
-
-                    Inventory inventory = Bukkit.createInventory(player, smallSize * 9, title.replace("%player",target.getName()));
-                    playerBackpacks.put(target.getUniqueId(), inventory);
-                    String create = plugin.getLanguageString("create.target.create");
-                    target.sendMessage(ChatColor.RED + create.replace("%size", "small").replace("%player", player.getName()));
-                    target.sendMessage(plugin.getLanguageString("config.open"));
-                    return;
-                }
-            }else{
-                String create = plugin.getLanguageString("create.perm");
-                player.sendMessage(ChatColor.RED + create.replace("%size", "small"));
-                e.setCancelled(true);
-            }
+            create(e,player,"bp.small","createSmall","small",smallSize);
         }
 
         if (e.getView().getTitle().equalsIgnoreCase(medium.replace("%size", capitalizeFirstLetter(plugin.getLanguageString("gui.medium"))))) {
-            e.setCancelled(true);
-
-            if(e.getSlot() == 53){
-                Inventory createGUI = guis.createGUI(player);
-                player.openInventory(createGUI);
-                return;
-            }
-
-            if(player.hasPermission("bp.medium")) {
-                if (e.getSlot() == 49) {
-                    player.closeInventory();
-                    customName.put(player.getUniqueId(),player.getCustomName());
-                    player.setCustomName("createMedium");
-                    player.sendMessage(ChatColor.GRAY + plugin.getLanguageString("gui.browser"));
-                    return;
-                }
-
-                for (int i = 0; i < glass_slots.length; i++) {
-                    if (e.getSlot() == glass_slots[i]) {
-                        head = false;
-                        i = glass_slots.length;
-                    } else {
-                        head = true;
-                    }
-                }
-
-                if (head) {
-                    SkullMeta skullMeta = (SkullMeta) e.getCurrentItem().getItemMeta();
-                    Player target = (Player) skullMeta.getOwningPlayer();
-
-                    if (!player.hasPermission("bp.admin")) {
-                        if (target.getUniqueId() == player.getUniqueId()) {
-
-                            if (playerBackpacks.containsKey(target.getUniqueId())) {
-                                e.setCancelled(true);
-                                player.sendMessage(ChatColor.RED + plugin.getLanguageString("create.already"));
-                                return;
-                            }
-                            String title = plugin.getLanguageString("config.title");
-
-                            Inventory inventory = Bukkit.createInventory(player, mediumSize * 9, title.replace("%player",player.getName()));
-                            playerBackpacks.put(player.getUniqueId(), inventory);
-                            player.openInventory(inventory);
-                            return;
-                        } else {
-                            player.sendMessage(ChatColor.RED + plugin.getLanguageString("create.target.perm"));
-                        }
-                        return;
-                    }
-
-                    if (playerBackpacks.containsKey(target.getUniqueId())) {
-                        e.setCancelled(true);
-                        player.sendMessage(ChatColor.RED + target.getName() + plugin.getLanguageString("create.target.already"));
-                        return;
-                    }
-
-                    if (target.getUniqueId() == player.getUniqueId()) {
-                        String title = plugin.getLanguageString("config.title");
-                        Inventory inventory = Bukkit.createInventory(null, mediumSize * 9, title.replace("%player",player.getName()));
-                        playerBackpacks.put(player.getUniqueId(), inventory);
-                        player.openInventory(inventory);
-                        return;
-                    }
-
-                    String title = plugin.getLanguageString("config.title");
-
-                    Inventory inventory = Bukkit.createInventory(player, mediumSize * 9, title.replace("%palyer",target.getName()));
-                    playerBackpacks.put(target.getUniqueId(), inventory);
-                    String create = plugin.getLanguageString("create.target.create");
-                    target.sendMessage(ChatColor.RED + create.replace("%size", "medium").replace("%player", player.getName()));
-                    target.sendMessage(plugin.getLanguageString("config.open"));
-                    player.openInventory(inventory);
-                }
-            }else{
-                String create = plugin.getLanguageString("create.perm");
-                player.sendMessage(ChatColor.RED + create.replace("%size", "medium"));
-                e.setCancelled(true);
-            }
+            create(e,player,"bp.medium","createMedium","medium",mediumSize);
         }
 
         if (e.getView().getTitle().equalsIgnoreCase(large.replace("%size", capitalizeFirstLetter(plugin.getLanguageString("gui.large"))))) {
-            e.setCancelled(true);
+            create(e,player,"bp.large","createLarge","large",largeSize);
+        }
+    }
 
-            if(e.getSlot() == 53){
-                Inventory createGUI = guis.createGUI(player);
-                player.openInventory(createGUI);
-                return;
-            }
+    private void create(InventoryClickEvent e,Player player,String perm,String cName,String size,int bSize){
+        e.setCancelled(true);
 
-            if(e.getSlot() == 49){
+        if(e.getSlot() == 53){
+            Inventory createGUI = guis.createGUI(player);
+            player.openInventory(createGUI);
+            return;
+        }
+
+        if(player.hasPermission(perm)) {
+
+
+            if (e.getSlot() == 49) {
                 player.closeInventory();
                 customName.put(player.getUniqueId(),player.getCustomName());
-                player.setCustomName("createLarge");
+                player.setCustomName(cName);
                 player.sendMessage(ChatColor.GRAY + plugin.getLanguageString("gui.browser"));
                 return;
             }
 
-            for (int i=0;i<glass_slots.length;i++){
-                if(e.getSlot() == glass_slots[i]){
+            for (int i = 0; i < glass_slots.length; i++) {
+                if (e.getSlot() == glass_slots[i]) {
                     head = false;
-                }else{
+                } else {
                     head = true;
                 }
             }
 
-            if(head){
-                SkullMeta skullMeta = (SkullMeta) e.getCurrentItem().getItemMeta();
-                Player target = (Player) skullMeta.getOwningPlayer();
+            if (head) {
+                try {
+                    SkullMeta skullMeta = (SkullMeta) e.getCurrentItem().getItemMeta();
+                    Player target = (Player) skullMeta.getOwningPlayer();
 
-                if(!player.hasPermission("bp.admin")) {
-                    if(target.getUniqueId() == player.getUniqueId()) {
 
-                        if (playerBackpacks.containsKey(target.getUniqueId())) {
-                            e.setCancelled(true);
-                            player.sendMessage(ChatColor.RED + plugin.getLanguageString("create.already"));
+                    if (!player.hasPermission("bp.admin")) {
+                        if (target.getUniqueId() == player.getUniqueId()) {
+
+                            if (playerBackpacks.containsKey(target.getUniqueId())) {
+                                e.setCancelled(true);
+                                player.sendMessage(ChatColor.RED + plugin.getLanguageString("create.already"));
+                                return;
+                            }
+                            String title = plugin.getLanguageString("config.title");
+                            Inventory inventory = Bukkit.createInventory(player, bSize * 9, title.replace("%player", player.getName()));
+                            playerBackpacks.put(player.getUniqueId(), inventory);
+                            player.closeInventory();
+                            player.openInventory(inventory);
                             return;
+                        } else {
+                            player.sendMessage(ChatColor.RED + plugin.getLanguageString("create.target.perm"));
                         }
+                        return;
+                    }
+
+                    if (playerBackpacks.containsKey(target.getUniqueId())) {
+                        e.setCancelled(true);
+                        player.sendMessage(ChatColor.RED + target.getName() + plugin.getLanguageString("create.target.already"));
+                        return;
+                    }
+
+                    if (target.getUniqueId() == player.getUniqueId()) {
                         String title = plugin.getLanguageString("config.title");
-                        Inventory inventory = Bukkit.createInventory(player,largeSize * 9,title.replace("%player",player.getName()));
-                        playerBackpacks.put(player.getUniqueId(),inventory);
+                        Inventory inventory = Bukkit.createInventory(null, bSize * 9, title.replace("%player", player.getName()));
+                        playerBackpacks.put(player.getUniqueId(), inventory);
+                        player.closeInventory();
                         player.openInventory(inventory);
                         return;
-                    }else{
-                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("create.perm"));
                     }
-                    return;
-                }
 
-                if (playerBackpacks.containsKey(target.getUniqueId())) {
-                    e.setCancelled(true);
-                    player.sendMessage(ChatColor.RED + target.getName() + plugin.getLanguageString("create.target.already"));
-                    return;
-                }
-
-                if(target.getUniqueId() == player.getUniqueId()){
                     String title = plugin.getLanguageString("config.title");
-                    Inventory inventory = Bukkit.createInventory(null, largeSize * 9,title.replace("%player",player.getName()));
-                    playerBackpacks.put(player.getUniqueId(), inventory);
-                    player.openInventory(inventory);
-                    return;
-                }
 
-                String title = plugin.getLanguageString("config.title");
-
-                Inventory inventory = Bukkit.createInventory(player,largeSize * 9,title.replace("%player",target.getName()));
-                playerBackpacks.put(target.getUniqueId(),inventory);
-                String create = plugin.getLanguageString("create.target.create");
-                target.sendMessage(ChatColor.RED + create.replace("%size", "large").replace("%player", player.getName()));
-                target.sendMessage(plugin.getLanguageString("config.open"));
-                player.openInventory(inventory);
-            }else{
-                String create = plugin.getLanguageString("create.perm");
-                player.sendMessage(ChatColor.RED + create.replace("%size", "large"));
-                e.setCancelled(true);
+                    Inventory inventory = Bukkit.createInventory(player, bSize * 9, title.replace("%player", target.getName()));
+                    playerBackpacks.put(target.getUniqueId(), inventory);
+                    String create = plugin.getLanguageString("create.target.create");
+                    target.sendMessage(ChatColor.RED + create.replace("%size", size).replace("%player", player.getName()));
+                    target.sendMessage(plugin.getLanguageString("config.open"));
+                    player.closeInventory();
+                } catch (Exception ignored) {}
             }
+        }else{
+            String create = plugin.getLanguageString("create.perm");
+            player.sendMessage(ChatColor.RED + create.replace("%size", size));
+            e.setCancelled(true);
         }
     }
 

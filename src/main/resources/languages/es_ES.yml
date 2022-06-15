@@ -7,7 +7,7 @@ create:
     create: "%player te ha creado una mochila %size"
     perm: "No tines permiso para crear mochilas a otros"
 delete:
-  firtsmsg: "Esto eliminara tu mochila y los objetos seran soltados"
+  firstmsg: "Esto eliminara tu mochila y los objetos seran soltados"
   secondmsg: "/bp delete confirm para eliminar tu mochila"
   notBackpack: "No tienes una mochila"
   deleted: "Tu mochila ha sido eliminada"

@@ -9,7 +9,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 public class CreateSubCommand extends SubCommand {
     private final Backpacks plugin;
@@ -44,79 +47,41 @@ public class CreateSubCommand extends SubCommand {
     public void perform(Player player, String[] args) {
         checkSize();
         if(args.length == 1) {
-            player.sendMessage(ChatColor.RED + "/bp create <s/m/l>");
+            player.sendMessage(ChatColor.RED + "/bp create <s/m>");
         }else if (args[1].equalsIgnoreCase("s")) { // add backpack mechanics
-            if(player.hasPermission("bp.small")) {
-                if(args.length == 3){
-                    if(player.hasPermission("bp.admin")) {
-                        Player target = Bukkit.getPlayer(args[2]);
-
-                        if (target == null) {
-                            String targetOffline = args[2];
-                            createOfflineBackpack(player,targetOffline,smallSize);
-                            return;
-                        }
-
-                        createTargetBackpack(player, target, smallSize, plugin.getLanguageString("gui.small"));
-                        return;
-                    }else{
-                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
-                    }
-                }
-
-                createBackpack(player,smallSize);
-
-            }else {
-                player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
-            }
+            create(player,args,"bp.small","gui.small",smallSize);
         }else if (args[1].equalsIgnoreCase("m")) {
-            if(player.hasPermission("bp.medium")) {
-                if(args.length == 3){
-                    if(player.hasPermission("bp.admin")) {
-                        Player target = Bukkit.getPlayer(args[2]);
-
-                        if (target == null) {
-                            String targetOffline = args[2];
-                            createOfflineBackpack(player,targetOffline,mediumSize);
-                            return;
-                        }
-
-                        createTargetBackpack(player, target, mediumSize, plugin.getLanguageString("gui.medium"));
-                        return;
-                    }else{
-                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
-                    }
-                }
-
-                createBackpack(player,mediumSize);
-            }else{
-                player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
-            }
+            create(player,args,"bp.medium","gui.medium",mediumSize);
         }else if (args[1].equalsIgnoreCase("l")) {
-            if (player.hasPermission("bp.large")) {
-                if(args.length == 3){
-                    if(player.hasPermission("bp.admin")) {
-                        Player target = Bukkit.getPlayer(args[2]);
-
-                        if (target == null) {
-                            String targetOffline = args[2];
-                            createOfflineBackpack(player,targetOffline,largeSize);
-                            return;
-                        }
-
-                        createTargetBackpack(player, target, largeSize, plugin.getLanguageString("gui.large"));
-                        return;
-                    }else{
-                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
-                    }
-                }
-
-                createBackpack(player,largeSize);
-            } else {
-                player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
-            }
+            create(player,args,"bp.large","gui.large",largeSize);
         }else{
             player.sendMessage(plugin.name + ChatColor.RED + plugin.getLanguageString("config.exist"));
+        }
+    }
+
+    private void create(Player player,String[] args,String perm,String gui,int size){
+        if(player.hasPermission(perm)) {
+            if(args.length == 3){
+                if(player.hasPermission("bp.admin")) {
+                    Player target = Bukkit.getPlayer(args[2]);
+
+                    if (target == null) {
+                        String targetOffline = args[2];
+                        createOfflineBackpack(player,targetOffline,size);
+                        return;
+                    }
+
+                    createTargetBackpack(player, target, smallSize, plugin.getLanguageString(gui));
+                    return;
+                }else{
+                    player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
+                }
+            }
+
+            createBackpack(player,size);
+
+        }else{
+            player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
         }
     }
 
@@ -158,7 +123,7 @@ public class CreateSubCommand extends SubCommand {
 
             String title = plugin.getLanguageString("config.title");
 
-            Inventory inventory = Bukkit.createInventory(null,size * 9,title.replace("%palyer",target));
+            Inventory inventory = Bukkit.createInventory(null,size * 9,title.replace("%player",target));
             playerBackpack.put(targetUUID,inventory);
             player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("create.target.created") + target);
         } catch (Exception e) {

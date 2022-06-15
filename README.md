@@ -1,23 +1,124 @@
 # Backpacks
 Spigot plugin that adds backpacks accessible with commands
 ## Badges:
-[![Latest Version](https://img.shields.io/badge/Latest%20Version-1.4.2-brightgreen)](https://github.com/IBMESP/Backpacks/releases/latest)
-<a href="https://www.spigotmc.org/resources/99840/"><img src="https://img.shields.io/spiget/downloads/99840?label=Spigot%20Downloads" alt="Spigot downloads"></a>
-<a href="https://www.spigotmc.org/resources/99840/"><img src="https://img.shields.io/spiget/rating/99840?label=Spigot%20Rating" alt="Spigot rating"></a>
-### Commands
-- bp create <s/m/l> (player)
-- bp reload
-- bp open
-- bp delete
-- bpsee <player>
-- bgamerule keepBackpack <true/false> or bgr keepBackpack <true/false>
-- bpmenu
+[![Latest Version](https://img.shields.io/badge/Latest%20Version-2.0.0-brightgreen)](https://github.com/IBMESP/Backpacks/releases/latest)
+![Spigot Downloads](https://img.shields.io/spiget/downloads/99840?label=Spigot%20Downloads)
+![Spigot Rating](https://img.shields.io/spiget/rating/99840?label=Spigot%20Rating)
+
+
+[![](https://i.imgur.com/6JVFkxy.png)](https://www.spigotmc.org/resources/backpacks.99840/)
+![](https://i.imgur.com/Edv3vWf.png)
+- **Three sizes** of backpacks: small, medium and large
+- **Create**, **delete** and **see** backpacks of online or offline players
+- A **GUI** to create, configure and delete backpacks
+- **Multiple languages**
+
+![](https://i.imgur.com/M21j7Lc.png)
+
+![](https://media2.giphy.com/media/3zRrIdt0yYDYmfNJAs/giphy.gif)
+
+![](https://i.imgur.com/XEfeWN8.png)
+- **Permission:** bp.admin →
+  - **Commands:**
+    - /bp delete <player> : Deletes a player backpack
+    - /bgr keepbackpack (true/false) : To keep your backpack after dead
+- **Permission:** bp.small →
+  - **Commands:**
+    - /bp create s : Creates a small backpack
+- **Permission:** bp.medium →
+  - **Commands:**
+    - /bp create m : Creates a medium backpack
+- **Permission:** bp.large →
+  - **Commands:**
+    - /bp create l : Creates a large backpack
+- **Permission:** bp.see →
+  - **Commands:**
+    - /bpsee <player> : To see other player backpack
+- **Other Commands**
+  - /bpmenu : Plugin GUI
+  - /bp open : To open your backpack
+  - /bp relaod : Reloads bpconfig.yml
+
+![](https://i.imgur.com/oH7B1CQ.png)
+<details>
+  <summary>Default config.yml</summary>
   
-### Permissions
-- bp.small (for /bp create s)
-- bp.medium (for /bp create m)
-- bp.bpsee (for /bpsee)
-- bp.reload (for /bp reload)
-- bp.admin (for /bp create <s/m/l> </player/>, /bp delete </player/> confirm and bgr keepBackpack <true/false>)
-<p><strong><img src="https://bstats.org/signatures/bukkit/Backpacks%20-%20by%20Ib.svg" alt="" width="640" height="360" /></strong></p>
+  ```
+  #Available languages
+  #en_US
+  #es_ES
+  locale: en_US
+
+  # This is the en_US.yml version for reference.
+  # ONLY EDIT ONCE ALL LANGUAGE FILES HAVE BEEN UPDATED.
+  languageFile: 2
+  ```
+</details>
+<details>
+  <summary>Default en_US.yml</summary>
+
+  ```
+  create:
+    already: "You already have a backpack"
+    perm: "You do not have permission to create a %size backpack"
+    target:
+      already: " already has a backpack"
+      created: "You created a backpack to "
+      create: "%player created you a %size backpack"
+      perm: "You do not have permission to create other backpacks"
+  delete:
+    firstmsg: "This will remove your backpack and your items will be dropped"
+    secondmsg: "/bp delete confirm to delete the backpack"
+    notBackpack: "You do not have a backpack"
+    deleted: "Your backpack has been deleted"
+    target:
+      firstmsg: "This will remove %target backpack and %target items will be dropped"
+      secondmsg: "/bp delete %target confirm to delete the backpack"
+      notBackpack: " does not have a backpack"
+      deleted: "'s backpack has been deleted"
+      perm: "You do not have permission to delete other backpacks"
+      deletedBy: "Your backpack has been deleted by "
+  gui:
+    small: "small"
+    medium: "medium"
+    large: "large"
+    title: "Backpack Menu"
+    browser: "Write the name"
+    size:
+      small: "Small size"
+      medium: "Medium size"
+      large: "Large size"
+    items:
+      create: "Create a bakcpack"
+      delete: "Delete a bakcpack"
+      config: "Config"
+      configuration: "Configuration"
+      keepBackpack: "Keep Backpack"
+      current: "Current: "
+      back: "Back"
+      search: "Search a player"
+      has: " has a backpack"
+      hasNot: " does not have a backpack"
+      size: "Size"
+    config:
+      gamerule: "Gamerule keepBackpack is now set: %bool"
+      changeSize: "%size size set to %num row"
+    create:
+      title: "Players Online (%size)"
+    delete:
+      title: "Players Online (Delete)"
+  config:
+    reloaded: "[Backpacks] Config reloaded!"
+    perms: "You do not have permission to use this command"
+    exist: "This command doesn't exists"
+    open: "Use /bp open to open the backpack"
+    help: "Use /bp help to see the commands"
+    update: "Backpacks has a new update"
+    notUpdate: "Backpacks is up to date"
+    title: "%player's Backpack"
+  ```
+</details>
+
+![](https://bstats.org/signatures/bukkit/Backpacks%20-%20by%20Ib.svg)
+
   

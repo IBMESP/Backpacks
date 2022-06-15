@@ -5,7 +5,7 @@ import com.gmail.ibmesp1.data.DataManger;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;
@@ -57,14 +57,6 @@ public class BpMenuEvents implements Listener {
                     player.openInventory(deleteGUI);
                     break;
                 }
-
-                /*case 26: {
-                    if(player.hasPermission("bp.admin")){
-                        player.sendMessage(player.getCustomName() + "");
-                        return;
-                    }
-                    break;
-                }*/
             }
         }
     }

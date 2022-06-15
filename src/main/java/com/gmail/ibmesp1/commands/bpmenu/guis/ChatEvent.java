@@ -139,144 +139,61 @@ public class ChatEvent implements Listener {
         }
 
         if(player.getCustomName().equalsIgnoreCase("createSmall")) {
-            msg = e.getMessage();
-            Player target = null;
-            UUID uuid = null;
-            player.setCustomName(customName.get(player.getUniqueId()));
-
-            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                if(p.getName().equals(msg)){
-                    isOnline = true;
-                    target = p;
-                    uuid = target.getUniqueId();
-                    break;
-                }else{
-                    isOnline = false;
-                }
-            }
-
-            if(!isOnline){
-                try {
-                    uuid = UUIDFetcher.getUUIDOf(msg);
-                } catch (Exception ex) {
-                }
-            }
-
-            if(playerBackpacks.containsKey(uuid)){
-                player.sendMessage(ChatColor.RED + msg + plugin.getLanguageString("create.target.already"));;
-                e.setCancelled(true);
-                return;
-            }
-
-            Inventory inventory = Bukkit.createInventory(null, smallSize * 9,msg + "s' Backpack");
-
-            playerBackpacks.put(uuid,inventory);
-            BackpackManager.savePlayerBackPacks(uuid);
-            if(target != null) {
-                if(target.getUniqueId() == player.getUniqueId()){
-                    player.sendMessage(plugin.getLanguageString("config.open"));
-                    e.setCancelled(true);
-                    return;
-                }
-                String create = plugin.getLanguageString("create.target.create");
-                target.sendMessage(create.replace("%player",player.getName().replace("%size","small")));
-                target.sendMessage(plugin.getLanguageString("config.open"));
-            }
-            player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("create.target.created") + msg);
-            e.setCancelled(true);
+            createEvent(e,player,smallSize,"small");
         }else if(player.getCustomName().equalsIgnoreCase("createMedium")) {
-            msg = e.getMessage();
-            Player target = null;
-            UUID uuid = null;
-            player.setCustomName(customName.get(player.getUniqueId()));
-
-            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                if(p.getName().equals(msg)){
-                    isOnline = true;
-                    target = p;
-                    uuid = target.getUniqueId();
-                    break;
-                }else{
-                    isOnline = false;
-                }
-            }
-
-            if(!isOnline){
-                try {
-                    uuid = UUIDFetcher.getUUIDOf(msg);
-                } catch (Exception ex) {
-                }
-            }
-
-            if(playerBackpacks.containsKey(uuid)){
-                player.sendMessage(ChatColor.RED + msg + plugin.getLanguageString("create.target.already"));;
-                e.setCancelled(true);
-                return;
-            }
-
-            Inventory inventory = Bukkit.createInventory(null, mediumSize * 9,msg + "s' Backpack");
-
-            playerBackpacks.put(uuid,inventory);
-            BackpackManager.savePlayerBackPacks(uuid);
-            if(target != null) {
-                if(target.getUniqueId() == player.getUniqueId()){
-                    player.sendMessage(plugin.getLanguageString("config.open"));
-                    e.setCancelled(true);
-                    return;
-                }
-                String create = plugin.getLanguageString("create.target.create");
-                target.sendMessage(create.replace("%player",player.getName().replace("%size","medium")));
-                target.sendMessage(plugin.getLanguageString("config.open"));
-            }
-            player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("create.target.create") + msg);
-            e.setCancelled(true);
+            createEvent(e,player,mediumSize,"medium");
         }else if(player.getCustomName().equalsIgnoreCase("createLarge")) {
-            msg = e.getMessage();
-            Player target = null;
-            UUID uuid = null;
-            player.setCustomName(customName.get(player.getUniqueId()));
-
-            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                if(p.getName().equals(msg)){
-                    isOnline = true;
-                    target = p;
-                    uuid = target.getUniqueId();
-                    break;
-                }else{
-                    isOnline = false;
-                }
-            }
-
-            if(!isOnline){
-                try {
-                    uuid = UUIDFetcher.getUUIDOf(msg);
-                } catch (Exception ex) {
-                }
-            }
-
-            if(playerBackpacks.containsKey(uuid)){
-                player.sendMessage(ChatColor.RED + msg + plugin.getLanguageString("create.target.already"));;
-                e.setCancelled(true);
-                return;
-            }
-
-            Inventory inventory = Bukkit.createInventory(null, largeSize * 9,msg + "s' Backpack");
-
-            playerBackpacks.put(uuid,inventory);
-            BackpackManager.savePlayerBackPacks(uuid);
-            if(target != null) {
-                if(target.getUniqueId() == player.getUniqueId()){
-                    player.sendMessage(plugin.getLanguageString("config.open"));
-                    e.setCancelled(true);
-                    return;
-                }
-                String create = plugin.getLanguageString("create.target.create");
-                target.sendMessage(create.replace("%player",player.getName().replace("%size","large")));
-                target.sendMessage(plugin.getLanguageString("config.open"));
-            }
-            player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("create.target.create") + msg);
-            e.setCancelled(true);
+            createEvent(e,player,largeSize,"medium");
         }
     }
 
+    private void createEvent(AsyncPlayerChatEvent e,Player player,int size,String Size){
+        msg = e.getMessage();
+        Player target = null;
+        UUID uuid = null;
+        player.setCustomName(customName.get(player.getUniqueId()));
+
+        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+            if(p.getName().equals(msg)){
+                isOnline = true;
+                target = p;
+                uuid = target.getUniqueId();
+                break;
+            }else{
+                isOnline = false;
+            }
+        }
+
+        if(!isOnline){
+            try {
+                uuid = UUIDFetcher.getUUIDOf(msg);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if(playerBackpacks.containsKey(uuid)){
+            player.sendMessage(ChatColor.RED + msg + plugin.getLanguageString("delete.target.already"));;
+            e.setCancelled(true);
+            return;
+        }
+
+        Inventory inventory = Bukkit.createInventory(null, size * 9,msg + "s' Backpack");
+
+        playerBackpacks.put(uuid,inventory);
+        BackpackManager.savePlayerBackPacks(uuid);
+
+        if(target != null) {
+            if(target.getUniqueId() == player.getUniqueId()){
+                player.sendMessage(plugin.getLanguageString("config.open"));
+                e.setCancelled(true);
+                return;
+            }
+            String create = plugin.getLanguageString("create.target.create");
+            target.sendMessage(create.replace("%player",player.getName().replace("%size",Size)));
+            target.sendMessage(plugin.getLanguageString("config.open"));
+        }
+        player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("create.target.created") + msg);
+        e.setCancelled(true);
+    }
 }

@@ -29,138 +29,66 @@ public class SizeConfig implements Listener {
 
     @EventHandler
     public void clickGUI(InventoryClickEvent e) {
+
         if (e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.size.small"))) {
-            e.setCancelled(true);
-
-            Player player = (Player) e.getWhoClicked();
-
-            switch (e.getSlot()){
-                case 1:{
-                    bpcm.getConfig().set("smallSize",1);
-                    player.closeInventory();
-                    String row = plugin.getLanguageString("gui.config.changeSize");
-                    player.sendMessage(ChatColor.RED + row.replace("%size",capitalizeFirstLetter(plugin.getLanguageString("gui.small"))).replace("%num", "1"));
-                    bpcm.saveConfig();
-                    break;
-                }
-                case 2:{
-                    sizeConfig(player,"small",2,capitalizeFirstLetter(plugin.getLanguageString("gui.small")));
-                    break;
-                }
-                case 3:{
-                    sizeConfig(player,"small",3,capitalizeFirstLetter(plugin.getLanguageString("gui.small")));
-                    break;
-                }
-                case 5:{
-                    sizeConfig(player,"small",4,capitalizeFirstLetter(plugin.getLanguageString("gui.small")));
-                    break;
-                }
-                case 6:{
-                    sizeConfig(player,"small",5,capitalizeFirstLetter(plugin.getLanguageString("gui.small")));
-                    break;
-                }
-                case 7:{
-                    sizeConfig(player,"small",6,capitalizeFirstLetter(plugin.getLanguageString("gui.small")));
-                    break;
-                }
-                case 8:{
-                    Inventory configGUI = guis.configGUI(player);
-
-                    player.openInventory(configGUI);
-                }
-            }
+            switchCases(e,"smallSize","gui.small","small");
         }
 
         if (e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.size.medium"))) {
-            e.setCancelled(true);
-
-            Player player = (Player) e.getWhoClicked();
-
-            switch (e.getSlot()){
-                case 1:{
-                    bpcm.getConfig().set("mediumSize",1);
-                    player.closeInventory();
-                    String row = plugin.getLanguageString("gui.config.changeSize");
-                    player.sendMessage(ChatColor.RED + row.replace("%size", capitalizeFirstLetter(plugin.getLanguageString("gui.medium"))).replace("%num", "1"));
-                    bpcm.saveConfig();
-                    break;
-                }
-                case 2:{
-                    sizeConfig(player,"medium",2,capitalizeFirstLetter(plugin.getLanguageString("gui.medium")));
-                    break;
-                }
-                case 3:{
-                    sizeConfig(player,"medium",3,capitalizeFirstLetter(plugin.getLanguageString("gui.medium")));
-                    break;
-                }
-                case 5:{
-                    sizeConfig(player,"medium",4,capitalizeFirstLetter(plugin.getLanguageString("gui.medium")));
-                    break;
-                }
-                case 6:{
-                    sizeConfig(player,"medium",5,capitalizeFirstLetter(plugin.getLanguageString("gui.medium")));
-                    break;
-                }
-                case 7:{
-                    sizeConfig(player,"medium",6,capitalizeFirstLetter(plugin.getLanguageString("gui.medium")));
-                    break;
-                }
-                case 8:{
-                    Inventory configGUI = guis.configGUI(player);
-
-                    player.openInventory(configGUI);
-                }
-            }
+            switchCases(e,"mediumSize","gui.medium","medium");
         }
 
         if (e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.size.large"))) {
-            e.setCancelled(true);
-
-            Player player = (Player) e.getWhoClicked();
-
-            switch (e.getSlot()){
-                case 1:{
-                    bpcm.getConfig().set("largeSize",1);
-                    player.closeInventory();
-                    String row = plugin.getLanguageString("gui.config.changeSize");
-                    player.sendMessage(ChatColor.RED + row.replace("%size", capitalizeFirstLetter(plugin.getLanguageString("gui.large").replace("%num", "1"))));
-                    bpcm.saveConfig();
-                    break;
-                }
-                case 2:{
-                    sizeConfig(player,"large",2,capitalizeFirstLetter(plugin.getLanguageString("gui.large")));
-                    break;
-                }
-                case 3:{
-                    sizeConfig(player,"large",3,capitalizeFirstLetter(plugin.getLanguageString("gui.large")));
-                    break;
-                }
-                case 5:{
-                    sizeConfig(player,"large",4,capitalizeFirstLetter(plugin.getLanguageString("gui.large")));
-                    break;
-                }
-                case 6:{
-                    sizeConfig(player,"large",5,capitalizeFirstLetter(plugin.getLanguageString("gui.large")));
-                    break;
-                }
-                case 7:{
-                    sizeConfig(player,"large",6,capitalizeFirstLetter(plugin.getLanguageString("gui.large")));
-                    break;
-                }
-                case 8:{
-                    Inventory configGUI = guis.configGUI(player);
-
-                    player.openInventory(configGUI);
-                }
-            }
+            switchCases(e, "largeSize", "gui.large", "large");
         }
     }
 
+    private void switchCases(InventoryClickEvent e,String Size,String guiPath,String sizePath)
+    {
+        e.setCancelled(true);
+
+        Player player = (Player) e.getWhoClicked();
+
+        switch (e.getSlot()){
+            case 1:{
+                bpcm.getConfig().set(Size,1);
+                player.closeInventory();
+                String row = plugin.getLanguageString("gui.config.changeSize");
+                player.sendMessage(ChatColor.RED + row.replace("%size",capitalizeFirstLetter(plugin.getLanguageString(guiPath))).replace("%num", "1"));
+                bpcm.saveConfig();
+                break;
+            }
+            case 2:{
+                sizeConfig(player,sizePath,2,capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
+                break;
+            }
+            case 3:{
+                sizeConfig(player,sizePath,3,capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
+                break;
+            }
+            case 5:{
+                sizeConfig(player,sizePath,4,capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
+                break;
+            }
+            case 6:{
+                sizeConfig(player,sizePath,5,capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
+                break;
+            }
+            case 7:{
+                sizeConfig(player,sizePath,6,capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
+                break;
+            }
+            case 8:{
+                Inventory configGUI = guis.configGUI(player);
+
+                player.openInventory(configGUI);
+            }
+        }
+    }
     private void sizeConfig(Player player,String path, int rows,String size){
         bpcm.getConfig().set(path + "Size",rows);
         player.closeInventory();
         String row = plugin.getLanguageString("gui.config.changeSize") + "s";
-        player.sendMessage(size);
         player.sendMessage(ChatColor.RED + row.replace("%size", size).replace("%num", String.valueOf(rows)));
         bpcm.saveConfig();
     }

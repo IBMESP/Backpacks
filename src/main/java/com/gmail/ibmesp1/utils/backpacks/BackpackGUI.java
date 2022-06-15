@@ -16,7 +16,7 @@ public class BackpackGUI extends Menu{
     private int size;
     private String title;
 
-    public BackpackGUI(int size, String title,Player viewer,UUID ownerId,BackpackManager backpackManager) {
+    public BackpackGUI(int size, String title, Player viewer, UUID ownerId, BackpackManager backpackManager) {
         super(size, title);
         this.viewer = viewer;
         this.ownerId = ownerId;
@@ -40,8 +40,6 @@ public class BackpackGUI extends Menu{
 
     @Override
     public void onClick(InventoryClickEvent event) {
-        if(viewer.getUniqueId().equals(ownerId)) return;
-
         event.setCancelled(true);
     }
 

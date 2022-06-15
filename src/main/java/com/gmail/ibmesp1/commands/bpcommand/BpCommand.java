@@ -12,9 +12,12 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
-public class BpCommand  implements TabExecutor {
+public class BpCommand implements TabExecutor {
 
     private final Backpacks plugin;
     private static HashMap<UUID, Inventory> playerBackpack;
@@ -25,17 +28,19 @@ public class BpCommand  implements TabExecutor {
     public BpCommand(Backpacks plugin, HashMap<UUID,Inventory> playerBackpack, DataManger bpcm,BackpackManager bpm){
         this.plugin = plugin;
         this.playerBackpack = playerBackpack;
+        this.bpcm = bpcm;
+        this.bpm = bpm;
 
         subCommands.add(new VersionSubCommand(plugin));
         subCommands.add(new HelpSubCommand());
         subCommands.add(new CreateSubCommand(plugin,playerBackpack,bpcm));
         subCommands.add(new OpenSubCommand(plugin,playerBackpack,bpm));
         subCommands.add(new DeleteSubCommand(plugin,playerBackpack));
-        subCommands.add(new ReloadSubCommand(plugin));
+        subCommands.add(new ReloadSubCommand(plugin,bpcm));
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(!(sender instanceof Player)) {
             return false;
         }
@@ -47,17 +52,17 @@ public class BpCommand  implements TabExecutor {
             return true;
         }
 
-        if(args.length > 0){
-            for (int i = 0; i< getSubCommands().size(); i++){
-                if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())){
-                    getSubCommands().get(i).perform(player,args);
-                }
+        for (int i = 0; i< getSubCommands().size(); i++){
+            if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())){
+                getSubCommands().get(i).perform(player,args);
             }
         }
         return true;
     }
 
-    public ArrayList<SubCommand> getSubCommands(){return subCommands;}
+    private ArrayList<SubCommand> getSubCommands() {
+        return subCommands;
+    }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
