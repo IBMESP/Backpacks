@@ -1,19 +1,17 @@
 create:
   already: "You already have a backpack"
   perm: "You do not have permission to create a %size backpack"
+  maxbp: "You cant create more backpacks"
   target:
     already: " already has a backpack"
     created: "You created a backpack to "
     create: "%player created you a %size backpack"
     perm: "You do not have permission to create other backpacks"
 delete:
-  firstmsg: "This will remove your backpack and your items will be dropped"
-  secondmsg: "/bp delete confirm to delete the backpack"
+  confirm: "Write \u0022confirm\u0022"
   notBackpack: "You do not have a backpack"
   deleted: "Your backpack has been deleted"
   target:
-    firstmsg: "This will remove %target backpack and %target items will be dropped"
-    secondmsg: "/bp delete %target confirm to delete the backpack"
     notBackpack: " does not have a backpack"
     deleted: "'s backpack has been deleted"
     perm: "You do not have permission to delete other backpacks"
@@ -56,3 +54,4 @@ config:
   update: "Backpacks has a new update"
   notUpdate: "Backpacks is up to date"
   title: "%player's Backpack"
+  backpacks: "Backpacks"

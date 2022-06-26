@@ -1,19 +1,17 @@
 create:
   already: "Ya tienes una mochila"
   perm: "No tienes permiso para crear una mochila %size"
+  maxbp: "No puedes crear mas mochilas"
   target:
     already: " ya tiene una mochila"
     created: "Has creado una mochila a "
     create: "%player te ha creado una mochila %size"
     perm: "No tines permiso para crear mochilas a otros"
 delete:
-  firstmsg: "Esto eliminara tu mochila y los objetos seran soltados"
-  secondmsg: "/bp delete confirm para eliminar tu mochila"
+  confirm: "Escribe \u0022confirm\u0022"
   notBackpack: "No tienes una mochila"
   deleted: "Tu mochila ha sido eliminada"
   target:
-    firstmsg: "Esto eliminara la mochila de %target y los obejetos de %target seran soltados"
-    secondmsg: "/bp delete %target confirm para eliminar su mochila"
     notBackpack: " no tiene una mochila"
     deleted: "'s backpack ha sido eliminada"
     perm: "No tienes permiso para eliminar la mochila de otros"
@@ -56,3 +54,4 @@ config:
   update: "Backpacks tiene una nueva actualizacion"
   notUpdate: "Backpacks esta actualizado"
   title: "Mochila de %player"
+  backpacks: "Mochilas"

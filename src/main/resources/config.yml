@@ -1,3 +1,7 @@
+# This is the config version for reference.
+# DO NOT EDIT VALUE.
+configVersion: 1
+
 #Available languages
 #en_US
 #es_ES
@@ -5,4 +9,11 @@ locale: en_US
 
 # This is the en_US.yml version for reference.
 # ONLY EDIT ONCE ALL LANGUAGE FILES HAVE BEEN UPDATED.
-languageFile: 2
+languageFile: 3
+
+#Paginated create and delete GUIs, adds pages of players to create and delete GUIs
+#If using this gives lag just change to false
+paginatedGUI: true
+
+#Maximun number of backpacks per player (1-9)
+maxBP: 9
