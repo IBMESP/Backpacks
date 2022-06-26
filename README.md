@@ -1,7 +1,7 @@
 # Backpacks
 Spigot plugin that adds backpacks accessible with commands
 ## Badges:
-[![Latest Version](https://img.shields.io/badge/Latest%20Version-2.0.0-brightgreen)](https://github.com/IBMESP/Backpacks/releases/latest)
+[![Latest Version](https://img.shields.io/badge/Latest%20Version-2.1.0-brightgreen)](https://github.com/IBMESP/Backpacks/releases/latest)
 ![Spigot Downloads](https://img.shields.io/spiget/downloads/99840?label=Spigot%20Downloads)
 ![Spigot Rating](https://img.shields.io/spiget/rating/99840?label=Spigot%20Rating)
 
@@ -44,14 +44,25 @@ Spigot plugin that adds backpacks accessible with commands
   <summary>Default config.yml</summary>
   
   ```
-  #Available languages
-  #en_US
-  #es_ES
-  locale: en_US
+# This is the config version for reference.
+# DO NOT EDIT VALUE.
+configVersion: 1
 
-  # This is the en_US.yml version for reference.
-  # ONLY EDIT ONCE ALL LANGUAGE FILES HAVE BEEN UPDATED.
-  languageFile: 2
+#Available languages
+#en_US
+#es_ES
+locale: en_US
+
+# This is the en_US.yml version for reference.
+# ONLY EDIT ONCE ALL LANGUAGE FILES HAVE BEEN UPDATED.
+languageFile: 3
+
+#Paginated create and delete GUIs, adds pages of players to create and delete GUIs
+#If using this gives lag just change to false
+paginatedGUI: true
+
+#Maximun number of backpacks per player (1-9)
+maxBP: 9
   ```
 </details>
 <details>
@@ -59,63 +70,62 @@ Spigot plugin that adds backpacks accessible with commands
 
   ```
   create:
-    already: "You already have a backpack"
-    perm: "You do not have permission to create a %size backpack"
-    target:
-      already: " already has a backpack"
-      created: "You created a backpack to "
-      create: "%player created you a %size backpack"
-      perm: "You do not have permission to create other backpacks"
-  delete:
-    firstmsg: "This will remove your backpack and your items will be dropped"
-    secondmsg: "/bp delete confirm to delete the backpack"
-    notBackpack: "You do not have a backpack"
-    deleted: "Your backpack has been deleted"
-    target:
-      firstmsg: "This will remove %target backpack and %target items will be dropped"
-      secondmsg: "/bp delete %target confirm to delete the backpack"
-      notBackpack: " does not have a backpack"
-      deleted: "'s backpack has been deleted"
-      perm: "You do not have permission to delete other backpacks"
-      deletedBy: "Your backpack has been deleted by "
-  gui:
-    small: "small"
-    medium: "medium"
-    large: "large"
-    title: "Backpack Menu"
-    browser: "Write the name"
-    size:
-      small: "Small size"
-      medium: "Medium size"
-      large: "Large size"
-    items:
-      create: "Create a bakcpack"
-      delete: "Delete a bakcpack"
-      config: "Config"
-      configuration: "Configuration"
-      keepBackpack: "Keep Backpack"
-      current: "Current: "
-      back: "Back"
-      search: "Search a player"
-      has: " has a backpack"
-      hasNot: " does not have a backpack"
-      size: "Size"
-    config:
-      gamerule: "Gamerule keepBackpack is now set: %bool"
-      changeSize: "%size size set to %num row"
-    create:
-      title: "Players Online (%size)"
-    delete:
-      title: "Players Online (Delete)"
+  already: "You already have a backpack"
+  perm: "You do not have permission to create a %size backpack"
+  maxbp: "You cant create more backpacks"
+  target:
+    already: " already has a backpack"
+    created: "You created a backpack to "
+    create: "%player created you a %size backpack"
+    perm: "You do not have permission to create other backpacks"
+delete:
+  confirm: "Write \u0022confirm\u0022"
+  notBackpack: "You do not have a backpack"
+  deleted: "Your backpack has been deleted"
+  target:
+    notBackpack: " does not have a backpack"
+    deleted: "'s backpack has been deleted"
+    perm: "You do not have permission to delete other backpacks"
+    deletedBy: "Your backpack has been deleted by "
+gui:
+  small: "small"
+  medium: "medium"
+  large: "large"
+  title: "Backpack Menu"
+  browser: "Write the name"
+  size:
+    small: "Small size"
+    medium: "Medium size"
+    large: "Large size"
+  items:
+    create: "Create a bakcpack"
+    delete: "Delete a bakcpack"
+    config: "Config"
+    configuration: "Configuration"
+    keepBackpack: "Keep Backpack"
+    current: "Current: "
+    back: "Back"
+    search: "Search a player"
+    has: " has a backpack"
+    hasNot: " does not have a backpack"
+    size: "Size"
   config:
-    reloaded: "[Backpacks] Config reloaded!"
-    perms: "You do not have permission to use this command"
-    exist: "This command doesn't exists"
-    open: "Use /bp open to open the backpack"
-    help: "Use /bp help to see the commands"
-    update: "Backpacks has a new update"
-    notUpdate: "Backpacks is up to date"
-    title: "%player's Backpack"
+    gamerule: "Gamerule keepBackpack is now set: %bool"
+    changeSize: "%size size set to %num row"
+  create:
+    title: "Players Online (%size)"
+  delete:
+    title: "Players Online (Delete)"
+config:
+  reloaded: "[Backpacks] Config reloaded!"
+  perms: "You do not have permission to use this command"
+  exist: "This command doesn't exists"
+  open: "Use /bp open to open the backpack"
+  help: "Use /bp help to see the commands"
+  update: "Backpacks has a new update"
+  notUpdate: "Backpacks is up to date"
+  title: "%player's Backpack"
+  backpacks: "Backpacks"
   ```
 </details>
 
