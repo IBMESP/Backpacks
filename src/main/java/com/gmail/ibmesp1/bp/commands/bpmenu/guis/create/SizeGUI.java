@@ -4,7 +4,7 @@ package com.gmail.ibmesp1.bp.commands.bpmenu.guis.create;
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.bpmenu.BpEasterEgg;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
-import com.gmail.ibmesp1.bp.data.DataManager;
+import com.gmail.ibmesp1.bp.utils.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

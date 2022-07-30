@@ -1,10 +1,9 @@
 package com.gmail.ibmesp1.bp.utils.backpacks;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.data.DataManager;
+import com.gmail.ibmesp1.bp.utils.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -48,7 +47,7 @@ public class BackpackManager {
                     if (backpackM.getConfig().contains(player.getUniqueId() + "." + key)) {
                         String inventory = backpackM.getConfig().getString(player.getUniqueId() + "." + key);
                         String title = plugin.getLanguageString("config.title");
-                        invs.put(key,inventoryFromBase64(inventory,title.replace("%player",player.getName())));
+                        invs.put(key,inventoryFromBase64(inventory,title.replace("%player%",player.getName())));
                         list = true;
                     }
                 }
@@ -68,7 +67,7 @@ public class BackpackManager {
                 if (backpackM.getConfig().contains(player.getUniqueId() + "." + key)) {
                     String inventory = backpackM.getConfig().getString(player.getUniqueId() + "." + key);
                     String title = plugin.getLanguageString("config.title");
-                    invs.put(key,inventoryFromBase64(inventory,title.replace("%player",player.getName())));
+                    invs.put(key,inventoryFromBase64(inventory,title.replace("%player%",player.getName())));
                     list = true;
                 }
             }
@@ -136,5 +135,4 @@ public class BackpackManager {
         }
         return null;
     }
-
 }

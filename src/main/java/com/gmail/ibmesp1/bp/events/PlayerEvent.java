@@ -1,23 +1,19 @@
 package com.gmail.ibmesp1.bp.events;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.data.DataManager;
-import com.gmail.ibmesp1.bp.utils.UUIDFetcher;
+import com.gmail.ibmesp1.bp.utils.DataManager;
 import com.gmail.ibmesp1.bp.utils.backpacks.BackpackManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class PlayerEvent implements Listener {
@@ -57,7 +53,7 @@ public class PlayerEvent implements Listener {
     }
 
     @EventHandler
-    public void PlayerQuits(PlayerQuitEvent e)
+    public void onQuits(PlayerQuitEvent e)
     {
         Player player = e.getPlayer();
         playerList.remove(player);
@@ -71,7 +67,7 @@ public class PlayerEvent implements Listener {
     }
 
     @EventHandler
-    public void PlayerKicked(PlayerKickEvent e){
+    public void onKick(PlayerKickEvent e){
         Player player = e.getPlayer();
         playerList.remove(player);
 
@@ -84,30 +80,31 @@ public class PlayerEvent implements Listener {
     }
 
     @EventHandler
-    public void PlayerDeath(PlayerDeathEvent event){
+    public void onDeath(PlayerDeathEvent event){
         Player player = event.getEntity();
 
         if(!bpcm.getConfig().getBoolean("keepBackpack")){
             HashMap<String,Inventory> invs = playerBackpack.get(player.getUniqueId());
             Set<String> set = plugin.backpacks.getConfig().getConfigurationSection(player.getUniqueId() + ".").getKeys(false);
             String title = plugin.getLanguageString("config.title");
-
-            for (String key:set) {
-                Inventory inventory = playerBackpack.get(player.getUniqueId()).get(key);
-                int size = inventory.getSize();
-                for (int j = 0; j < size; j++) {
-                    try {
-                        player.getLocation().getWorld().dropItem(player.getLocation(), inventory.getItem(j));
-                    } catch (IllegalArgumentException e) {
+            if(plugin.backpacks.getConfig().getConfigurationSection(player.getUniqueId() + ".") != null) {
+                for (String key : set) {
+                    Inventory inventory = playerBackpack.get(player.getUniqueId()).get(key);
+                    int size = inventory.getSize();
+                    for (int j = 0; j < size; j++) {
+                        try {
+                            player.getLocation().getWorld().dropItem(player.getLocation(), inventory.getItem(j));
+                        } catch (IllegalArgumentException e) {
+                        }
                     }
+
+                    Inventory inv = Bukkit.createInventory(null, size, title.replace("%player%", player.getName()));
+                    invs.replace(key, inv);
                 }
 
-                Inventory inv = Bukkit.createInventory(null, size, title.replace("%player", player.getName()));
-                invs.replace(key,inv);
+                playerBackpack.put(player.getUniqueId(), invs);
+                bpm.savePlayerBackPacks(player.getUniqueId());
             }
-
-            playerBackpack.put(player.getUniqueId(),invs);
-            bpm.savePlayerBackPacks(player.getUniqueId());
         }
     }
 
@@ -116,15 +113,14 @@ public class PlayerEvent implements Listener {
         Player player = (Player) e.getPlayer();
         String create = plugin.getLanguageString("gui.create.title");
 
-        if(e.getView().getTitle().equalsIgnoreCase(create.replace("%size", "Small"))){
+        if(e.getView().getTitle().equalsIgnoreCase(create.replace("%size%", "Small"))){
             plugin.playerPage.remove(player.getUniqueId());
-        }else if(e.getView().getTitle().equalsIgnoreCase(create.replace("%size", "Medium"))){
+        }else if(e.getView().getTitle().equalsIgnoreCase(create.replace("%size%", "Medium"))){
             plugin.playerPage.remove(player.getUniqueId());
-        }else if(e.getView().getTitle().equalsIgnoreCase(create.replace("%size", "Large"))) {
+        }else if(e.getView().getTitle().equalsIgnoreCase(create.replace("%size%", "Large"))) {
             plugin.playerPage.remove(player.getUniqueId());
         } else if (e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.delete.title"))) {
             plugin.playerPage.remove(player.getUniqueId());
         }
     }
-
 }

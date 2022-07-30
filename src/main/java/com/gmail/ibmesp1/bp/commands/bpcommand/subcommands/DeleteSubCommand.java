@@ -19,11 +19,17 @@ public class DeleteSubCommand extends SubCommand {
     private final Backpacks plugin;
     private final HashMap<UUID, HashMap<String,Inventory>> playerBackpack;
     private BackpackManager bpm;
+    private int smallSize;
+    private int mediumSize;
+    private int largeSize;
 
     public DeleteSubCommand(Backpacks plugin, HashMap<UUID, HashMap<String, Inventory>> playerBackpack, BackpackManager bpm) {
         this.plugin = plugin;
         this.playerBackpack = playerBackpack;
         this.bpm = bpm;
+        smallSize = plugin.bpcm.getConfig().getInt("smallSize");
+        mediumSize = plugin.bpcm.getConfig().getInt("mediumSize");
+        largeSize = plugin.bpcm.getConfig().getInt("largeSize");
     }
     @Override
     public String getName() {
@@ -63,10 +69,19 @@ public class DeleteSubCommand extends SubCommand {
         }
     }
 
-    private void GUI(Player player,UUID uuid,String name)
-    {
-        Inventory inventory = Bukkit.createInventory(player,3*9,"Delete %player backpack".replace("%player",name));
-        int[] glass_slots = {0,1,2,3,4,5,6,7,8,18,19,20,21,22,23,24,25,26};
+    private void GUI(Player player,UUID uuid,String name) {
+        Inventory inventory = Bukkit.createInventory(player,(plugin.rowsBP+2)*9,"Delete %player% backpack".replace("%player%",name));
+        int[] glass_slots = new int[18];
+        int j = 9;
+
+        for(int h=0;h<9;h++)
+            glass_slots[h] = h;
+
+        for(int i=(plugin.rowsBP+2)*9-1;i>(plugin.rowsBP+2)*9-10;i--){
+            glass_slots[j] = i;
+            j++;
+        }
+
         for(int slot:glass_slots){
             ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
             ItemMeta glass_meta = glass.getItemMeta();
@@ -78,9 +93,21 @@ public class DeleteSubCommand extends SubCommand {
         int i = 0;
 
         for (String key:set){
+            int size = plugin.playerBackpack.get(player.getUniqueId()).get(key).getSize();
             ItemStack bp = new ItemStack(Material.CHEST);
             ItemMeta bp_meta = bp.getItemMeta();
-            bp_meta.setDisplayName(key + "");
+
+            if(size < largeSize*9)
+                if(size < mediumSize*9)
+                    bp_meta.setDisplayName(plugin.getLanguageString("gui.open.small"));
+                else
+                    bp_meta.setDisplayName(plugin.getLanguageString("gui.open.medium"));
+            else
+                bp_meta.setDisplayName(plugin.getLanguageString("gui.open.large"));
+
+            List<String> lore = new ArrayList<>();
+            lore.add(0,key + "");
+            bp_meta.setLore(lore);
             bp.setItemMeta(bp_meta);
             inventory.setItem(i+9,bp);
             i++;

@@ -7,8 +7,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,9 +33,7 @@ public class BackpackGUI extends Menu{
     }
 
     @Override
-    public void onOpen(InventoryOpenEvent event) {
-
-    }
+    public void onOpen(InventoryOpenEvent event) {}
 
     @Override
     public void onClose(InventoryCloseEvent event) {

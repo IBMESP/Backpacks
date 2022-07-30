@@ -2,7 +2,7 @@ name: Backpacks
 version: '${project.version}'
 main: com.gmail.ibmesp1.bp.Backpacks
 api-version: 1.13
-authors: [ Ib ]
+authors: [Ib]
 
 commands:
   bp:

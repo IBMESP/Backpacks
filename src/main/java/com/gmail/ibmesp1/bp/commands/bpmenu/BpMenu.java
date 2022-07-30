@@ -2,7 +2,7 @@ package com.gmail.ibmesp1.bp.commands.bpmenu;
 
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
-import com.gmail.ibmesp1.bp.data.DataManager;
+import com.gmail.ibmesp1.bp.utils.DataManager;
 import com.gmail.ibmesp1.bp.utils.backpacks.BackpackManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -2,7 +2,7 @@ package com.gmail.ibmesp1.bp.commands.bpmenu.guis.create;
 
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
-import com.gmail.ibmesp1.bp.data.DataManager;
+import com.gmail.ibmesp1.bp.utils.DataManager;
 import com.gmail.ibmesp1.bp.utils.UUIDFetcher;
 import com.gmail.ibmesp1.bp.utils.backpacks.BackpackManager;
 import net.wesjd.anvilgui.AnvilGUI;
@@ -19,7 +19,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public class CreateGUI implements Listener {
@@ -55,15 +54,15 @@ public class CreateGUI implements Listener {
 
         String title = plugin.getLanguageString("gui.create.title");
 
-        if (e.getView().getTitle().equalsIgnoreCase(title.replace("%size", capitalizeFirstLetter(plugin.getLanguageString("gui.small"))))) {
+        if (e.getView().getTitle().equalsIgnoreCase(title.replace("%size%", plugin.capitalizeFirstLetter(plugin.getLanguageString("gui.small"))))) {
             create(e,player,"bp.small","small",smallSize);
         }
 
-        if (e.getView().getTitle().equalsIgnoreCase(title.replace("%size", capitalizeFirstLetter(plugin.getLanguageString("gui.medium"))))) {
+        if (e.getView().getTitle().equalsIgnoreCase(title.replace("%size%", plugin.capitalizeFirstLetter(plugin.getLanguageString("gui.medium"))))) {
             create(e,player,"bp.medium","medium",mediumSize);
         }
 
-        if (e.getView().getTitle().equalsIgnoreCase(title.replace("%size", capitalizeFirstLetter(plugin.getLanguageString("gui.large"))))) {
+        if (e.getView().getTitle().equalsIgnoreCase(title.replace("%size%", plugin.capitalizeFirstLetter(plugin.getLanguageString("gui.large"))))) {
             create(e,player,"bp.large","large",largeSize);
         }
     }
@@ -83,7 +82,7 @@ public class CreateGUI implements Listener {
                 return;
             }
             page++;
-            Inventory sizeGUI = guis.sizeGUI(capitalizeFirstLetter(size),page);
+            Inventory sizeGUI = guis.sizeGUI(plugin.capitalizeFirstLetter(size), page);
             player.openInventory(sizeGUI);
             plugin.playerPage.put(player.getUniqueId(),page);
             return;
@@ -95,7 +94,7 @@ public class CreateGUI implements Listener {
                 return;
             }
             page--;
-            Inventory sizeGUI = guis.sizeGUI(capitalizeFirstLetter(size),page);
+            Inventory sizeGUI = guis.sizeGUI(plugin.capitalizeFirstLetter(size), page);
             player.openInventory(sizeGUI);
             plugin.playerPage.put(player.getUniqueId(),page);
             return;
@@ -142,7 +141,7 @@ public class CreateGUI implements Listener {
 
                             String title = plugin.getLanguageString("config.title");
 
-                            Inventory inventory = Bukkit.createInventory(null, bSize * 9,title.replace("%player",player.getName()));
+                            Inventory inventory = Bukkit.createInventory(null, bSize * 9,title.replace("%player%",player.getName()));
                             if(playerBackpacks.containsKey(player.getUniqueId())){
                                 HashMap<String,Inventory> invs = playerBackpacks.get(player.getUniqueId());
                                 invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
@@ -175,7 +174,7 @@ public class CreateGUI implements Listener {
 
                         String title = plugin.getLanguageString("config.title");
 
-                        Inventory inventory = Bukkit.createInventory(null, bSize * 9,title.replace("%player",player.getName()));
+                        Inventory inventory = Bukkit.createInventory(null, bSize * 9,title.replace("%player%",player.getName()));
                         if(playerBackpacks.containsKey(player.getUniqueId())){
                             HashMap<String,Inventory> invs = playerBackpacks.get(player.getUniqueId());
                             invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
@@ -203,7 +202,7 @@ public class CreateGUI implements Listener {
 
                     String title = plugin.getLanguageString("config.title");
 
-                    Inventory inventory = Bukkit.createInventory(null, bSize * 9,title.replace("%player",target.getName()));
+                    Inventory inventory = Bukkit.createInventory(null, bSize * 9,title.replace("%player%",target.getName()));
                     if(playerBackpacks.containsKey(target.getUniqueId())){
                         HashMap<String,Inventory> invs = playerBackpacks.get(target.getUniqueId());
                         invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
@@ -218,7 +217,7 @@ public class CreateGUI implements Listener {
                         plugin.backpacks.saveConfig();
                     }
                     String create = plugin.getLanguageString("create.target.create");
-                    target.sendMessage(ChatColor.RED + create.replace("%size", size).replace("%player", player.getName()));
+                    target.sendMessage(ChatColor.RED + create.replace("%size%", size).replace("%player%", player.getName()));
                     target.sendMessage(plugin.getLanguageString("config.open"));
                     player.closeInventory();
 
@@ -226,7 +225,7 @@ public class CreateGUI implements Listener {
             }
         }else{
             String create = plugin.getLanguageString("create.perm");
-            player.sendMessage(ChatColor.RED + create.replace("%size", size));
+            player.sendMessage(ChatColor.RED + create.replace("%size%", size));
             e.setCancelled(true);
         }
     }
@@ -251,7 +250,7 @@ public class CreateGUI implements Listener {
             } catch (Exception ignored) {}
         }
 
-        Inventory inventory = Bukkit.createInventory(null, size * 9,plugin.getLanguageString("config.title").replace("%player",s));
+        Inventory inventory = Bukkit.createInventory(null, size * 9,plugin.getLanguageString("config.title").replace("%player%",s));
 
         HashMap<String, Inventory> invs;
         if(playerBackpacks.containsKey(uuid)){
@@ -271,13 +270,9 @@ public class CreateGUI implements Listener {
                 return;
             }
             String create = plugin.getLanguageString("create.target.create");
-            target.sendMessage(create.replace("%player",player.getName().replace("%size",Size)));
+            target.sendMessage(create.replace("%player%",player.getName().replace("%size%",Size)));
             target.sendMessage(plugin.getLanguageString("config.open"));
         }
         player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("create.target.created") + s);
-    }
-
-    private String capitalizeFirstLetter(String string) {
-        return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 }

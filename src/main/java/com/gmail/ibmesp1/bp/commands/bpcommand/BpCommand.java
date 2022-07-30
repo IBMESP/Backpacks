@@ -3,7 +3,7 @@ package com.gmail.ibmesp1.bp.commands.bpcommand;
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.SubCommand;
 import com.gmail.ibmesp1.bp.commands.bpcommand.subcommands.*;
-import com.gmail.ibmesp1.bp.data.DataManager;
+import com.gmail.ibmesp1.bp.utils.DataManager;
 import com.gmail.ibmesp1.bp.utils.backpacks.BackpackManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -34,7 +34,7 @@ public class BpCommand implements TabExecutor {
         subCommands.add(new VersionSubCommand(plugin));
         subCommands.add(new HelpSubCommand());
         subCommands.add(new CreateSubCommand(plugin,playerBackpack,bpcm));
-        subCommands.add(new OpenSubCommand(plugin,playerBackpack,bpm));
+        subCommands.add(new OpenSubCommand(plugin,playerBackpack));
         subCommands.add(new DeleteSubCommand(plugin,playerBackpack,bpm));
         subCommands.add(new ReloadSubCommand(plugin,bpcm));
     }
@@ -48,7 +48,7 @@ public class BpCommand implements TabExecutor {
         Player player = (Player) sender ;
 
         if (args.length == 0){
-            player.sendMessage(plugin.name+ ChatColor.WHITE+ plugin.getLanguageString("config.help"));
+            player.sendMessage(plugin.name + ChatColor.WHITE + " " + plugin.getLanguageString("config.help"));
             return true;
         }
 

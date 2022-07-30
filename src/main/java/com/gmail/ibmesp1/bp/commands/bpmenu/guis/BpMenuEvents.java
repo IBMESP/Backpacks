@@ -1,7 +1,7 @@
 package com.gmail.ibmesp1.bp.commands.bpmenu.guis;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.data.DataManager;
+import com.gmail.ibmesp1.bp.utils.DataManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,7 +9,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public class BpMenuEvents implements Listener {

@@ -1,4 +1,4 @@
-package com.gmail.ibmesp1.bp.data;
+package com.gmail.ibmesp1.bp.utils;
 
 import com.gmail.ibmesp1.bp.Backpacks;
 import org.bukkit.ChatColor;

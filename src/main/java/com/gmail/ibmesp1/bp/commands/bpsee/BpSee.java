@@ -2,15 +2,12 @@ package com.gmail.ibmesp1.bp.commands.bpsee;
 
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.utils.UUIDFetcher;
-import com.gmail.ibmesp1.bp.utils.backpacks.BackpackGUI;
-import com.gmail.ibmesp1.bp.utils.backpacks.BackpackManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Guardian;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -76,7 +73,7 @@ public class BpSee implements CommandExecutor {
     }
 
     private void GUI(Player player,UUID uuid,String name) {
-        Inventory inventory = Bukkit.createInventory(player,3*9,"%player's Backpacks".replace("%player",name));
+        Inventory inventory = Bukkit.createInventory(player,3*9,"%player%'s Backpacks".replace("%player%",name));
         int[] glass_slots = {0,1,2,3,4,5,6,7,8,18,19,20,21,22,23,24,25,26};
         for(int slot:glass_slots){
             ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);

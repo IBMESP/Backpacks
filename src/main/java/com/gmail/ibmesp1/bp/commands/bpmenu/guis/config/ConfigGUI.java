@@ -3,7 +3,7 @@ package com.gmail.ibmesp1.bp.commands.bpmenu.guis.config;
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.bpmenu.BpEasterEgg;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
-import com.gmail.ibmesp1.bp.data.DataManager;
+import com.gmail.ibmesp1.bp.utils.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -13,7 +13,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public class ConfigGUI implements Listener {
@@ -44,13 +43,13 @@ public class ConfigGUI implements Listener {
                         bpcm.getConfig().set("keepBackpack",false);
                         bpcm.saveConfig();
                         String gamerule = plugin.getLanguageString("gui.config.gamerule");
-                        player.sendMessage(ChatColor.RED + gamerule.replace("%bool", "false"));
+                        player.sendMessage(ChatColor.RED + gamerule.replace("%bool%", "false"));
                         player.closeInventory();
                     }else if(!bpcm.getConfig().getBoolean("keepBackpack")){
                         bpcm.getConfig().set("keepBackpack",true);
                         bpcm.saveConfig();
                         String gamerule = plugin.getLanguageString("gui.config.gamerule");
-                        player.sendMessage(ChatColor.RED + gamerule.replace("%bool", "true"));
+                        player.sendMessage(ChatColor.RED + gamerule.replace("%bool%", "true"));
                         player.closeInventory();
                     }
                     break;

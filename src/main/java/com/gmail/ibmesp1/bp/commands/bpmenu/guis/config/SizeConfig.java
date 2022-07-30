@@ -2,7 +2,7 @@ package com.gmail.ibmesp1.bp.commands.bpmenu.guis.config;
 
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
-import com.gmail.ibmesp1.bp.data.DataManager;
+import com.gmail.ibmesp1.bp.utils.DataManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,7 +11,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public class SizeConfig implements Listener {
@@ -21,7 +20,7 @@ public class SizeConfig implements Listener {
     private HashMap<UUID,HashMap<String,Inventory>> playerBackpacks;
     private DataManager bpcm;
 
-    public SizeConfig(Backpacks plugin, HashMap<UUID, HashMap<String,Inventory>> playerBackpacks, DataManager bpcm, List<Player> playerList) {
+    public SizeConfig(Backpacks plugin, HashMap<UUID, HashMap<String,Inventory>> playerBackpacks, DataManager bpcm) {
         this.plugin = plugin;
         this.playerBackpacks = playerBackpacks;
         this.guis = new GUIs(plugin,playerBackpacks,bpcm);
@@ -55,7 +54,7 @@ public class SizeConfig implements Listener {
                 bpcm.getConfig().set(Size,1);
                 player.closeInventory();
                 String row = plugin.getLanguageString("gui.config.changeSize");
-                player.sendMessage(ChatColor.RED + row.replace("%size",capitalizeFirstLetter(plugin.getLanguageString(guiPath))).replace("%num", "1"));
+                player.sendMessage(ChatColor.RED + row.replace("%size%",capitalizeFirstLetter(plugin.getLanguageString(guiPath))).replace("%num%", "1"));
                 bpcm.saveConfig();
                 break;
             }
@@ -87,11 +86,43 @@ public class SizeConfig implements Listener {
         }
     }
     private void sizeConfig(Player player,String path, int rows,String size){
+        if(!sizeConfigCheck(player,path,rows))
+            return;
+
         bpcm.getConfig().set(path + "Size",rows);
         player.closeInventory();
         String row = plugin.getLanguageString("gui.config.changeSize") + "s";
-        player.sendMessage(ChatColor.RED + row.replace("%size", size).replace("%num", String.valueOf(rows)));
+        player.sendMessage(ChatColor.RED + row.replace("%size%", size).replace("%num%", String.valueOf(rows)));
         bpcm.saveConfig();
+    }
+
+    private boolean sizeConfigCheck(Player player, String size,int rows){
+        switch (size) {
+            case "small":
+                if (rows >= bpcm.getConfig().getInt("mediumSize")) {
+                    player.sendMessage(plugin.getLanguageString("gui.config.small"));
+                    return false;
+                }
+                return true;
+            case "medium":
+                if (rows >= bpcm.getConfig().getInt("largeSize")) {
+                    player.sendMessage(plugin.getLanguageString("gui.config.small"));
+                    return false;
+                }
+
+                if (rows <= bpcm.getConfig().getInt("smallSize")){
+                    player.sendMessage(plugin.getLanguageString("gui.config.large"));
+                    return false;
+                }
+                    return true;
+            case "large":
+                if (rows <= bpcm.getConfig().getInt("mediumSize")) {
+                    player.sendMessage(plugin.getLanguageString("gui.config.large"));
+                    return false;
+                }
+                return true;
+        }
+        return false;
     }
 
     private String capitalizeFirstLetter(String string) {

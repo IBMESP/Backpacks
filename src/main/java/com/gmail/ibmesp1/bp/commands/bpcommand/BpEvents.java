@@ -36,22 +36,41 @@ public class BpEvents implements Listener {
             e.setCancelled(true);
             Player player = (Player) e.getWhoClicked();
 
-            String key = e.getClickedInventory().getItem(e.getSlot()).getItemMeta().getDisplayName();
+            if(e.getClickedInventory().getItem(e.getSlot()) == null)
+                return;
+
+            if(!e.getClickedInventory().getItem(e.getSlot()).hasItemMeta())
+                return;
+
+            if(!e.getClickedInventory().getItem(e.getSlot()).getItemMeta().hasLore())
+                return;
+
+            String key = e.getClickedInventory().getItem(e.getSlot()).getItemMeta().getLore().get(0);
 
             Inventory inventory = playerBackpack.get(player.getUniqueId()).get(key);
             player.openInventory(inventory);
             return;
         }
 
-        String title = "Delete %player backpack";
+        String title = "Delete %player% backpack";
         String[] parts = title.split(" ");
 
         if(e.getView().getTitle().startsWith(parts[0])){
             e.setCancelled(true);
-            String key = e.getClickedInventory().getItem(e.getSlot()).getItemMeta().getDisplayName();
+
+            if(e.getClickedInventory().getItem(e.getSlot()) == null)
+                return;
+
+            if(!e.getClickedInventory().getItem(e.getSlot()).hasItemMeta())
+                return;
+
+            if(!e.getClickedInventory().getItem(e.getSlot()).getItemMeta().hasLore())
+                return;
+
+            String key = e.getClickedInventory().getItem(e.getSlot()).getItemMeta().getLore().get(0);
             Player player = (Player) e.getWhoClicked();
             AnvilGUI.Builder builder = new AnvilGUI.Builder().onComplete((p,s) ->{
-                if(s.equals("confirm")){
+                if(s.equalsIgnoreCase("confirm")){
                     try {
                         String invTitle = e.getView().getTitle();
                         String[] invParts = invTitle.split(" ");
@@ -69,8 +88,7 @@ public class BpEvents implements Listener {
                             for (int i = 0; i < size; i++) {
                                 try {
                                     player.getLocation().getWorld().dropItem(player.getLocation(), prevInventory.getItem(i));
-                                } catch (IllegalArgumentException | NullPointerException ignored) {
-                                }
+                                } catch (IllegalArgumentException | NullPointerException ignored) {}
                             }
 
                             HashMap<String,Inventory> invs = playerBackpack.get(target.getUniqueId());
@@ -91,7 +109,7 @@ public class BpEvents implements Listener {
                                 return AnvilGUI.Response.close();
                             }
 
-                            if(target.getOpenInventory().getTitle().equals(title.replace("%player",target.getName()))){
+                            if(target.getOpenInventory().getTitle().equals(title.replace("%player%",target.getName()))){
                                 target.closeInventory();
                             }
 
@@ -151,7 +169,7 @@ public class BpEvents implements Listener {
             Bukkit.getScheduler().runTask(plugin,()-> builder.open(player));
         }
 
-        String see = "%player's Backpacks";
+        String see = "%player%'s Backpacks";
         String[] seeParts = see.split(" ");
 
         if(e.getView().getTitle().endsWith(seeParts[1])){
@@ -170,7 +188,7 @@ public class BpEvents implements Listener {
                     Inventory inventory = playerBackpack.get(targetUUID).get(key);
                     int size = inventory.getSize();
                     String getTitle = plugin.getLanguageString("config.title");
-                    String bpTitle = getTitle.replace("%player",name[0]);
+                    String bpTitle = getTitle.replace("%player%",name[0]);
                     player.openInventory(new BackpackGUI(size,bpTitle,player,targetUUID,key,bpm,plugin).getInventory());
                     return;
                 } catch (Exception ex) {
@@ -183,7 +201,7 @@ public class BpEvents implements Listener {
                 Inventory inventory = playerBackpack.get(player.getUniqueId()).get(key);
                 int size = inventory.getSize();
                 String getTitle = plugin.getLanguageString("config.title");
-                String bpTitle = getTitle.replace("%player",player.getName());
+                String bpTitle = getTitle.replace("%player%",player.getName());
                 player.openInventory(new BackpackGUI(size,bpTitle,player,player.getUniqueId(),key,bpm,plugin).getInventory());
                 return;
             }
@@ -191,7 +209,7 @@ public class BpEvents implements Listener {
             Inventory inventory = playerBackpack.get(target.getUniqueId()).get(key);
             int size = inventory.getSize();
             String getTitle = plugin.getLanguageString("config.title");
-            String bpTitle = getTitle.replace("%player",target.getName());
+            String bpTitle = getTitle.replace("%player%",target.getName());
             player.openInventory(new BackpackGUI(size,bpTitle,player,target.getUniqueId(),key,bpm,plugin).getInventory());
         }
     }

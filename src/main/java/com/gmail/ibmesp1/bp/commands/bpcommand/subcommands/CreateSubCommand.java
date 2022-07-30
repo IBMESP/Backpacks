@@ -2,13 +2,11 @@ package com.gmail.ibmesp1.bp.commands.bpcommand.subcommands;
 
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.SubCommand;
-import com.gmail.ibmesp1.bp.data.DataManager;
+import com.gmail.ibmesp1.bp.utils.DataManager;
 import com.gmail.ibmesp1.bp.utils.UUIDFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 
 import java.time.LocalDateTime;
@@ -48,7 +46,6 @@ public class CreateSubCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-        checkSize();
         if(args.length == 1) {
             player.sendMessage(ChatColor.RED + "/bp create <s/m/l>");
         }else if (args[1].equalsIgnoreCase("s")) {// add backpack mechanics
@@ -107,7 +104,7 @@ public class CreateSubCommand extends SubCommand {
 
         String title = plugin.getLanguageString("config.title");
 
-        Inventory inventory = Bukkit.createInventory(null, size * 9,title.replace("%player",player.getName()));
+        Inventory inventory = Bukkit.createInventory(null, size * 9,title.replace("%player%",player.getName()));
         if(playerBackpack.containsKey(player.getUniqueId())){
             HashMap<String,Inventory> invs = playerBackpack.get(player.getUniqueId());
             invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
@@ -127,9 +124,9 @@ public class CreateSubCommand extends SubCommand {
     private void createTargetBackpack(Player player,Player target,int size,String Size){
         String title = plugin.getLanguageString("config.title");
 
-        Inventory inventory = Bukkit.createInventory(target, size * 9,title.replace("%player",target.getName()));
+        Inventory inventory = Bukkit.createInventory(target, size * 9,title.replace("%player%",target.getName()));
         String created = plugin.getLanguageString("create.target.create");
-        target.sendMessage(created.replace("%player",player.getName()).replace("%size", Size));
+        target.sendMessage(created.replace("%player%",player.getName()).replace("%size%", Size));
         target.sendMessage(plugin.getLanguageString("config.open"));
         if(playerBackpack.containsKey(target.getUniqueId())){
             HashMap<String,Inventory> invs = playerBackpack.get(target.getUniqueId());
@@ -158,7 +155,7 @@ public class CreateSubCommand extends SubCommand {
 
             String title = plugin.getLanguageString("config.title");
 
-            Inventory inventory = Bukkit.createInventory(null,size * 9,title.replace("%player",target));
+            Inventory inventory = Bukkit.createInventory(null,size * 9,title.replace("%player%",target));
             if(playerBackpack.containsKey(targetUUID)){
                 HashMap<String,Inventory> invs = playerBackpack.get(targetUUID);
                 invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
@@ -173,40 +170,6 @@ public class CreateSubCommand extends SubCommand {
             player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("create.target.created") + target);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    private void checkSize(){
-        smallSize = bpcm.getConfig().getInt("smallSize");
-        mediumSize = bpcm.getConfig().getInt("mediumSize");
-        largeSize = bpcm.getConfig().getInt("largeSize");
-
-        if(smallSize > 6 || smallSize < 1){
-            if(smallSize < 1){
-                smallSize = 1;
-                bpcm.getConfig().set("smallSize",1);
-                return;
-            }
-            smallSize = 6;
-            bpcm.getConfig().set("smallSize",6);
-        }
-        if(mediumSize > 6 || mediumSize < 1){
-            if(mediumSize < 1){
-                mediumSize = 1;
-                plugin.getConfig().set("mediumSize",1);
-                return;
-            }
-            mediumSize = 6;
-            bpcm.getConfig().set("mediumSize",6);
-        }
-        if (largeSize > 6|| largeSize < 1){
-            if(largeSize < 1){
-                largeSize = 1;
-                bpcm.getConfig().set("largeSize",1);
-                return;
-            }
-            largeSize = 6;
-            bpcm.getConfig().set("largeSize",6);
         }
     }
 }

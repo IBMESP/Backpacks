@@ -6,7 +6,7 @@
 
     <groupId>com.gmail.ibmesp1</groupId>
     <artifactId>Backpacks</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
     <packaging>jar</packaging>
 
     <name>Backpacks</name>
@@ -79,5 +79,12 @@
             <artifactId>anvilgui</artifactId>
             <version>1.5.3-SNAPSHOT</version>
         </dependency>
+        <!--<dependency>
+            <groupId>com.gmail.ibmesp1</groupId>
+            <artifactId>IbCore</artifactId>
+            <version>0.0.1</version>
+            <scope>system</scope>
+            <systemPath>D:/.MinecraftCoding/Plugins/.Spigot/IbCore/target/IbCore-0.0.1.jar</systemPath>
+        </dependency>-->
     </dependencies>
 </project>

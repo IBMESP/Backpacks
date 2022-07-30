@@ -2,7 +2,7 @@ package com.gmail.ibmesp1.bp.commands.bpmenu.guis;
 
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.bpmenu.BpEasterEgg;
-import com.gmail.ibmesp1.bp.data.DataManager;
+import com.gmail.ibmesp1.bp.utils.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,7 +13,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 public class GUIs {
 
@@ -308,7 +311,7 @@ public class GUIs {
 
         String create = plugin.getLanguageString("gui.create.title");
 
-        Inventory sizeGUI = Bukkit.createInventory(null, 54, create.replace("%size", size));
+        Inventory sizeGUI = Bukkit.createInventory(null, 54, create.replace("%size%", size));
         int[] glass_slots = {0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,51,52};
 
         ItemStack anvil = new ItemStack(Material.ANVIL);

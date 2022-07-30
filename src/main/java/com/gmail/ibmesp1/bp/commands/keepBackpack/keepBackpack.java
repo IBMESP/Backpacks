@@ -1,7 +1,7 @@
 package com.gmail.ibmesp1.bp.commands.keepBackpack;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.data.DataManager;
+import com.gmail.ibmesp1.bp.utils.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -30,12 +30,12 @@ public class keepBackpack implements CommandExecutor {
                 if(args[1].equalsIgnoreCase("true")){
                     bpcm.getConfig().set("keepBackpack",true);
                     String gamerule = plugin.getLanguageString("gui.config.gamerule");
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + gamerule.replace("%bool", "true"));
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + gamerule.replace("%bool%", "true"));
                     bpcm.saveConfig();
                 }else if(args[1].equalsIgnoreCase("false")){
                     bpcm.getConfig().set("keepBackpack",false);
                     String gamerule = plugin.getLanguageString("gui.config.gamerule");
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + gamerule.replace("%bool", "false"));
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + gamerule.replace("%bool%", "false"));
                     bpcm.saveConfig();
                 }else{
                     Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "You do not have permission to use this command");
@@ -52,12 +52,12 @@ public class keepBackpack implements CommandExecutor {
             if(args[1].equalsIgnoreCase("true")){
                 bpcm.getConfig().set("keepBackpack",true);
                 String gamerule = plugin.getLanguageString("gui.config.gamerule");
-                player.sendMessage(ChatColor.RED + gamerule.replace("%bool", "true"));
+                player.sendMessage(ChatColor.RED + gamerule.replace("%bool%", "true"));
                 bpcm.saveConfig();
             }else if(args[1].equalsIgnoreCase("false") && sender.hasPermission("bp.admin")){
                 bpcm.getConfig().set("keepBackpack",false);
                 String gamerule = plugin.getLanguageString("gui.config.gamerule");
-                player.sendMessage(ChatColor.RED + gamerule.replace("%bool", "false"));
+                player.sendMessage(ChatColor.RED + gamerule.replace("%bool%", "false"));
                 bpcm.saveConfig();
             }else{
                 player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
