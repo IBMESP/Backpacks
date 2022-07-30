@@ -43,7 +43,7 @@ Spigot plugin that adds backpacks accessible with commands
 <details>
   <summary>Default config.yml</summary>
   
-  ```
+```YAML
 # This is the config version for reference.
 # DO NOT EDIT VALUE.
 configVersion: 1
@@ -55,28 +55,28 @@ locale: en_US
 
 # This is the en_US.yml version for reference.
 # ONLY EDIT ONCE ALL LANGUAGE FILES HAVE BEEN UPDATED.
-languageFile: 3
+languageFile: 4
 
 #Paginated create and delete GUIs, adds pages of players to create and delete GUIs
 #If using this gives lag just change to false
 paginatedGUI: true
 
-#Maximun number of backpacks per player (1-9)
+#Maximun number of backpacks per player (1-36)
 maxBP: 9
   ```
 </details>
 <details>
-  <summary>Default en_US.yml</summary>
+<summary>Default en_US.yml</summary>
 
-  ```
-  create:
+```YAML
+create:
   already: "You already have a backpack"
-  perm: "You do not have permission to create a %size backpack"
+  perm: "You do not have permission to create a %size% backpack"
   maxbp: "You cant create more backpacks"
   target:
     already: " already has a backpack"
     created: "You created a backpack to "
-    create: "%player created you a %size backpack"
+    create: "%player% created you a %size% backpack"
     perm: "You do not have permission to create other backpacks"
 delete:
   confirm: "Write \u0022confirm\u0022"
@@ -110,12 +110,18 @@ gui:
     hasNot: " does not have a backpack"
     size: "Size"
   config:
-    gamerule: "Gamerule keepBackpack is now set: %bool"
-    changeSize: "%size size set to %num row"
+    gamerule: "Gamerule keepBackpack is now set: %bool%"
+    changeSize: "%size% size set to %num% row"
+    small: "Small backpack can't be bigger than medium backpack"
+    large: "Large backpack can't be smaller than medium backpack"
   create:
-    title: "Players Online (%size)"
+    title: "Players Online (%size%)"
   delete:
     title: "Players Online (Delete)"
+  open:
+    small: "Small Backpack"
+    medium: "Medium Backpack"
+    large: "Large Backpack"
 config:
   reloaded: "[Backpacks] Config reloaded!"
   perms: "You do not have permission to use this command"
@@ -124,7 +130,7 @@ config:
   help: "Use /bp help to see the commands"
   update: "Backpacks has a new update"
   notUpdate: "Backpacks is up to date"
-  title: "%player's Backpack"
+  title: "%player%'s Backpack"
   backpacks: "Backpacks"
   ```
 </details>
