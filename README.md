@@ -1,7 +1,7 @@
 # Backpacks
 Spigot plugin that adds backpacks accessible with commands
 ## Badges:
-[![Latest Version](https://img.shields.io/badge/Latest%20Version-2.1.1-brightgreen)](https://github.com/IBMESP/Backpacks/releases/latest)
+[![Latest Version](https://img.shields.io/badge/Latest%20Version-2.1.0-brightgreen)](https://github.com/IBMESP/Backpacks/releases/latest)
 ![Spigot Downloads](https://img.shields.io/spiget/downloads/99840?label=Spigot%20Downloads)
 ![Spigot Rating](https://img.shields.io/spiget/rating/99840?label=Spigot%20Rating)
 
@@ -43,7 +43,7 @@ Spigot plugin that adds backpacks accessible with commands
 <details>
   <summary>Default config.yml</summary>
   
-  ```
+```YAML
 # This is the config version for reference.
 # DO NOT EDIT VALUE.
 configVersion: 1
@@ -66,9 +66,9 @@ maxBP: 9
   ```
 </details>
 <details>
-  <summary>Default en_US.yml</summary>
+<summary>Default en_US.yml</summary>
 
-  ```
+```YAML
 create:
   already: "You already have a backpack"
   perm: "You do not have permission to create a %size% backpack"
