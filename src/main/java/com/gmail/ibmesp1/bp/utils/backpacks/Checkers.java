@@ -21,7 +21,7 @@ public class Checkers {
         return rowsBP;
     }
     
-    public int getmaxBP() {
+    public int getMaxBP() {
         return maxBP;
     }
 
