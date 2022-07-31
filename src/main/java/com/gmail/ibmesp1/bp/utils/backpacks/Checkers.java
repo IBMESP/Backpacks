@@ -20,6 +20,10 @@ public class Checkers {
     public int getRowsBP() {
         return rowsBP;
     }
+    
+    public int getmaxBP() {
+        return maxBP;
+    }
 
     public void checkSize(){
         int smallSize = bpcm.getConfig().getInt("smallSize");
