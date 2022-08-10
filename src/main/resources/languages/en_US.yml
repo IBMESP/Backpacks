@@ -20,7 +20,7 @@ gui:
   small: "small"
   medium: "medium"
   large: "large"
-  title: "&rBackpack Menu" #
+  title: "&rBackpack Menu"
   browser: "Write the name"
   nextPage: "Next page"
   previousPage: "Previous page"
@@ -32,23 +32,23 @@ gui:
     create: "Create a backpack"
     delete: "Delete a backpack"
     config: "Config"
-    configuration: "&rConfiguration" #
+    configuration: "&rConfiguration"
     keepBackpack: "Keep Backpack"
     current: "Current: "
     back: "Back"
     search: "Search a player"
     has: "%player% has a backpack"
     hasNot: "%player% does not have a backpack"
-    size: "&rSize" #
+    size: "&rSize"
   config:
     gamerule: "Gamerule keepBackpack is now set: %bool%"
     changeSize: "%size% size set to %num% row"
     small: "Small backpack can't be bigger than medium backpack"
     large: "Large backpack can't be smaller than medium backpack"
   create:
-    title: "&rPlayers Online (%size%)" #
+    title: "&rPlayers Online (%size%)"
   delete:
-    title: "&rPlayers Online (Delete)" #
+    title: "&rPlayers Online (Delete)"
   open:
     small: "Small Backpack"
     medium: "Medium Backpack"
@@ -61,5 +61,5 @@ config:
   help: "Use /bp help to see the commands"
   update: "Backpacks has a new update"
   notUpdate: "Backpacks is up to date"
-  title: "&r%player%'s Backpack" #
-  backpacks: "&rBackpacks" #
+  title: "&r%player%'s Backpack"
+  backpacks: "&rBackpacks"

@@ -25,10 +25,6 @@ public class CreateSubCommand extends SubCommand {
         this.plugin = plugin;
         this.playerBackpack = playerBackpack;
         this.bpcm = bpcm;
-        
-        smallSize = plugin.getConfig().getInt("smallSize");
-        mediumSize = plugin.getConfig().getInt("mediumSize");
-        largeSize = plugin.getConfig().getInt("largeSize");
     }
 
     @Override
