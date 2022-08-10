@@ -20,6 +20,10 @@ public class Checkers {
     public int getRowsBP() {
         return rowsBP;
     }
+    
+    public int getMaxBP() {
+        return maxBP;
+    }
 
     public int getMaxBP() {
         return maxBP;
