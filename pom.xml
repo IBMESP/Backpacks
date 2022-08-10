@@ -6,7 +6,7 @@
 
     <groupId>com.gmail.ibmesp1</groupId>
     <artifactId>Backpacks</artifactId>
-    <version>2.1.1</version>
+    <version>2.2.0</version>
     <packaging>jar</packaging>
 
     <name>Backpacks</name>
@@ -65,6 +65,10 @@
             <id>codemc-snapshots</id>
             <url>https://repo.codemc.io/repository/maven-snapshots/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -79,12 +83,10 @@
             <artifactId>anvilgui</artifactId>
             <version>1.5.3-SNAPSHOT</version>
         </dependency>
-        <!--<dependency>
-            <groupId>com.gmail.ibmesp1</groupId>
+        <dependency>
+            <groupId>com.github.IBMESP</groupId>
             <artifactId>IbCore</artifactId>
-            <version>0.0.1</version>
-            <scope>system</scope>
-            <systemPath>D:/.MinecraftCoding/Plugins/.Spigot/IbCore/target/IbCore-0.0.1.jar</systemPath>
-        </dependency>-->
+            <version>1.0.4</version>
+        </dependency>
     </dependencies>
 </project>

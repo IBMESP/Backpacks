@@ -3,7 +3,7 @@ package com.gmail.ibmesp1.bp.commands.bpmenu.guis.config;
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.bpmenu.BpEasterEgg;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
-import com.gmail.ibmesp1.bp.utils.DataManager;
+import com.gmail.ibmesp1.ibcore.utils.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -12,27 +12,24 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 public class ConfigGUI implements Listener {
 
-    private Backpacks plugin;
-    private GUIs guis;
-    private BpEasterEgg bpEasterEgg;
-    private HashMap<UUID,HashMap<String,Inventory>> playerBackpacks;
-    private DataManager bpcm;
+    private final Backpacks plugin;
+    private final GUIs guis;
+    private final DataManager bpcm;
 
-    public ConfigGUI(Backpacks plugin, HashMap<UUID, HashMap<String,Inventory>> playerBackpacks, DataManager bpcm) {
+    public ConfigGUI(Backpacks plugin, DataManager bpcm,GUIs guis) {
         this.plugin = plugin;
-        this.playerBackpacks = playerBackpacks;
-        this.guis = new GUIs(plugin,playerBackpacks,bpcm);
+        this.guis = guis;
         this.bpcm = bpcm;
     }
 
     @EventHandler
     public void clickGUI(InventoryClickEvent e) {
-        if (e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.items.configuration"))) {
+        if(e.getClickedInventory() == null)
+            return;
+
+        if (e.getView().getTitle().equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("gui.items.configuration")))) {
             e.setCancelled(true);
 
             Player player = (Player) e.getWhoClicked();
@@ -75,23 +72,24 @@ public class ConfigGUI implements Listener {
                 }
                 case 35:{
 
+                    BpEasterEgg bpEasterEgg;
                     if(!player.hasPermission("bp.admin")){
                         int easterEgg = (int) (Math.random() * 100);
 
-                        Inventory gui = Bukkit.createInventory(player,3*9,plugin.getLanguageString("gui.title"));
-                        bpEasterEgg = new BpEasterEgg(gui);
+                        Inventory gui = Bukkit.createInventory(player,3*9,ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("gui.title")));
+                        bpEasterEgg = new BpEasterEgg();
 
-                        gui = guis.menuGUI(gui,bpEasterEgg,easterEgg);
+                        gui = guis.menuGUI(gui, bpEasterEgg,easterEgg);
 
                         player.openInventory(gui);
                         break;
                     }
 
                     int easterEgg = (int) (Math.random() * 100);
-                    Inventory gui = Bukkit.createInventory(player,3*9,plugin.getLanguageString("gui.title"));
-                    bpEasterEgg = new BpEasterEgg(gui);
+                    Inventory gui = Bukkit.createInventory(player,3*9,ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("gui.title")));
+                    bpEasterEgg = new BpEasterEgg();
 
-                    gui = guis.menuOPGUI(gui,bpEasterEgg,easterEgg);
+                    gui = guis.menuOPGUI(gui, bpEasterEgg,easterEgg);
 
                     player.openInventory(gui);
                     break;

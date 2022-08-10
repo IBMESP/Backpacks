@@ -3,9 +3,8 @@ package com.gmail.ibmesp1.bp.commands.bpmenu.guis.delete;
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.bpmenu.BpEasterEgg;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
-import com.gmail.ibmesp1.bp.utils.DataManager;
-import com.gmail.ibmesp1.bp.utils.UUIDFetcher;
-import com.gmail.ibmesp1.bp.utils.backpacks.BackpackManager;
+import com.gmail.ibmesp1.ibcore.guis.MenuItems;
+import com.gmail.ibmesp1.ibcore.utils.UUIDFetcher;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,31 +23,30 @@ import java.util.*;
 public class DeleteGUI implements Listener {
 
     private final Backpacks plugin;
-    private HashMap<UUID, HashMap<String,Inventory>> playerBackpacks;
+    private final HashMap<UUID, HashMap<String,Inventory>> playerBackpacks;
     private boolean head;
     private final GUIs guis;
-    private BpEasterEgg bpEasterEgg;
-    private DataManager bpcm;
-    private BackpackManager bpm;
-    private int smallSize;
-    private int mediumSize;
-    private int largeSize;
+    private final int mediumSize;
+    private final int largeSize;
+    private final MenuItems menuItems;
 
 
-    public DeleteGUI(Backpacks plugin, HashMap<UUID, HashMap<String,Inventory>> playerBackpacks, DataManager bpcm, BackpackManager bpm) {
+    public DeleteGUI(Backpacks plugin, HashMap<UUID, HashMap<String,Inventory>> playerBackpacks, MenuItems menuItems,GUIs guis) {
         this.plugin = plugin;
         this.playerBackpacks = playerBackpacks;
-        this.guis = new GUIs(plugin,playerBackpacks,bpcm);
-        this.bpcm = bpcm;
-        this.bpm = bpm;
-        smallSize = plugin.bpcm.getConfig().getInt("smallSize");
+        this.menuItems = menuItems;
+        this.guis = guis;
+
         mediumSize = plugin.bpcm.getConfig().getInt("mediumSize");
         largeSize = plugin.bpcm.getConfig().getInt("largeSize");
     }
 
     @EventHandler
     public void clickGUI(InventoryClickEvent e) {
-        if (e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.delete.title"))) {
+        if(e.getClickedInventory() == null)
+            return;
+
+        if (e.getView().getTitle().equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("gui.delete.title")))) {
             e.setCancelled(true);
             Player player = (Player) e.getWhoClicked();
 
@@ -62,12 +60,12 @@ public class DeleteGUI implements Listener {
                 }
 
                 player.closeInventory();
-                player.closeInventory();
                 AnvilGUI.Builder builder = new AnvilGUI.Builder().onComplete((p, s)->{
                             deleteBrowser(s,p);
                             return AnvilGUI.Response.close();
-                        }).text(plugin.getLanguageString("gui.browser"))
+                        }).title(plugin.getLanguageString("gui.browser"))
                         .itemLeft(new ItemStack(Material.PAPER))
+                        .text("")
                         .plugin(plugin);
 
                 Bukkit.getScheduler().runTask(plugin,()-> builder.open(player));
@@ -100,11 +98,12 @@ public class DeleteGUI implements Listener {
 
             if (e.getSlot() == 53) {
 
+                BpEasterEgg bpEasterEgg;
                 if (!player.hasPermission("bp.admin")) {
                     int easterEgg = (int) (Math.random() * 100);
 
-                    Inventory gui = Bukkit.createInventory(player, 3 * 9, plugin.getLanguageString("gui.title"));
-                    bpEasterEgg = new BpEasterEgg(gui);
+                    Inventory gui = Bukkit.createInventory(player, 3 * 9,ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("gui.title")));
+                    bpEasterEgg = new BpEasterEgg();
 
                     gui = guis.menuGUI(gui, bpEasterEgg, easterEgg);
 
@@ -113,8 +112,8 @@ public class DeleteGUI implements Listener {
                 }
 
                 int easterEgg = (int) (Math.random() * 100);
-                Inventory gui = Bukkit.createInventory(player, 3 * 9, plugin.getLanguageString("gui.title"));
-                bpEasterEgg = new BpEasterEgg(gui);
+                Inventory gui = Bukkit.createInventory(player, 3 * 9, ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("gui.title")));
+                bpEasterEgg = new BpEasterEgg();
 
                 gui = guis.menuOPGUI(gui, bpEasterEgg, easterEgg);
 
@@ -152,7 +151,7 @@ public class DeleteGUI implements Listener {
 
                     if (!playerBackpacks.containsKey(target.getUniqueId())) {
                         e.setCancelled(true);
-                        player.sendMessage(ChatColor.RED + target.getName() + plugin.getLanguageString("delete.target.notBackpack"));
+                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.notBackpack").replace("%player%",target.getName()));
                         return;
                     }
                     GUI(player,target.getUniqueId(),target.getName());
@@ -165,7 +164,7 @@ public class DeleteGUI implements Listener {
 
     private void deleteBrowser(String s,Player player){
         boolean isOnline = false;
-        Player target = null;
+        Player target;
         UUID uuid = null;
 
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
@@ -174,8 +173,6 @@ public class DeleteGUI implements Listener {
                 target = p;
                 uuid = target.getUniqueId();
                 break;
-            } else {
-                isOnline = false;
             }
         }
 
@@ -188,14 +185,13 @@ public class DeleteGUI implements Listener {
         }
 
         if (!playerBackpacks.containsKey(uuid)) {
-            player.sendMessage(ChatColor.RED + s + plugin.getLanguageString("delete.target.notBackpack"));
+            player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.notBackpack").replace("%player%",s));
             return;
         }
         GUI(player,uuid,s);
     }
 
-    private void GUI(Player player,UUID uuid,String name)
-    {
+    private void GUI(Player player,UUID uuid,String name) {
         Inventory inventory = Bukkit.createInventory(player,(plugin.rowsBP+2)*9,"Delete %player% backpack".replace("%player%",name));
         int[] glass_slots = new int[18];
         int j = 9;
@@ -209,17 +205,17 @@ public class DeleteGUI implements Listener {
             j++;
         }
         for(int slot:glass_slots){
-            ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-            ItemMeta glass_meta = glass.getItemMeta();
-            glass_meta.setDisplayName(" ");
-            glass.setItemMeta(glass_meta);
-            inventory.setItem(slot,glass);
+            inventory.setItem(slot,menuItems.glass());
         }
+
+        if(plugin.backpacks.getConfig().getConfigurationSection(uuid + ".") == null)
+            return;
+
         Set<String> set = plugin.backpacks.getConfig().getConfigurationSection(uuid + ".").getKeys(false);
         int i = 0;
 
         for (String key:set){
-            int size = plugin.playerBackpack.get(player.getUniqueId()).get(key).getSize();
+            int size = plugin.playerBackpack.get(uuid).get(key).getSize();
             ItemStack bp = new ItemStack(Material.CHEST);
             ItemMeta bp_meta = bp.getItemMeta();
 

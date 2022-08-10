@@ -1,8 +1,9 @@
-package com.gmail.ibmesp1.bp.utils.backpacks;
+package com.gmail.ibmesp1.bp.utils;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.utils.DataManager;
+import com.gmail.ibmesp1.ibcore.utils.DataManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -12,12 +13,15 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class BackpackManager {
     private final Backpacks plugin;
     private final HashMap<UUID, HashMap<String,Inventory>> playerBackpack;
-    private DataManager backpackM;
+    private final DataManager backpackM;
     private boolean list;
 
     public BackpackManager(Backpacks plugin, HashMap<UUID, HashMap<String, Inventory>> playerBackpack, DataManager backpacks) {
@@ -41,12 +45,12 @@ public class BackpackManager {
         for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
             list = false;
             HashMap<String,Inventory> invs = new HashMap<>();
-            if(plugin.backpacks.getConfig().getConfigurationSection(player.getUniqueId() + ".") != null) {
-                Set<String> set = plugin.backpacks.getConfig().getConfigurationSection(player.getUniqueId() + ".").getKeys(false);
+            if(backpackM.getConfig().getConfigurationSection(player.getUniqueId() + ".") != null) {
+                Set<String> set = backpackM.getConfig().getConfigurationSection(player.getUniqueId() + ".").getKeys(false);
                 for (String key:set) {
                     if (backpackM.getConfig().contains(player.getUniqueId() + "." + key)) {
                         String inventory = backpackM.getConfig().getString(player.getUniqueId() + "." + key);
-                        String title = plugin.getLanguageString("config.title");
+                        String title = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title"));
                         invs.put(key,inventoryFromBase64(inventory,title.replace("%player%",player.getName())));
                         list = true;
                     }
@@ -58,15 +62,15 @@ public class BackpackManager {
         }
     }
 
-    public HashMap<String,Inventory> loadPlayerBackPacks(OfflinePlayer player) {
+    public void loadPlayerBackPacks(OfflinePlayer player) {
         list = false;
         HashMap<String,Inventory> invs = new HashMap<>();
-        if(plugin.backpacks.getConfig().getConfigurationSection(player.getUniqueId() + ".") != null) {
-            Set<String> set = plugin.backpacks.getConfig().getConfigurationSection(player.getUniqueId() + ".").getKeys(false);
+        if(backpackM.getConfig().getConfigurationSection(player.getUniqueId() + ".") != null) {
+            Set<String> set = backpackM.getConfig().getConfigurationSection(player.getUniqueId() + ".").getKeys(false);
             for (String key:set) {
                 if (backpackM.getConfig().contains(player.getUniqueId() + "." + key)) {
                     String inventory = backpackM.getConfig().getString(player.getUniqueId() + "." + key);
-                    String title = plugin.getLanguageString("config.title");
+                    String title = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title"));
                     invs.put(key,inventoryFromBase64(inventory,title.replace("%player%",player.getName())));
                     list = true;
                 }
@@ -75,12 +79,11 @@ public class BackpackManager {
                 playerBackpack.put(player.getUniqueId(), invs);
             }
         }
-        return invs;
     }
 
     public void saveBackPacks() {
         for (Map.Entry<UUID, HashMap<String,Inventory>> entry : playerBackpack.entrySet()) {
-            Set<String> set = plugin.backpacks.getConfig().getConfigurationSection(entry.getKey().toString() + ".").getKeys(false);
+            Set<String> set = backpackM.getConfig().getConfigurationSection(entry.getKey().toString() + ".").getKeys(false);
             for (String key:set) {
                 backpackM.getConfig().set(entry.getKey() + "." + key, inventoryToBase64(playerBackpack.get(entry.getKey()).get(key)));
             }
@@ -124,7 +127,7 @@ public class BackpackManager {
         try {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
             BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
-            Inventory inventory = Bukkit.createInventory(null, dataInput.readInt(),title);
+            Inventory inventory = Bukkit.createInventory(null, dataInput.readInt(),ChatColor.translateAlternateColorCodes('&',title));
 
             for (int i = 0; i < inventory.getSize(); i++) {
                 inventory.setItem(i, (ItemStack) dataInput.readObject());

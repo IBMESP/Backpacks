@@ -2,9 +2,10 @@ package com.gmail.ibmesp1.bp.commands.bpmenu.guis.create;
 
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
-import com.gmail.ibmesp1.bp.utils.DataManager;
-import com.gmail.ibmesp1.bp.utils.UUIDFetcher;
-import com.gmail.ibmesp1.bp.utils.backpacks.BackpackManager;
+import com.gmail.ibmesp1.bp.utils.BackpackManager;
+import com.gmail.ibmesp1.ibcore.utils.DataManager;
+import com.gmail.ibmesp1.ibcore.utils.UUIDFetcher;
+import com.gmail.ibmesp1.ibcore.utils.Utils;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,46 +25,46 @@ import java.util.UUID;
 public class CreateGUI implements Listener {
 
     private final Backpacks plugin;
-    private HashMap<UUID, HashMap<String,Inventory>> playerBackpacks;
+    private final HashMap<UUID, HashMap<String,Inventory>> playerBackpacks;
     private boolean head;
     private final GUIs guis;
-    private int smallSize;
-    private int mediumSize;
-    private int largeSize;
+    private final BackpackManager bpm;
     private final DataManager bpcm;
-    private BackpackManager bpm;
     private final int[] glass_slots;
 
-    public CreateGUI(Backpacks plugin, HashMap<UUID,HashMap<String,Inventory>> playerBackpacks, DataManager bpcm, BackpackManager bpm) {
+    public CreateGUI(Backpacks plugin, HashMap<UUID,HashMap<String,Inventory>> playerBackpacks, DataManager bpcm, BackpackManager bpm, GUIs guis) {
         this.plugin = plugin;
         this.playerBackpacks = playerBackpacks;
-        this.guis = new GUIs(plugin,playerBackpacks,bpcm);
-        this.bpcm = bpcm;
+        this.guis = guis;
         this.bpm = bpm;
+        this.bpcm = bpcm;
         glass_slots  = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 50, 51, 52};
     }
 
     @EventHandler
     public void onClick(InventoryClickEvent e){
+        if(e.getClickedInventory() == null)
+            return;
 
-        smallSize = bpcm.getConfig().getInt("smallSize");
-        mediumSize = bpcm.getConfig().getInt("mediumSize");
-        largeSize = bpcm.getConfig().getInt("largeSize");
+        int smallSize = bpcm.getConfig().getInt("smallSize");
+        int mediumSize = bpcm.getConfig().getInt("mediumSize");
+        int largeSize = bpcm.getConfig().getInt("largeSize");
+
 
         Player player = (Player) e.getWhoClicked();
 
-        String title = plugin.getLanguageString("gui.create.title");
+        String title = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("gui.create.title"));
 
-        if (e.getView().getTitle().equalsIgnoreCase(title.replace("%size%", plugin.capitalizeFirstLetter(plugin.getLanguageString("gui.small"))))) {
-            create(e,player,"bp.small","small",smallSize);
+        if (e.getView().getTitle().equalsIgnoreCase(title.replace("%size%", Utils.capitalizeFirstLetter(plugin.getLanguageString("gui.small"))))) {
+            create(e,player,"bp.small","small", smallSize);
         }
 
-        if (e.getView().getTitle().equalsIgnoreCase(title.replace("%size%", plugin.capitalizeFirstLetter(plugin.getLanguageString("gui.medium"))))) {
-            create(e,player,"bp.medium","medium",mediumSize);
+        if (e.getView().getTitle().equalsIgnoreCase(title.replace("%size%", Utils.capitalizeFirstLetter(plugin.getLanguageString("gui.medium"))))) {
+            create(e,player,"bp.medium","medium", mediumSize);
         }
 
-        if (e.getView().getTitle().equalsIgnoreCase(title.replace("%size%", plugin.capitalizeFirstLetter(plugin.getLanguageString("gui.large"))))) {
-            create(e,player,"bp.large","large",largeSize);
+        if (e.getView().getTitle().equalsIgnoreCase(title.replace("%size%", Utils.capitalizeFirstLetter(plugin.getLanguageString("gui.large"))))) {
+            create(e,player,"bp.large","large", largeSize);
         }
     }
 
@@ -82,7 +83,7 @@ public class CreateGUI implements Listener {
                 return;
             }
             page++;
-            Inventory sizeGUI = guis.sizeGUI(plugin.capitalizeFirstLetter(size), page);
+            Inventory sizeGUI = guis.sizeGUI(Utils.capitalizeFirstLetter(size), page);
             player.openInventory(sizeGUI);
             plugin.playerPage.put(player.getUniqueId(),page);
             return;
@@ -94,7 +95,7 @@ public class CreateGUI implements Listener {
                 return;
             }
             page--;
-            Inventory sizeGUI = guis.sizeGUI(plugin.capitalizeFirstLetter(size), page);
+            Inventory sizeGUI = guis.sizeGUI(Utils.capitalizeFirstLetter(size), page);
             player.openInventory(sizeGUI);
             plugin.playerPage.put(player.getUniqueId(),page);
             return;
@@ -106,20 +107,17 @@ public class CreateGUI implements Listener {
                 AnvilGUI.Builder builder = new AnvilGUI.Builder().onComplete((p,s)->{
                     createEvent(s,p,bSize,size);
                     return AnvilGUI.Response.close();
-                }).text(plugin.getLanguageString("gui.browser"))
+                }).title(plugin.getLanguageString("gui.browser"))
                         .itemLeft(new ItemStack(Material.PAPER))
+                        .text("")
                         .plugin(plugin);
 
                 Bukkit.getScheduler().runTask(plugin,()-> builder.open(player));
                 return;
             }
 
-            for (int i = 0; i < glass_slots.length; i++) {
-                if (e.getSlot() == glass_slots[i]) {
-                    head = false;
-                } else {
-                    head = true;
-                }
+            for (int glass_slot : glass_slots) {
+                head = e.getSlot() != glass_slot;
             }
 
             if (head) {
@@ -139,7 +137,7 @@ public class CreateGUI implements Listener {
                                 return;
                             }
 
-                            String title = plugin.getLanguageString("config.title");
+                            String title = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title"));
 
                             Inventory inventory = Bukkit.createInventory(null, bSize * 9,title.replace("%player%",player.getName()));
                             if(playerBackpacks.containsKey(player.getUniqueId())){
@@ -172,7 +170,7 @@ public class CreateGUI implements Listener {
                             return;
                         }
 
-                        String title = plugin.getLanguageString("config.title");
+                        String title = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title"));
 
                         Inventory inventory = Bukkit.createInventory(null, bSize * 9,title.replace("%player%",player.getName()));
                         if(playerBackpacks.containsKey(player.getUniqueId())){
@@ -200,7 +198,7 @@ public class CreateGUI implements Listener {
                         return;
                     }
 
-                    String title = plugin.getLanguageString("config.title");
+                    String title = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title"));
 
                     Inventory inventory = Bukkit.createInventory(null, bSize * 9,title.replace("%player%",target.getName()));
                     if(playerBackpacks.containsKey(target.getUniqueId())){
@@ -250,7 +248,7 @@ public class CreateGUI implements Listener {
             } catch (Exception ignored) {}
         }
 
-        Inventory inventory = Bukkit.createInventory(null, size * 9,plugin.getLanguageString("config.title").replace("%player%",s));
+        Inventory inventory = Bukkit.createInventory(null, size * 9,ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title").replace("%player%",s)));
 
         HashMap<String, Inventory> invs;
         if(playerBackpacks.containsKey(uuid)){

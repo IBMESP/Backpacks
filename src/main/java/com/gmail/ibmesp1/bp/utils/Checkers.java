@@ -1,12 +1,12 @@
-package com.gmail.ibmesp1.bp.utils.backpacks;
+package com.gmail.ibmesp1.bp.utils;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.utils.DataManager;
+import com.gmail.ibmesp1.ibcore.utils.DataManager;
 
 public class Checkers {
 
-    private Backpacks plugin;
-    private DataManager bpcm;
+    private final Backpacks plugin;
+    private final DataManager bpcm;
     private int maxBP;
     private int rowsBP;
 
@@ -19,6 +19,10 @@ public class Checkers {
 
     public int getRowsBP() {
         return rowsBP;
+    }
+
+    public int getMaxBP() {
+        return maxBP;
     }
 
     public void checkSize(){

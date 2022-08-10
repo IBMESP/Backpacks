@@ -1,4 +1,4 @@
-package com.gmail.ibmesp1.bp.utils.backpacks;
+package com.gmail.ibmesp1.bp.utils;
 
 import com.gmail.ibmesp1.bp.Backpacks;
 import org.bukkit.entity.Player;
@@ -12,19 +12,17 @@ import java.util.UUID;
 
 public class BackpackGUI extends Menu{
 
-    private Player viewer;
-    private UUID ownerId;
-    private BackpackManager backpackManager;
+    private final Player viewer;
+    private final UUID ownerId;
+    private final BackpackManager backpackManager;
     private int size;
     private String title;
-    private String key;
-    private Backpacks plugin;
+    private final Backpacks plugin;
 
     public BackpackGUI(int size, String title, Player viewer, UUID ownerId,String key, BackpackManager backpackManager, Backpacks plugin) {
         super(size, title);
         this.viewer = viewer;
         this.ownerId = ownerId;
-        this.key = key;
         this.backpackManager = backpackManager;
         this.plugin = plugin;
 
@@ -38,6 +36,9 @@ public class BackpackGUI extends Menu{
     @Override
     public void onClose(InventoryCloseEvent event) {
         if(!viewer.getUniqueId().equals(ownerId)) return;
+
+        if(plugin.backpacks.getConfig().getConfigurationSection(ownerId + ".") == null)
+            return;
 
         Set<String> set = plugin.backpacks.getConfig().getConfigurationSection(ownerId + ".").getKeys(false);
         for (String key:set){

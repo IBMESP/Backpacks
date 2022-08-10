@@ -5,6 +5,7 @@ import com.gmail.ibmesp1.bp.commands.bpcommand.BpEvents;
 import com.gmail.ibmesp1.bp.commands.bpcommand.subcommands.OpenSubCommand;
 import com.gmail.ibmesp1.bp.commands.bpmenu.BpMenu;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.BpMenuEvents;
+import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.config.ConfigGUI;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.config.SizeConfig;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.create.CreateGUI;
@@ -14,12 +15,14 @@ import com.gmail.ibmesp1.bp.commands.bpsee.BpSee;
 import com.gmail.ibmesp1.bp.commands.keepBackpack.keepBackpack;
 import com.gmail.ibmesp1.bp.commands.keepBackpack.keepBackpackTab;
 import com.gmail.ibmesp1.bp.events.PlayerEvent;
-import com.gmail.ibmesp1.bp.utils.DataManager;
-import com.gmail.ibmesp1.bp.utils.Metrics;
-import com.gmail.ibmesp1.bp.utils.UpdateChecker;
-import com.gmail.ibmesp1.bp.utils.backpacks.BackpackManager;
-import com.gmail.ibmesp1.bp.utils.backpacks.Checkers;
-import com.gmail.ibmesp1.bp.utils.backpacks.MenuListener;
+import com.gmail.ibmesp1.bp.utils.BackpackManager;
+import com.gmail.ibmesp1.bp.utils.Checkers;
+import com.gmail.ibmesp1.bp.utils.MenuListener;
+import com.gmail.ibmesp1.ibcore.guis.MenuItems;
+import com.gmail.ibmesp1.ibcore.utils.DataManager;
+import com.gmail.ibmesp1.ibcore.utils.Metrics;
+import com.gmail.ibmesp1.ibcore.utils.UpdateChecker;
+import com.gmail.ibmesp1.ibcore.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -43,18 +46,19 @@ public final class Backpacks extends JavaPlugin {
     public DataManager backpacks;
     public DataManager bpcm;
     public DataManager languageData;
+    public MenuItems menuItems;
+    public GUIs guis;
     public List<Player> playerList;
     public int maxBP;
     public int rowsBP;
 
-    public final int configFileVersion = 1;
+    public final int configFileVersion = 2;
     public final int languageFileVersion = 4;
 
     @Override
     public void onEnable() {
         PluginDescriptionFile pdffile = getDescription();
         version = pdffile.getVersion();
-        name = ChatColor.GOLD + "[" + pdffile.getName() + "]";
         Logger log = Bukkit.getLogger();
 
         bpcm = new DataManager(this,"bpconfig.yml");
@@ -65,8 +69,11 @@ public final class Backpacks extends JavaPlugin {
         bpcm.saveConfig();
         languageData.getConfig().options().copyDefaults(true);
         backpacks.getConfig().options().copyDefaults(true);
+        backpacks.saveConfig();
 
         new Metrics(this,14427);
+
+        menuItems = new MenuItems();
 
         playerList = new ArrayList<>();
         playerBackpack = new HashMap<>();
@@ -75,9 +82,12 @@ public final class Backpacks extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
 
+        name = ChatColor.translateAlternateColorCodes('&',getConfig().getString("name"));
 
         bpm = new BackpackManager(this,playerBackpack,backpacks);
         bpm.loadBackPacks();
+
+        guis = new GUIs(this,playerBackpack,bpcm);
 
         registrerCommands();
         registerEvents();
@@ -86,6 +96,7 @@ public final class Backpacks extends JavaPlugin {
         checkers.checkMaxBP();
         checkers.checkSize();
         rowsBP = checkers.getRowsBP();
+        maxBP = checkers.getMaxBP();
 
         Bukkit.getConsoleSender().sendMessage("[Backpacks] - Version: " + version + " Enabled - By Ib");
 
@@ -98,16 +109,16 @@ public final class Backpacks extends JavaPlugin {
         });
 
         if (getConfig().getInt("configVersion") < configFileVersion) {
-            urgentConsoleWarning("Your config.yml is outdated!");
-            urgentConsoleWarning("Please update to the latest version " + ChatColor.AQUA + configFileVersion + ChatColor.RED + " to ensure compatibility.");
-            urgentConsoleWarning("Please only update AFTER updating all other data files.");
+            Utils.urgentConsoleWarning(name,"Your config.yml is outdated!");
+            Utils.urgentConsoleWarning(name,"Please update to the latest version " + ChatColor.AQUA + configFileVersion + ChatColor.RED + " to ensure compatibility.");
+            Utils.urgentConsoleWarning(name,"Please only update AFTER updating all other data files.");
         }
 
         if (getConfig().getInt("languageFile") < languageFileVersion) {
-            urgentConsoleWarning("You language files are no longer supported with this version!");
-            urgentConsoleWarning("Please update en_US.yml and update any other language files to version " +
+            Utils.urgentConsoleWarning(name,"You language files are no longer supported with this version!");
+            Utils.urgentConsoleWarning(name,"Please update en_US.yml and update any other language files to version " +
                     ChatColor.AQUA + languageFileVersion + ChatColor.RED + ".");
-            urgentConsoleWarning("Please do not update your config.yml until your language files have been updated.");
+            Utils.urgentConsoleWarning(name,"Please do not update your config.yml until your language files have been updated.");
         }
 
     }
@@ -118,11 +129,11 @@ public final class Backpacks extends JavaPlugin {
     }
 
     public void registrerCommands() {
-        getCommand("bp").setExecutor(new BpCommand(this,playerBackpack,bpcm,bpm));
-        getCommand("bpsee").setExecutor(new BpSee(this,playerBackpack));
+        getCommand("bp").setExecutor(new BpCommand(this,playerBackpack,bpcm,guis,languageData, bpm));
+        getCommand("bpsee").setExecutor(new BpSee(this,playerBackpack, menuItems));
         getCommand("bgamerule").setExecutor(new keepBackpack(this,bpcm));
         getCommand("bgamerule").setTabCompleter(new keepBackpackTab());
-        getCommand("bpmenu").setExecutor(new BpMenu(this,bpm,playerBackpack,bpcm));
+        getCommand("bpmenu").setExecutor(new BpMenu(this,guis));
     }
 
     public void registerEvents(){
@@ -130,23 +141,15 @@ public final class Backpacks extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new BpEvents(this,playerBackpack,bpm),this);
         Bukkit.getPluginManager().registerEvents(new MenuListener(),this);
         Bukkit.getPluginManager().registerEvents(new OpenSubCommand(this,playerBackpack),this);
-        Bukkit.getPluginManager().registerEvents(new BpMenuEvents(this,playerBackpack,bpcm),this);
-        Bukkit.getPluginManager().registerEvents(new ConfigGUI(this,playerBackpack,bpcm),this);
-        Bukkit.getPluginManager().registerEvents(new SizeConfig(this,playerBackpack,bpcm),this);
-        Bukkit.getPluginManager().registerEvents(new SizeGUI(this,playerBackpack,bpcm),this);
-        Bukkit.getPluginManager().registerEvents(new DeleteGUI(this,playerBackpack,bpcm,bpm),this);
-        Bukkit.getPluginManager().registerEvents(new CreateGUI(this,playerBackpack,bpcm,bpm),this);
+        Bukkit.getPluginManager().registerEvents(new BpMenuEvents(this,guis),this);
+        Bukkit.getPluginManager().registerEvents(new ConfigGUI(this,bpcm,guis),this);
+        Bukkit.getPluginManager().registerEvents(new SizeConfig(this,bpcm,guis),this);
+        Bukkit.getPluginManager().registerEvents(new SizeGUI(this,guis),this);
+        Bukkit.getPluginManager().registerEvents(new DeleteGUI(this,playerBackpack, menuItems,guis),this);
+        Bukkit.getPluginManager().registerEvents(new CreateGUI(this,playerBackpack,bpcm,bpm,guis),this);
     }
 
     public String getLanguageString(String path) {
         return languageData.getConfig().getString(path);
-    }
-
-    private void urgentConsoleWarning(String msg) {
-        Bukkit.getConsoleSender().sendMessage("[Backpacks] " + ChatColor.RED + msg);
-    }
-
-    public String capitalizeFirstLetter(String string) {
-        return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 }

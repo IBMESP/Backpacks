@@ -1,11 +1,12 @@
 package com.gmail.ibmesp1.bp.commands.bpcommand.subcommands;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.commands.SubCommand;
-import com.gmail.ibmesp1.bp.utils.DataManager;
-import com.gmail.ibmesp1.bp.utils.UUIDFetcher;
+import com.gmail.ibmesp1.ibcore.commands.SubCommand;
+import com.gmail.ibmesp1.ibcore.utils.DataManager;
+import com.gmail.ibmesp1.ibcore.utils.UUIDFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -17,11 +18,8 @@ import java.util.UUID;
 
 public class CreateSubCommand extends SubCommand {
     private final Backpacks plugin;
-    private HashMap<UUID, HashMap<String,Inventory>> playerBackpack;
-    private int smallSize;
-    private int mediumSize;
-    private int largeSize;
-    private DataManager bpcm;
+    private final HashMap<UUID, HashMap<String,Inventory>> playerBackpack;
+    private final DataManager bpcm;
 
     public CreateSubCommand(Backpacks plugin, HashMap<UUID, HashMap<String, Inventory>> playerBackpack, DataManager bpcm) {
         this.plugin = plugin;
@@ -45,15 +43,30 @@ public class CreateSubCommand extends SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) {
+    public void perform(CommandSender sender, String[] args) {
+        if(!(sender instanceof Player)){
+            return;
+        }
+
+        int smallSize = bpcm.getConfig().getInt("smallSize");
+        int mediumSize = bpcm.getConfig().getInt("mediumSize");
+        int largeSize = bpcm.getConfig().getInt("largeSize");
+
+        Player player = (Player) sender;
+
+        if(args.length > 3){
+            player.sendMessage(ChatColor.RED + "/bp create <s/m/l> (player)");
+            return;
+        }
+
         if(args.length == 1) {
-            player.sendMessage(ChatColor.RED + "/bp create <s/m/l>");
+            player.sendMessage(ChatColor.RED + "/bp create <s/m/l> (player)");
         }else if (args[1].equalsIgnoreCase("s")) {// add backpack mechanics
-            create(player,args,"bp.small","gui.small",smallSize);
+            create(player,args,"bp.small","gui.small", smallSize);
         }else if (args[1].equalsIgnoreCase("m")) {
-            create(player,args,"bp.medium","gui.medium",mediumSize);
+            create(player,args,"bp.medium","gui.medium", mediumSize);
         }else if (args[1].equalsIgnoreCase("l")) {
-            create(player,args,"bp.large","gui.large",largeSize);
+            create(player,args,"bp.large","gui.large", largeSize);
         }else{
             player.sendMessage(plugin.name + ChatColor.RED + plugin.getLanguageString("config.exist"));
         }
@@ -75,11 +88,11 @@ public class CreateSubCommand extends SubCommand {
                             ? 0 : plugin.backpacks.getConfig().getConfigurationSection(target.getUniqueId() + ".").getKeys(false).size();
 
                     if(bps >= plugin.maxBP){
-                        player.sendMessage(plugin.getLanguageString("create.maxbp"));
+                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("create.maxbp"));
                         return;
                     }
 
-                    createTargetBackpack(player, target, smallSize, plugin.getLanguageString(gui));
+                    createTargetBackpack(player, target, size, plugin.getLanguageString(gui));
                     return;
                 }else{
                     player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
@@ -102,7 +115,7 @@ public class CreateSubCommand extends SubCommand {
 
     private void createBackpack(Player player,int size){
 
-        String title = plugin.getLanguageString("config.title");
+        String title = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title"));
 
         Inventory inventory = Bukkit.createInventory(null, size * 9,title.replace("%player%",player.getName()));
         if(playerBackpack.containsKey(player.getUniqueId())){
@@ -122,7 +135,7 @@ public class CreateSubCommand extends SubCommand {
     }
 
     private void createTargetBackpack(Player player,Player target,int size,String Size){
-        String title = plugin.getLanguageString("config.title");
+        String title = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title"));
 
         Inventory inventory = Bukkit.createInventory(target, size * 9,title.replace("%player%",target.getName()));
         String created = plugin.getLanguageString("create.target.create");
@@ -137,7 +150,7 @@ public class CreateSubCommand extends SubCommand {
             HashMap<String,Inventory> invs = new HashMap<>();
             invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
             playerBackpack.put(target.getUniqueId(), invs);
-            plugin.backpacks.getConfig().set(target.getUniqueId() + "." + LocalDateTime.now().withNano(0),plugin.bpm.inventoryToBase64(inventory));;
+            plugin.backpacks.getConfig().set(target.getUniqueId() + "." + LocalDateTime.now().withNano(0),plugin.bpm.inventoryToBase64(inventory));
         }
     }
 
@@ -160,12 +173,12 @@ public class CreateSubCommand extends SubCommand {
                 HashMap<String,Inventory> invs = playerBackpack.get(targetUUID);
                 invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
                 playerBackpack.put(targetUUID, invs);
-                plugin.backpacks.getConfig().set(target + "." + LocalDateTime.now().withNano(0),plugin.bpm.inventoryToBase64(inventory));
+                plugin.backpacks.getConfig().set(targetUUID + "." + LocalDateTime.now().withNano(0),plugin.bpm.inventoryToBase64(inventory));
             }else{
                 HashMap<String,Inventory> invs = new HashMap<>();
                 invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
-                playerBackpack.put(player.getUniqueId(), invs);
-                plugin.backpacks.getConfig().set(player.getUniqueId() + "." + LocalDateTime.now().withNano(0),plugin.bpm.inventoryToBase64(inventory));
+                playerBackpack.put(targetUUID, invs);
+                plugin.backpacks.getConfig().set(targetUUID + "." + LocalDateTime.now().withNano(0),plugin.bpm.inventoryToBase64(inventory));
             }
             player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("create.target.created") + target);
         } catch (Exception e) {

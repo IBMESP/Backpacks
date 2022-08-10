@@ -2,7 +2,8 @@ package com.gmail.ibmesp1.bp.commands.bpmenu.guis.config;
 
 import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
-import com.gmail.ibmesp1.bp.utils.DataManager;
+import com.gmail.ibmesp1.ibcore.utils.DataManager;
+import com.gmail.ibmesp1.ibcore.utils.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,35 +11,32 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 public class SizeConfig implements Listener {
 
-    private Backpacks plugin;
-    private GUIs guis;
-    private HashMap<UUID,HashMap<String,Inventory>> playerBackpacks;
-    private DataManager bpcm;
+    private final Backpacks plugin;
+    private final GUIs guis;
+    private final DataManager bpcm;
 
-    public SizeConfig(Backpacks plugin, HashMap<UUID, HashMap<String,Inventory>> playerBackpacks, DataManager bpcm) {
+    public SizeConfig(Backpacks plugin, DataManager bpcm,GUIs guis) {
         this.plugin = plugin;
-        this.playerBackpacks = playerBackpacks;
-        this.guis = new GUIs(plugin,playerBackpacks,bpcm);
+        this.guis = guis;
         this.bpcm = bpcm;
     }
 
     @EventHandler
     public void clickGUI(InventoryClickEvent e) {
+        if(e.getClickedInventory() == null)
+            return;
 
-        if (e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.size.small"))) {
+        if (e.getView().getTitle().equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("gui.size.small")))) {
             switchCases(e,"smallSize","gui.small","small");
         }
 
-        if (e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.size.medium"))) {
+        if (e.getView().getTitle().equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("gui.size.medium")))) {
             switchCases(e,"mediumSize","gui.medium","medium");
         }
 
-        if (e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.size.large"))) {
+        if (e.getView().getTitle().equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("gui.size.large")))) {
             switchCases(e, "largeSize", "gui.large", "large");
         }
     }
@@ -51,31 +49,34 @@ public class SizeConfig implements Listener {
 
         switch (e.getSlot()){
             case 1:{
+                if(sizeConfigCheck(player, sizePath, 1))
+                    return;
+
                 bpcm.getConfig().set(Size,1);
                 player.closeInventory();
                 String row = plugin.getLanguageString("gui.config.changeSize");
-                player.sendMessage(ChatColor.RED + row.replace("%size%",capitalizeFirstLetter(plugin.getLanguageString(guiPath))).replace("%num%", "1"));
+                player.sendMessage(ChatColor.RED + row.replace("%size%", Utils.capitalizeFirstLetter(plugin.getLanguageString(guiPath))).replace("%num%", "1"));
                 bpcm.saveConfig();
                 break;
             }
             case 2:{
-                sizeConfig(player,sizePath,2,capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
+                sizeConfig(player,sizePath,2,Utils.capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
                 break;
             }
             case 3:{
-                sizeConfig(player,sizePath,3,capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
+                sizeConfig(player,sizePath,3,Utils.capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
                 break;
             }
             case 5:{
-                sizeConfig(player,sizePath,4,capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
+                sizeConfig(player,sizePath,4,Utils.capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
                 break;
             }
             case 6:{
-                sizeConfig(player,sizePath,5,capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
+                sizeConfig(player,sizePath,5,Utils.capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
                 break;
             }
             case 7:{
-                sizeConfig(player,sizePath,6,capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
+                sizeConfig(player,sizePath,6,Utils.capitalizeFirstLetter(plugin.getLanguageString(guiPath)));
                 break;
             }
             case 8:{
@@ -86,7 +87,7 @@ public class SizeConfig implements Listener {
         }
     }
     private void sizeConfig(Player player,String path, int rows,String size){
-        if(!sizeConfigCheck(player,path,rows))
+        if(sizeConfigCheck(player, path, rows))
             return;
 
         bpcm.getConfig().set(path + "Size",rows);
@@ -100,32 +101,28 @@ public class SizeConfig implements Listener {
         switch (size) {
             case "small":
                 if (rows >= bpcm.getConfig().getInt("mediumSize")) {
-                    player.sendMessage(plugin.getLanguageString("gui.config.small"));
-                    return false;
+                    player.sendMessage(ChatColor.RED + plugin.getLanguageString("gui.config.small"));
+                    return true;
                 }
-                return true;
+                return false;
             case "medium":
                 if (rows >= bpcm.getConfig().getInt("largeSize")) {
-                    player.sendMessage(plugin.getLanguageString("gui.config.small"));
-                    return false;
+                    player.sendMessage(ChatColor.RED + plugin.getLanguageString("gui.config.large"));
+                    return true;
                 }
 
                 if (rows <= bpcm.getConfig().getInt("smallSize")){
-                    player.sendMessage(plugin.getLanguageString("gui.config.large"));
-                    return false;
-                }
+                    player.sendMessage(ChatColor.RED + plugin.getLanguageString("gui.config.small"));
                     return true;
+                }
+                    return false;
             case "large":
                 if (rows <= bpcm.getConfig().getInt("mediumSize")) {
-                    player.sendMessage(plugin.getLanguageString("gui.config.large"));
-                    return false;
+                    player.sendMessage(ChatColor.RED + plugin.getLanguageString("gui.config.large"));
+                    return true;
                 }
-                return true;
+                return false;
         }
-        return false;
-    }
-
-    private String capitalizeFirstLetter(String string) {
-        return string.substring(0, 1).toUpperCase() + string.substring(1);
+        return true;
     }
 }

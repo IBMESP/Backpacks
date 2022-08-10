@@ -1,8 +1,8 @@
 package com.gmail.ibmesp1.bp.events;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.utils.DataManager;
-import com.gmail.ibmesp1.bp.utils.backpacks.BackpackManager;
+import com.gmail.ibmesp1.bp.utils.BackpackManager;
+import com.gmail.ibmesp1.ibcore.utils.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,10 +19,10 @@ import java.util.*;
 public class PlayerEvent implements Listener {
 
     private final Backpacks plugin;
-    private HashMap<UUID, HashMap<String,Inventory>> playerBackpack;
-    private DataManager bpcm;
+    private final HashMap<UUID, HashMap<String,Inventory>> playerBackpack;
+    private final DataManager bpcm;
     private List<Player> playerList;
-    private BackpackManager bpm;
+    private final BackpackManager bpm;
 
     public PlayerEvent(Backpacks plugin, HashMap<UUID, HashMap<String, Inventory>> playerBackpack, DataManager bpcm, List<Player> playerList, BackpackManager bpm) {
         this.plugin = plugin;
@@ -94,7 +94,7 @@ public class PlayerEvent implements Listener {
                     for (int j = 0; j < size; j++) {
                         try {
                             player.getLocation().getWorld().dropItem(player.getLocation(), inventory.getItem(j));
-                        } catch (IllegalArgumentException e) {
+                        } catch (IllegalArgumentException ignored) {
                         }
                     }
 

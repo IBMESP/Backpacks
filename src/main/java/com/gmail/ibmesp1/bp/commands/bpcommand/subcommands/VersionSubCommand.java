@@ -1,8 +1,10 @@
 package com.gmail.ibmesp1.bp.commands.bpcommand.subcommands;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.commands.SubCommand;
+import com.gmail.ibmesp1.ibcore.commands.SubCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -25,7 +27,14 @@ public class VersionSubCommand extends SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) {
-        player.sendMessage(plugin.name+ ChatColor.WHITE+" Version "+plugin.version);
+    public void perform(CommandSender sender, String[] args) {
+        if(!(sender instanceof Player)){
+            Bukkit.getConsoleSender().sendMessage(plugin.name+ ChatColor.WHITE+"Version "+plugin.version);
+            return;
+        }
+
+        Player player = (Player) sender;
+
+        player.sendMessage(plugin.name+ ChatColor.WHITE+"Version "+plugin.version);
     }
 }

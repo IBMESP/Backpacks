@@ -1,4 +1,4 @@
-package com.gmail.ibmesp1.bp.utils.backpacks;
+package com.gmail.ibmesp1.bp.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;

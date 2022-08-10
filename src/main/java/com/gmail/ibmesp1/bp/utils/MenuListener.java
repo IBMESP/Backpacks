@@ -1,4 +1,4 @@
-package com.gmail.ibmesp1.bp.utils.backpacks;
+package com.gmail.ibmesp1.bp.utils;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

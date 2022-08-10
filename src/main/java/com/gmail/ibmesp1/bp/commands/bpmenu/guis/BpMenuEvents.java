@@ -1,33 +1,29 @@
 package com.gmail.ibmesp1.bp.commands.bpmenu.guis;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.utils.DataManager;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 public class BpMenuEvents implements Listener {
 
-    private Backpacks plugin;
-    private GUIs guis;
-    private HashMap<UUID,HashMap<String,Inventory>> playerBackpacks;
-    private DataManager bpcm;
+    private final Backpacks plugin;
+    private final GUIs guis;
 
-    public BpMenuEvents(Backpacks plugin, HashMap<UUID, HashMap<String,Inventory>> playerBackpacks, DataManager bpcm) {
+    public BpMenuEvents(Backpacks plugin,GUIs guis) {
         this.plugin = plugin;
-        this.playerBackpacks = playerBackpacks;
-        this.bpcm = bpcm;
-        this.guis = new GUIs(plugin,playerBackpacks,bpcm);
+        this.guis = guis;
     }
 
     @EventHandler
     public void clickEvent(InventoryClickEvent e){
-        if(e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("gui.title"))){
+        if(e.getClickedInventory() == null)
+            return;
+
+        if(e.getView().getTitle().equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("gui.title")))){
             e.setCancelled(true);
 
             Player player = (Player) e.getWhoClicked();

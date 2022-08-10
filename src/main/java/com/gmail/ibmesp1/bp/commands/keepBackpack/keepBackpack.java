@@ -1,7 +1,7 @@
 package com.gmail.ibmesp1.bp.commands.keepBackpack;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.utils.DataManager;
+import com.gmail.ibmesp1.ibcore.utils.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class keepBackpack implements CommandExecutor {
     private final Backpacks plugin;
-    private DataManager bpcm;
+    private final DataManager bpcm;
 
     public keepBackpack(Backpacks plugin, DataManager bpcm) {
         this.plugin = plugin;

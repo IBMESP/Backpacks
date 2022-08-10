@@ -1,14 +1,15 @@
 package com.gmail.ibmesp1.bp.commands.bpcommand;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.commands.SubCommand;
 import com.gmail.ibmesp1.bp.commands.bpcommand.subcommands.*;
-import com.gmail.ibmesp1.bp.utils.DataManager;
-import com.gmail.ibmesp1.bp.utils.backpacks.BackpackManager;
+import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
+import com.gmail.ibmesp1.bp.utils.BackpackManager;
+import com.gmail.ibmesp1.ibcore.commands.SubCommand;
+import com.gmail.ibmesp1.ibcore.commands.SubCommandExecutor;
+import com.gmail.ibmesp1.ibcore.utils.DataManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -17,26 +18,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class BpCommand implements TabExecutor {
+public class BpCommand implements SubCommandExecutor {
 
     private final Backpacks plugin;
-    private HashMap<UUID, HashMap<String,Inventory>> playerBackpack;
-    private ArrayList<SubCommand> subCommands = new ArrayList<>();
-    private DataManager bpcm;
-    private BackpackManager bpm;
+    private final ArrayList<SubCommand> subCommands;
 
-    public BpCommand(Backpacks plugin, HashMap<UUID, HashMap<String, Inventory>> playerBackpack, DataManager bpcm, BackpackManager bpm){
+    public BpCommand(Backpacks plugin, HashMap<UUID, HashMap<String, Inventory>> playerBackpack, DataManager bpcm, GUIs guis, DataManager languageData, BackpackManager bpm){
         this.plugin = plugin;
-        this.playerBackpack = playerBackpack;
-        this.bpcm = bpcm;
-        this.bpm = bpm;
+
+        subCommands = new ArrayList<>();
 
         subCommands.add(new VersionSubCommand(plugin));
         subCommands.add(new HelpSubCommand());
         subCommands.add(new CreateSubCommand(plugin,playerBackpack,bpcm));
         subCommands.add(new OpenSubCommand(plugin,playerBackpack));
-        subCommands.add(new DeleteSubCommand(plugin,playerBackpack,bpm));
-        subCommands.add(new ReloadSubCommand(plugin,bpcm));
+        subCommands.add(new DeleteSubCommand(plugin,guis));
+        subCommands.add(new ReloadSubCommand(plugin,bpcm, languageData, bpm));
     }
 
     @Override
@@ -48,7 +45,7 @@ public class BpCommand implements TabExecutor {
         Player player = (Player) sender ;
 
         if (args.length == 0){
-            player.sendMessage(plugin.name + ChatColor.WHITE + " " + plugin.getLanguageString("config.help"));
+            player.sendMessage(plugin.name + ChatColor.WHITE + plugin.getLanguageString("config.help"));
             return true;
         }
 
@@ -60,7 +57,7 @@ public class BpCommand implements TabExecutor {
         return true;
     }
 
-    private ArrayList<SubCommand> getSubCommands() {
+    public ArrayList<SubCommand> getSubCommands() {
         return subCommands;
     }
 

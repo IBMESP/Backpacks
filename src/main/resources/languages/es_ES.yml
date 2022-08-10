@@ -3,7 +3,7 @@ create:
   perm: "No tienes permiso para crear una mochila %size%"
   maxbp: "No puedes crear mas mochilas"
   target:
-    already: " ya tiene una mochila"
+    already: "%player% ya tiene una mochila"
     created: "Has creado una mochila a "
     create: "%player% te ha creado una mochila %size%"
     perm: "No tines permiso para crear mochilas a otros"
@@ -12,16 +12,18 @@ delete:
   notBackpack: "No tienes una mochila"
   deleted: "Tu mochila ha sido eliminada"
   target:
-    notBackpack: " no tiene una mochila"
-    deleted: "'s backpack ha sido eliminada"
+    notBackpack: "%player% no tiene una mochila"
+    deleted: "La mochila de %player% ha sido eliminada"
     perm: "No tienes permiso para eliminar la mochila de otros"
-    deletedBy: "Tu mochila ha sido eliminado por "
+    deletedBy: "Tu mochila ha sido eliminado por %player%"
 gui:
   small: "pequeño"
   medium: "mediano"
   large: "grande"
   title: "Backpack Menu"
   browser: "Escribe el nombre"
+  nextPage: "Pagina siguiente"
+  previousPage: "Pagina anterior"
   size:
     small: "Tamaño pequeño"
     medium: "Tamaño mediano"
@@ -35,8 +37,8 @@ gui:
     current: "Actualmente: "
     back: "Atras"
     search: "Busca un jugador"
-    has: " tiene una mochila"
-    hasNot: " no tiene una mochila"
+    has: "%player% tiene una mochila"
+    hasNot: "%player% no tiene una mochila"
     size: "Tamaño"
   config:
     gamerule: "Gamerule keepBackpack is now set: %bool%"

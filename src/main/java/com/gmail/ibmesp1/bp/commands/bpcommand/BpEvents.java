@@ -1,9 +1,9 @@
 package com.gmail.ibmesp1.bp.commands.bpcommand;
 
 import com.gmail.ibmesp1.bp.Backpacks;
-import com.gmail.ibmesp1.bp.utils.UUIDFetcher;
-import com.gmail.ibmesp1.bp.utils.backpacks.BackpackGUI;
-import com.gmail.ibmesp1.bp.utils.backpacks.BackpackManager;
+import com.gmail.ibmesp1.bp.utils.BackpackGUI;
+import com.gmail.ibmesp1.bp.utils.BackpackManager;
+import com.gmail.ibmesp1.ibcore.utils.UUIDFetcher;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,7 +32,10 @@ public class BpEvents implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e){
-        if(e.getView().getTitle().equalsIgnoreCase(plugin.getLanguageString("config.backpacks"))){
+        if(e.getClickedInventory() == null)
+            return;
+
+        if(e.getView().getTitle().equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.backpacks")))){
             e.setCancelled(true);
             Player player = (Player) e.getWhoClicked();
 
@@ -80,7 +83,7 @@ public class BpEvents implements Listener {
 
                             Inventory prevInventory = playerBackpack.get(uuid).get(key);
                             if(prevInventory == null){
-                                player.sendMessage(ChatColor.RED + player.getName() + plugin.getLanguageString("delete.target.notBackpack"));
+                                player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.notBackpack").replace("%player%",player.getName()));
                                 return AnvilGUI.Response.close();
                             }
                             int size = prevInventory.getSize();
@@ -95,7 +98,7 @@ public class BpEvents implements Listener {
                             invs.remove(key);
                             playerBackpack.put(target.getUniqueId(),invs);
                             bpm.deletePlayerBackPacks(uuid,key);
-                            player.sendMessage(ChatColor.GREEN + target.getName() + plugin.getLanguageString("delete.target.deleted"));
+                            player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("delete.target.deleted").replace("%player%",target.getName()));
                         }else if(Bukkit.getPlayer(uuid) != null){
                             if(!player.hasPermission("bp.admin")){
                                 player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
@@ -105,7 +108,7 @@ public class BpEvents implements Listener {
                             Player target = Bukkit.getPlayer(uuid);
                             Inventory prevInventory = playerBackpack.get(uuid).get(key);
                             if(prevInventory == null){
-                                player.sendMessage(ChatColor.RED + target.getName() + plugin.getLanguageString("delete.target.notBackpack"));
+                                player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.notBackpack").replace("%player%",target.getName()));
                                 return AnvilGUI.Response.close();
                             }
 
@@ -126,11 +129,9 @@ public class BpEvents implements Listener {
                             invs.remove(key);
                             playerBackpack.put(target.getUniqueId(),invs);
                             bpm.deletePlayerBackPacks(uuid,key);
-                            target.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.deletedBy") + player.getName());
-                            player.sendMessage(ChatColor.GREEN + target.getName() + plugin.getLanguageString("delete.target.deleted"));
-                        }else {
-                            String deleteTitle = e.getView().getTitle();
-                            String[] detParts = deleteTitle.split(" ");
+                            target.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.deletedBy").replace("%player%",player.getName()));
+                            player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("delete.target.deleted").replace("%player%",target.getName()));
+                        }else{
                             if(!player.hasPermission("bp.admin")){
                                 e.setCancelled(true);
                                 player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
@@ -139,7 +140,7 @@ public class BpEvents implements Listener {
 
                             Inventory prevInventory = playerBackpack.get(uuid).get(key);
                             if(prevInventory == null){
-                                player.sendMessage(ChatColor.RED + detParts[1] + plugin.getLanguageString("delete.target.notBackpack"));
+                                player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.notBackpack").replace("%player",player.getName()));
                                 return AnvilGUI.Response.close();
                             }
                             int size = prevInventory.getSize();
@@ -155,15 +156,16 @@ public class BpEvents implements Listener {
                             invs.remove(key);
                             playerBackpack.put(uuid,invs);
                             bpm.deletePlayerBackPacks(uuid,key);
-                            player.sendMessage(ChatColor.GREEN + detParts[1] + plugin.getLanguageString("delete.target.deleted"));
+                            player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("delete.target.deleted"));
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
                 return AnvilGUI.Response.close();
-            }).text(plugin.getLanguageString("delete.confirm"))
+            }).title(plugin.getLanguageString("delete.confirm"))
                     .itemLeft(new ItemStack(Material.PAPER))
+                    .text("")
                     .plugin(plugin);
 
             Bukkit.getScheduler().runTask(plugin,()-> builder.open(player));
@@ -174,7 +176,7 @@ public class BpEvents implements Listener {
 
         if(e.getView().getTitle().endsWith(seeParts[1])){
             e.setCancelled(true);
-            String key = e.getClickedInventory().getItem(e.getSlot()).getItemMeta().getDisplayName();
+            String key = e.getClickedInventory().getItem(e.getSlot()).getItemMeta().getLore().get(0);
             Player player = (Player) e.getWhoClicked();
 
             String[] name = e.getView().getTitle().split("'");
@@ -187,7 +189,7 @@ public class BpEvents implements Listener {
 
                     Inventory inventory = playerBackpack.get(targetUUID).get(key);
                     int size = inventory.getSize();
-                    String getTitle = plugin.getLanguageString("config.title");
+                    String getTitle = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title"));
                     String bpTitle = getTitle.replace("%player%",name[0]);
                     player.openInventory(new BackpackGUI(size,bpTitle,player,targetUUID,key,bpm,plugin).getInventory());
                     return;
@@ -196,11 +198,10 @@ public class BpEvents implements Listener {
                 }
             }
 
-            if(player.getUniqueId() == target.getUniqueId())
-            {
+            if(player.getUniqueId() == target.getUniqueId()) {
                 Inventory inventory = playerBackpack.get(player.getUniqueId()).get(key);
                 int size = inventory.getSize();
-                String getTitle = plugin.getLanguageString("config.title");
+                String getTitle = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title"));
                 String bpTitle = getTitle.replace("%player%",player.getName());
                 player.openInventory(new BackpackGUI(size,bpTitle,player,player.getUniqueId(),key,bpm,plugin).getInventory());
                 return;
@@ -208,7 +209,7 @@ public class BpEvents implements Listener {
 
             Inventory inventory = playerBackpack.get(target.getUniqueId()).get(key);
             int size = inventory.getSize();
-            String getTitle = plugin.getLanguageString("config.title");
+            String getTitle = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title"));
             String bpTitle = getTitle.replace("%player%",target.getName());
             player.openInventory(new BackpackGUI(size,bpTitle,player,target.getUniqueId(),key,bpm,plugin).getInventory());
         }
