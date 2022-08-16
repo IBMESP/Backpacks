@@ -22,11 +22,15 @@ public class BpEvents implements Listener {
 
     private final Backpacks plugin;
     private final HashMap<UUID,HashMap<String,Inventory>> playerBackpack;
+    private final HashMap<UUID,UUID> delBP;
+    private final HashMap<UUID,String> delete;
     private final BackpackManager bpm;
 
-    public BpEvents(Backpacks plugin, HashMap<UUID, HashMap<String, Inventory>> playerBackpack, BackpackManager bpm) {
+    public BpEvents(Backpacks plugin, HashMap<UUID, HashMap<String, Inventory>> playerBackpack, HashMap<UUID, UUID> delBP, HashMap<UUID, String> delete, BackpackManager bpm) {
         this.plugin = plugin;
         this.playerBackpack = playerBackpack;
+        this.delBP = delBP;
+        this.delete = delete;
         this.bpm = bpm;
     }
 
@@ -72,6 +76,24 @@ public class BpEvents implements Listener {
 
             String key = e.getClickedInventory().getItem(e.getSlot()).getItemMeta().getLore().get(0);
             Player player = (Player) e.getWhoClicked();
+
+            if(plugin.getConfig().getBoolean("geyser")){
+                String invTitle = e.getView().getTitle();
+                String[] invParts = invTitle.split(" ");
+
+                if(Bukkit.getPlayer(invParts[1]) == null)
+                    return;
+
+                Player target = Bukkit.getPlayer(invParts[1]);
+                player.closeInventory();
+                player.sendMessage("Write confirm");
+                delBP.put(player.getUniqueId(),target.getUniqueId());
+                delete.put(target.getUniqueId(),key);
+
+
+                return;
+            }
+
             AnvilGUI.Builder builder = new AnvilGUI.Builder().onComplete((p,s) ->{
                 if(s.equalsIgnoreCase("confirm")){
                     try {
@@ -140,7 +162,7 @@ public class BpEvents implements Listener {
 
                             Inventory prevInventory = playerBackpack.get(uuid).get(key);
                             if(prevInventory == null){
-                                player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.notBackpack").replace("%player",player.getName()));
+                                player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.notBackpack").replace("%player%",player.getName()));
                                 return AnvilGUI.Response.close();
                             }
                             int size = prevInventory.getSize();

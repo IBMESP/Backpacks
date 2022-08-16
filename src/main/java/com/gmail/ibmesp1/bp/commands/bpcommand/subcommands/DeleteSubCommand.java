@@ -49,17 +49,26 @@ public class DeleteSubCommand extends SubCommand {
         if(args.length == 1){
             guis.delete(player,player.getUniqueId(),player.getName());
         }else if(args.length == 2){
-            Player target = Bukkit.getPlayer(args[1]);
+            if(!plugin.getConfig().getBoolean("geyser")){
+                Player target = Bukkit.getPlayer(args[1]);
 
-            if(target == null){
-                try {
-                    UUID uuid = UUIDFetcher.getUUIDOf(args[1]);
+                if(target == null){
+                    try {
+                        UUID uuid = UUIDFetcher.getUUIDOf(args[1]);
 
-                    guis.delete(player,uuid,args[1]);
-                } catch (Exception ignored) {}
-            }else{
-                guis.delete(player,target.getUniqueId(),target.getName());
+                        guis.delete(player,uuid,args[1]);
+                    } catch (Exception ignored) {}
+                }else{
+                    guis.delete(player,target.getUniqueId(),target.getName());
+                }
+                return;
             }
+            if(Bukkit.getPlayer(args[1]) == null)
+                return;
+
+            Player target = Bukkit.getPlayer(args[1]);
+            guis.delete(player,target.getUniqueId(),target.getName());
+
         }else{
             player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.config.exist"));
         }

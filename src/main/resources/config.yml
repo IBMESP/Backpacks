@@ -2,7 +2,7 @@ name: "&6[Backpacks] "
 
 # This is the config version for reference.
 # DO NOT EDIT VALUE.
-configVersion: 2
+configVersion: 3
 
 #Available languages
 #en_US
@@ -19,3 +19,7 @@ paginatedGUI: true
 
 #Maximun number of backpacks per player (1-36)
 maxBP: 9
+
+#If your server has Geyser, you must set this field to true
+#This will disable anvilGUI and won't get offline players
+geyser: true

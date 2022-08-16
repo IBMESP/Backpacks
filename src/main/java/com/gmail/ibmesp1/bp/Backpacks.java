@@ -42,6 +42,8 @@ public final class Backpacks extends JavaPlugin {
     public String name;
     public HashMap<UUID, HashMap<String,Inventory>> playerBackpack;
     public HashMap<UUID,Integer> playerPage;
+    public HashMap<UUID,UUID> delBP;
+    public HashMap<UUID,String> delete;
     public BackpackManager bpm;
     public DataManager backpacks;
     public DataManager bpcm;
@@ -52,7 +54,7 @@ public final class Backpacks extends JavaPlugin {
     public int maxBP;
     public int rowsBP;
 
-    public final int configFileVersion = 2;
+    public final int configFileVersion = 3;
     public final int languageFileVersion = 4;
 
     @Override
@@ -76,6 +78,8 @@ public final class Backpacks extends JavaPlugin {
         menuItems = new MenuItems();
 
         playerList = new ArrayList<>();
+        delBP = new HashMap<>();
+        delete = new HashMap<>();
         playerBackpack = new HashMap<>();
         playerPage = new HashMap<>();
 
@@ -137,8 +141,8 @@ public final class Backpacks extends JavaPlugin {
     }
 
     public void registerEvents(){
-        Bukkit.getPluginManager().registerEvents(new PlayerEvent(this,playerBackpack,bpcm,playerList,bpm),this);
-        Bukkit.getPluginManager().registerEvents(new BpEvents(this,playerBackpack,bpm),this);
+        Bukkit.getPluginManager().registerEvents(new PlayerEvent(this,playerBackpack, delBP, delete, bpcm,playerList,bpm),this);
+        Bukkit.getPluginManager().registerEvents(new BpEvents(this,playerBackpack, delBP, delete, bpm),this);
         Bukkit.getPluginManager().registerEvents(new MenuListener(),this);
         Bukkit.getPluginManager().registerEvents(new OpenSubCommand(this,playerBackpack),this);
         Bukkit.getPluginManager().registerEvents(new BpMenuEvents(this,guis),this);

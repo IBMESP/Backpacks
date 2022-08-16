@@ -25,10 +25,6 @@ public class Checkers {
         return maxBP;
     }
 
-    public int getMaxBP() {
-        return maxBP;
-    }
-
     public void checkSize(){
         int smallSize = bpcm.getConfig().getInt("smallSize");
         int mediumSize = bpcm.getConfig().getInt("mediumSize");

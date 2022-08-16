@@ -166,20 +166,20 @@ public class CreateSubCommand extends SubCommand {
                 return;
             }
 
-            String title = plugin.getLanguageString("config.title");
+            String title = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title"));
 
             Inventory inventory = Bukkit.createInventory(null,size * 9,title.replace("%player%",target));
+            HashMap<String, Inventory> invs;
+
             if(playerBackpack.containsKey(targetUUID)){
-                HashMap<String,Inventory> invs = playerBackpack.get(targetUUID);
-                invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
-                playerBackpack.put(targetUUID, invs);
-                plugin.backpacks.getConfig().set(targetUUID + "." + LocalDateTime.now().withNano(0),plugin.bpm.inventoryToBase64(inventory));
+                invs = playerBackpack.get(targetUUID);
             }else{
-                HashMap<String,Inventory> invs = new HashMap<>();
-                invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
-                playerBackpack.put(targetUUID, invs);
-                plugin.backpacks.getConfig().set(targetUUID + "." + LocalDateTime.now().withNano(0),plugin.bpm.inventoryToBase64(inventory));
+                invs = new HashMap<>();
             }
+
+            invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
+            playerBackpack.put(targetUUID, invs);
+            plugin.backpacks.getConfig().set(targetUUID + "." + LocalDateTime.now().withNano(0),plugin.bpm.inventoryToBase64(inventory));
             player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("create.target.created") + target);
         } catch (Exception e) {
             e.printStackTrace();
