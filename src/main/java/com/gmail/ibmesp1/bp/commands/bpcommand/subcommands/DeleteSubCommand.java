@@ -63,8 +63,10 @@ public class DeleteSubCommand extends SubCommand {
                 }
                 return;
             }
-            if(Bukkit.getPlayer(args[1]) == null)
+            if(Bukkit.getPlayer(args[1]) == null) {
+                player.sendMessage(args[1] + " not online");
                 return;
+            }
 
             Player target = Bukkit.getPlayer(args[1]);
             guis.delete(player,target.getUniqueId(),target.getName());

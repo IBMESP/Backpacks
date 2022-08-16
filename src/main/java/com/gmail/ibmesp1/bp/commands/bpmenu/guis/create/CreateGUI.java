@@ -4,18 +4,14 @@ import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
 import com.gmail.ibmesp1.bp.utils.BackpackManager;
 import com.gmail.ibmesp1.ibcore.utils.DataManager;
-import com.gmail.ibmesp1.ibcore.utils.UUIDFetcher;
 import com.gmail.ibmesp1.ibcore.utils.Utils;
-import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.time.LocalDateTime;
@@ -38,7 +34,7 @@ public class CreateGUI implements Listener {
         this.guis = guis;
         this.bpm = bpm;
         this.bpcm = bpcm;
-        glass_slots  = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 50, 51, 52};
+        glass_slots  = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52};
     }
 
     @EventHandler
@@ -102,7 +98,7 @@ public class CreateGUI implements Listener {
         }
 
         if(player.hasPermission(perm)) {
-            if (e.getSlot() == 49) {
+            /*if (e.getSlot() == 49) {
                 player.closeInventory();
                 AnvilGUI.Builder builder = new AnvilGUI.Builder().onComplete((p,s)->{
                     createEvent(s,p,bSize,size);
@@ -114,7 +110,7 @@ public class CreateGUI implements Listener {
 
                 Bukkit.getScheduler().runTask(plugin,()-> builder.open(player));
                 return;
-            }
+            }*/
 
             for (int glass_slot : glass_slots) {
                 head = e.getSlot() != glass_slot;
@@ -228,7 +224,7 @@ public class CreateGUI implements Listener {
         }
     }
 
-    private void createEvent(String s, Player player, int size, String Size){
+    /*private void createEvent(String s, Player player, int size, String Size){
         boolean isOnline = false;
         Player target = null;
         UUID uuid = null;
@@ -272,5 +268,5 @@ public class CreateGUI implements Listener {
             target.sendMessage(plugin.getLanguageString("config.open"));
         }
         player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("create.target.created") + s);
-    }
+    }*/
 }

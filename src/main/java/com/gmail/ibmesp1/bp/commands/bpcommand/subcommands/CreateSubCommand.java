@@ -76,24 +76,41 @@ public class CreateSubCommand extends SubCommand {
         if(player.hasPermission(perm)) {
             if(args.length == 3){
                 if(player.hasPermission("bp.admin")) {
+                    if(!plugin.getConfig().getBoolean("geyser")) {
+                        Player target = Bukkit.getPlayer(args[2]);
+
+                        if (target == null) {
+                            String targetOffline = args[2];
+                            createOfflineBackpack(player, targetOffline, size);
+                            return;
+                        }
+
+                        int bps = (plugin.backpacks.getConfig().getConfigurationSection(target.getUniqueId() + ".") == null)
+                                ? 0 : plugin.backpacks.getConfig().getConfigurationSection(target.getUniqueId() + ".").getKeys(false).size();
+
+                        if (bps >= plugin.maxBP) {
+                            player.sendMessage(ChatColor.RED + plugin.getLanguageString("create.maxbp"));
+                            return;
+                        }
+
+                        createTargetBackpack(player, target, size, plugin.getLanguageString(gui));
+                        return;
+                    }
+
+                    if(Bukkit.getPlayer(args[2]) == null){
+                        player.sendMessage(args[2] + " not online");
+                        return;
+                    }
+
                     Player target = Bukkit.getPlayer(args[2]);
 
-                    if (target == null) {
-                        String targetOffline = args[2];
-                        createOfflineBackpack(player,targetOffline,size);
+                    if(player.equals(target)){
+                        createBackpack(player,size);
                         return;
                     }
 
-                    int bps = (plugin.backpacks.getConfig().getConfigurationSection(target.getUniqueId() + ".") == null)
-                            ? 0 : plugin.backpacks.getConfig().getConfigurationSection(target.getUniqueId() + ".").getKeys(false).size();
+                    createTargetBackpack(player,target,size,plugin.getLanguageString(gui));
 
-                    if(bps >= plugin.maxBP){
-                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("create.maxbp"));
-                        return;
-                    }
-
-                    createTargetBackpack(player, target, size, plugin.getLanguageString(gui));
-                    return;
                 }else{
                     player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
                 }
@@ -166,20 +183,20 @@ public class CreateSubCommand extends SubCommand {
                 return;
             }
 
-            String title = ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("config.title"));
+            String title = plugin.getLanguageString("config.title");
 
             Inventory inventory = Bukkit.createInventory(null,size * 9,title.replace("%player%",target));
-            HashMap<String, Inventory> invs;
-
             if(playerBackpack.containsKey(targetUUID)){
-                invs = playerBackpack.get(targetUUID);
+                HashMap<String,Inventory> invs = playerBackpack.get(targetUUID);
+                invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
+                playerBackpack.put(targetUUID, invs);
+                plugin.backpacks.getConfig().set(targetUUID + "." + LocalDateTime.now().withNano(0),plugin.bpm.inventoryToBase64(inventory));
             }else{
-                invs = new HashMap<>();
+                HashMap<String,Inventory> invs = new HashMap<>();
+                invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
+                playerBackpack.put(targetUUID, invs);
+                plugin.backpacks.getConfig().set(targetUUID + "." + LocalDateTime.now().withNano(0),plugin.bpm.inventoryToBase64(inventory));
             }
-
-            invs.put(LocalDateTime.now().withNano(0).toString(),inventory);
-            playerBackpack.put(targetUUID, invs);
-            plugin.backpacks.getConfig().set(targetUUID + "." + LocalDateTime.now().withNano(0),plugin.bpm.inventoryToBase64(inventory));
             player.sendMessage(ChatColor.GREEN + plugin.getLanguageString("create.target.created") + target);
         } catch (Exception e) {
             e.printStackTrace();

@@ -138,8 +138,8 @@ public class GUIs {
     public Inventory deleteGUI(int page){
         Inventory deleteGUI = Bukkit.createInventory(null, 54, ChatColor.translateAlternateColorCodes('&',plugin.getLanguageString("gui.delete.title")));
 
-        ItemStack anvil = menuItems.search(plugin.getLanguageString("gui.items.search"));
-        deleteGUI.setItem(49,anvil);
+        /*ItemStack anvil = menuItems.search(plugin.getLanguageString("gui.items.search"));
+        deleteGUI.setItem(49,anvil);*/
 
         ItemStack back = menuItems.back(ChatColor.DARK_RED + plugin.getLanguageString("gui.items.back"));
         deleteGUI.setItem(53,back);
@@ -157,7 +157,7 @@ public class GUIs {
             deleteGUI.setItem(50, nextPage);
         }
 
-        int[] glass_slots = {0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,51,52};
+        int[] glass_slots = {0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,49,51,52};
         for (int slot : glass_slots) {
             deleteGUI.setItem(slot, menuItems.glass());
         }
@@ -236,10 +236,10 @@ public class GUIs {
         String create = plugin.getLanguageString("gui.create.title");
 
         Inventory sizeGUI = Bukkit.createInventory(null, 54, ChatColor.translateAlternateColorCodes('&',create.replace("%size%", size)));
-        int[] glass_slots = {0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,51,52};
+        int[] glass_slots = {0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,49,51,52};
 
-        ItemStack anvil = menuItems.search(plugin.getLanguageString("gui.items.search"));
-        sizeGUI.setItem(49,anvil);
+        /*ItemStack anvil = menuItems.search(plugin.getLanguageString("gui.items.search"));
+        sizeGUI.setItem(49,anvil);*/
 
         ItemStack back = menuItems.back(ChatColor.DARK_RED + plugin.getLanguageString("gui.items.back"));
         sizeGUI.setItem(53,back);

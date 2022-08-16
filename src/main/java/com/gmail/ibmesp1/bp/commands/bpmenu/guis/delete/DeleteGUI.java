@@ -4,8 +4,6 @@ import com.gmail.ibmesp1.bp.Backpacks;
 import com.gmail.ibmesp1.bp.commands.bpmenu.BpEasterEgg;
 import com.gmail.ibmesp1.bp.commands.bpmenu.guis.GUIs;
 import com.gmail.ibmesp1.ibcore.guis.MenuItems;
-import com.gmail.ibmesp1.ibcore.utils.UUIDFetcher;
-import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -50,9 +48,9 @@ public class DeleteGUI implements Listener {
             e.setCancelled(true);
             Player player = (Player) e.getWhoClicked();
 
-            int[] glass_slots = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 50, 51, 52};
+            int[] glass_slots = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52};
 
-            if (e.getSlot() == 49) {
+           /* if (e.getSlot() == 49) {
 
                 if (!player.hasPermission("bp.admin")) {
                     player.sendMessage(ChatColor.RED + plugin.getLanguageString("delete.target.perm"));
@@ -70,7 +68,7 @@ public class DeleteGUI implements Listener {
 
                 Bukkit.getScheduler().runTask(plugin,()-> builder.open(player));
                 return;
-            }
+            }*/
 
             if(e.getSlot() == 50){
                 int page = plugin.playerPage.get(player.getUniqueId());
@@ -162,7 +160,7 @@ public class DeleteGUI implements Listener {
 
     }
 
-    private void deleteBrowser(String s,Player player){
+    /*private void deleteBrowser(String s,Player player){
         boolean isOnline = false;
         Player target;
         UUID uuid = null;
@@ -189,7 +187,7 @@ public class DeleteGUI implements Listener {
             return;
         }
         GUI(player,uuid,s);
-    }
+    }*/
 
     private void GUI(Player player,UUID uuid,String name) {
         Inventory inventory = Bukkit.createInventory(player,(plugin.rowsBP+2)*9,"Delete %player% backpack".replace("%player%",name));

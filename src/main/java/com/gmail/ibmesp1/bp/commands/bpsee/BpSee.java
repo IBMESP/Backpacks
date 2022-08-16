@@ -42,22 +42,32 @@ public class BpSee implements CommandExecutor {
         Player player = (Player) sender ;
 
         if (args.length == 1){
-            Player target = Bukkit.getPlayer(args[0]);
+            if(!plugin.getConfig().getBoolean("geyser")) {
+                Player target = Bukkit.getPlayer(args[0]);
 
-            if(target == null) {
-                try {
-                    UUID targetUUID = UUIDFetcher.getUUIDOf(args[0]);
+                if (target == null) {
+                    try {
+                        UUID targetUUID = UUIDFetcher.getUUIDOf(args[0]);
 
-                    if(playerBackpack.get(targetUUID) == null){
-                        player.sendMessage(ChatColor.RED + plugin.getLanguageString("gui.items.hasNot").replace("%player%",args[0]));
-                        return true;
+                        if (playerBackpack.get(targetUUID) == null) {
+                            player.sendMessage(ChatColor.RED + plugin.getLanguageString("gui.items.hasNot").replace("%player%", args[0]));
+                            return true;
+                        }
+                        GUI(player, targetUUID, args[0]);
+
+                    } catch (Exception ignored) {
                     }
-                    GUI(player,targetUUID,args[0]);
 
-                } catch (Exception ignored) {}
-
-                return true;
+                    return true;
+                }
             }
+
+            if(Bukkit.getPlayer(args[0]) == null) {
+                player.sendMessage(args[0] + " not online");
+                return false;
+            }
+
+            Player target = Bukkit.getPlayer(args[0]);
 
             if(playerBackpack.get(target.getUniqueId()) == null){
                 player.sendMessage(ChatColor.RED + plugin.getLanguageString("gui.items.hasNot").replace("%player%",args[0]));
