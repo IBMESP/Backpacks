@@ -53,6 +53,7 @@ configVersion: 2
 #Available languages
 #en_US
 #es_ES
+#zh_CN
 locale: en_US
 
 # This is the en_US.yml version for reference.

@@ -96,6 +96,7 @@ public final class Backpacks extends JavaPlugin {
         checkers.checkMaxBP();
         checkers.checkSize();
         rowsBP = checkers.getRowsBP();
+        maxBP = checkers.getMaxBP();
 
         Bukkit.getConsoleSender().sendMessage("[Backpacks] - Version: " + version + " Enabled - By Ib");
 

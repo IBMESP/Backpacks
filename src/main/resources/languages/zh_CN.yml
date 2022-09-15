@@ -1,0 +1,65 @@
+create:
+  already: "你已经有了一个背包"
+  perm: "你没有权限创建一个%size%的背包"
+  maxbp: "你不能创建更多的背包"
+  target:
+    already: "%player% 已经有了一个背包"
+    created: "你创建了一个背包  "
+    create: "%player% 为你创建了一个 %size% 的背包"
+    perm: "你没有创建其他背包的权限"
+delete:
+  confirm: "输入 \u0022confirm\u0022 删除"
+  notBackpack: "你没有背包"
+  deleted: "您的背包已被删除"
+  target:
+    notBackpack: "%player% 没有背包"
+    deleted: "%player% 的背包已被删除"
+    perm: "你没有权限删除其他背包"
+    deletedBy: "您的背包已被 %player% 删除"
+gui:
+  small: "小"
+  medium: "中"
+  large: "大"
+  title: "&r背包菜单"
+  browser: "写下名字"
+  nextPage: "下一页"
+  previousPage: "上一页"
+  size:
+    small: "&a&l小尺寸"
+    medium: "&e&l中尺寸"
+    large: "&4&l大尺寸"
+  items:
+    create: "创建一个背包"
+    delete: "删除一个背包"
+    config: "配置"
+    configuration: "&r配置" #
+    keepBackpack: "保留背包"
+    current: "目前: "
+    back: "返回"
+    search: "搜索玩家"
+    has: "%player% 有一个背包"
+    hasNot: "%player% 没有背包"
+    size: "&r小" #
+  config:
+    gamerule: "游戏规则keepBackpack现在被设置了: %bool%"
+    changeSize: "%size% 大小设置为 %num% 行"
+    small: "小背包不能比中背包大"
+    large: "大背包不能比中背包小"
+  create:
+    title: "&r在线玩家 (%size%)" #
+  delete:
+    title: "&r在线玩家 (删除)" #
+  open:
+    small: "小背包"
+    medium: "中背包"
+    large: "大背包"
+config:
+  reloaded: "[背包] 重新加载配置,JiuWu汉化!"
+  perms: "你没有权限使用这个命令"
+  exist: "这个命令不存在"
+  open: "使用/bp open来打开背包"
+  help: "使用/bp help来查看命令"
+  update: "背包有了新的更新"
+  notUpdate: "背包是最新的版本"
+  title: "&r%player% 的背包" #
+  backpacks: "&r背包" #
