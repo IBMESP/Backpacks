@@ -7,6 +7,7 @@ authors: [Ib]
 commands:
   bp:
     description: Use /bp help to see the commands
+    aliases: backpack
   bpsee:
     description: Use /bpsee to see other player's backpacks
     permission: bp.bpsee
