@@ -7,6 +7,7 @@ import com.gmail.ibmesp1.bp.utils.BackpackManager;
 import com.gmail.ibmesp1.ibcore.commands.SubCommand;
 import com.gmail.ibmesp1.ibcore.commands.SubCommandExecutor;
 import com.gmail.ibmesp1.ibcore.utils.DataManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -39,6 +40,17 @@ public class BpCommand implements SubCommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(!(sender instanceof Player)) {
+            if (args.length == 0){
+                Bukkit.broadcastMessage(plugin.name + ChatColor.WHITE + plugin.getLanguageString("config.help"));
+                return true;
+            }
+
+            for (int i = 0; i< getSubCommands().size(); i++) {
+                if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())) {
+                    getSubCommands().get(i).perform(sender, args);
+                }
+            }
+
             return false;
         }
 
