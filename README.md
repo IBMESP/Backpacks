@@ -1,7 +1,7 @@
 # Backpacks
 Spigot plugin that adds backpacks accessible with commands
 ## Badges:
-[![Latest Version](https://img.shields.io/badge/Latest%20Version-2.2.1.1_SNAPSHOT-brightgreen)](https://github.com/IBMESP/Backpacks/releases/latest)
+[![Latest Version](https://img.shields.io/badge/Latest%20Version-2.2.2.1_SNAPSHOT-brightgreen)](https://github.com/IBMESP/Backpacks/releases/latest)
 ![Spigot Downloads](https://img.shields.io/spiget/downloads/99840?label=Spigot%20Downloads)
 ![Spigot Rating](https://img.shields.io/spiget/rating/99840?label=Spigot%20Rating)
 

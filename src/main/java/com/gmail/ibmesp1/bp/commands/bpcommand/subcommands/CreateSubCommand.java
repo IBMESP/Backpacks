@@ -44,13 +44,29 @@ public class CreateSubCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        if(!(sender instanceof Player)){
-            return;
-        }
 
         int smallSize = bpcm.getConfig().getInt("smallSize");
         int mediumSize = bpcm.getConfig().getInt("mediumSize");
         int largeSize = bpcm.getConfig().getInt("largeSize");
+
+        if(!(sender instanceof Player)){
+            if(args.length != 3){
+                Bukkit.broadcastMessage(ChatColor.RED + "/bp create <s/m/l> <player>");
+                return;
+            }
+
+            if (args[1].equalsIgnoreCase("s")) {// add backpack mechanics
+                createConsole(args,"gui.small", smallSize);
+            }else if (args[1].equalsIgnoreCase("m")) {
+                createConsole(args,"gui.medium", mediumSize);
+            }else if (args[1].equalsIgnoreCase("l")) {
+                createConsole(args,"gui.large", largeSize);
+            }else{
+                Bukkit.broadcastMessage(plugin.name + ChatColor.RED + plugin.getLanguageString("config.exist"));
+            }
+
+            return;
+        }
 
         Player player = (Player) sender;
 
@@ -127,6 +143,28 @@ public class CreateSubCommand extends SubCommand {
 
         }else{
             player.sendMessage(ChatColor.RED + plugin.getLanguageString("config.perms"));
+        }
+    }
+
+    private void createConsole(String[] args,String gui,int size){
+        if(args.length == 3){
+            Player target = Bukkit.getPlayer(args[2]);
+
+            if (target == null) {
+                String targetOffline = args[2];
+                createOfflineBackpack(null,targetOffline,size);
+                return;
+            }
+
+            int bps = (plugin.backpacks.getConfig().getConfigurationSection(target.getUniqueId() + ".") == null)
+                    ? 0 : plugin.backpacks.getConfig().getConfigurationSection(target.getUniqueId() + ".").getKeys(false).size();
+
+            if(bps >= plugin.maxBP){
+                Bukkit.broadcastMessage(ChatColor.RED + plugin.getLanguageString("create.maxbp"));
+                return;
+            }
+
+            createTargetBackpack(null,target, size, plugin.getLanguageString(gui));
         }
     }
 
